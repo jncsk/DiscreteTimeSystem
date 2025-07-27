@@ -44,3 +44,34 @@ double matrix_get(const Matrix* mat, int i, int j) {
     }
     return mat->data[i * mat->cols + j];
 }
+
+void matrix_add(const Matrix* a, const Matrix* b, Matrix* result) {
+    if (a->rows != b->rows || a->cols != b->cols ||
+        a->rows != result->rows || a->cols != result->cols) {
+        printf("Error: Dimension mismatch in matrix_add.\n");
+        return;
+    }
+
+    int size = a->rows * a->cols;
+    for (int i = 0; i < size; ++i) {
+        result->data[i] = a->data[i] + b->data[i];
+    }
+}
+
+void matrix_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
+    if (a->cols != b->rows ||
+        a->rows != result->rows || b->cols != result->cols) {
+        printf("Error: Dimension mismatch in matrix_multiply.\n");
+        return;
+    }
+
+    for (int i = 0; i < a->rows; ++i) {
+        for (int j = 0; j < b->cols; ++j) {
+            double sum = 0.0;
+            for (int k = 0; k < a->cols; ++k) {
+                sum += matrix_get(a, i, k) * matrix_get(b, k, j);
+            }
+            matrix_set(result, i, j, sum);
+        }
+    }
+}
