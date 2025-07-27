@@ -59,8 +59,10 @@ void matrix_add(const Matrix* a, const Matrix* b, Matrix* result) {
 }
 
 void matrix_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
-    if (a->cols != b->rows ||
-        a->rows != result->rows || b->cols != result->cols) {
+    if (a->cols     !=  b->rows        ||
+        a->rows    !=  result->rows || 
+        b->cols     !=  result->cols) 
+    {
         printf("Error: Dimension mismatch in matrix_multiply.\n");
         return;
     }
