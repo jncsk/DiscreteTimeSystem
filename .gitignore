@@ -1,0 +1,18 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+*.obj
+*.exe
+*.pdb
+
+# VS-specific files
+.vs/
+*.vcxproj.user
+*.suo
+*.user
+*.VC.db
+
+# Others
+*.log
+*.DS_Store

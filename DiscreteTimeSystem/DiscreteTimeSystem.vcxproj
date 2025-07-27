@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)include/linalg</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,12 +129,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\linalg\matrix.c" />
+    <ClCompile Include="source\linalg\matrix_exp.c" />
+    <ClCompile Include="source\linalg\matrix_ops.c" />
+    <ClCompile Include="source\linalg\state_space.c" />
     <ClCompile Include="source\main.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\matrix.h" />
-    <ClInclude Include="include\matrix_exp.h" />
-    <ClInclude Include="include\matrix_ops.h" />
+    <ClInclude Include="include\linalg\matrix.h" />
+    <ClInclude Include="include\linalg\matrix_exp.h" />
+    <ClInclude Include="include\linalg\matrix_ops.h" />
+    <ClInclude Include="include\linalg\state_space.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

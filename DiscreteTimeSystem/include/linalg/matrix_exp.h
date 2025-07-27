@@ -1,27 +1,32 @@
-#pragma once
+Ôªø#pragma once
 
-//çsóÒéwêîä÷êîÇ»Ç«ÇÃì¡éÍåvéZ
-
-#ifndef DEF_MATRIX_EXP_H
-#define DEF_MATRIX_EXP_H
+/*
+ * =============================================================================
+ *  matrix_exp.h
+ * =============================================================================
+ *
+ *  Description:
+ *      This header provides functions for computing the matrix exponential
+ *      and related matrix power operations in C.
+ *
+ *  Features:
+ *      - Matrix exponential via series expansion (e.g., Taylor, Pad√©)
+ *      - Exponential computation using diagonalization (if applicable)
+ *      - General matrix power functions
+ *
+ * =============================================================================
+ */
 
 //------------------------------------------------
-//  Macro definition
+//  Macro definitions
 //------------------------------------------------
 /* None */
 
 //------------------------------------------------
-//  Type definition
-//------------------------------------------------
-typedef struct LU_Decomposition
-{
-
-
-} LU;
-
-//------------------------------------------------
-//  Prototype declaration
+//  Type definitions
 //------------------------------------------------
 
+//------------------------------------------------
+//  Function Prototypes
+//------------------------------------------------
 
-#endif

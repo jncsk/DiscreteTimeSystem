@@ -18,15 +18,30 @@
     <ClCompile Include="source\main.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="source\linalg\matrix_ops.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\linalg\matrix.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\linalg\matrix_exp.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="source\linalg\state_space.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\matrix.h">
+    <ClInclude Include="include\linalg\matrix.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\matrix_exp.h">
+    <ClInclude Include="include\linalg\matrix_exp.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\matrix_ops.h">
+    <ClInclude Include="include\linalg\matrix_ops.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\linalg\state_space.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
