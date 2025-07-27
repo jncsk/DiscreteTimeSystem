@@ -6,11 +6,21 @@
 
 int main()
 {
+	//Define a structure of StateSpaceModel
 	StateSpaceModel model;
 
-	model = create_state_space(2, 1, 1);
-	matrix_set_identity(&(model.A));
+	//Initialize the structure
+	model = state_space_create(4, 1, 1);
 
-	printf("model.C.cols: %f\n", model.A.data[2]);
+	//Set values in the matrices
+	matrix_set_identity(&(model.A));
+	matrix_set_zero(&model.B);
+	matrix_set_zero(&model.C);
+
+	for (int i = 0; i < (model.A.cols * model.A.rows); i++)
+	{
+		printf("model.A.data[%d]: %f\n",i, model.A.data[i]);
+	}
+
 }
 

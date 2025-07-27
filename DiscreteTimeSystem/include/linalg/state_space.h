@@ -50,11 +50,11 @@ typedef struct {
  * @param p Number of outputs.
  * @return Initialized StateSpaceModel structure.
  */
-StateSpaceModel create_state_space(int n, int m, int p);
+StateSpaceModel state_space_create(int n, int m, int p);
 
 /**
  * @brief Free all dynamically allocated memory in a state-space model.
  *
  * @param model Pointer to the StateSpaceModel to free.
  */
-void free_state_space(StateSpaceModel* model);
+void state_space_free(StateSpaceModel* model);
