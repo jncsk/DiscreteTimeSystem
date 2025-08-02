@@ -2,21 +2,23 @@
 
 #include "bit_utils.h"
 
-int bit_utils_decompose(uint32_t value, int* bits, int maxBits)
+int bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits)
 {
 	int i = 0;
-	while (value > 0) {
+
+    // Convert to binary (LSB first)
+	while (value > 0 && i < maxBits) {
 		bits[i] = value % 2;
 		value = value / 2;
 		i++;
 	}
 
-    // 足りない分を0埋め
+    // Padding with zeros if necessary
     while (i < maxBits) {
         bits[i++] = 0;
     }
 
-    // 逆順に並べ替え（MSBから格納したい場合）
+    // Reverse the order (to store starting from the MSB)
     for (int j = 0; j < i / 2; j++) {
         int temp = bits[j];
         bits[j] = bits[i - 1 - j];
@@ -26,11 +28,24 @@ int bit_utils_decompose(uint32_t value, int* bits, int maxBits)
     return i;
 };
 
+int bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits)
+{
+    int i = 0;
+
+    // Convert to binary (LSB first)
+    while (value > 0 && i < maxBits) {
+        bits[i] = value % 2;
+        value /= 2;
+        i++;
+    }
+
+    return i;
+};
 
 void bit_utils_print_binary(uint32_t value, int bit_length)
 {
     if (bit_length <= 0 || bit_length > 32) {
-        bit_length = 32;  // デフォルト値
+        bit_length = 32;  // Default value
     }
 
     for (int i = bit_length - 1; i >= 0; i--) {

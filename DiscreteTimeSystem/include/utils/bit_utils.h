@@ -29,15 +29,24 @@
  //------------------------------------------------
 
 /**
- * @brief Decompose an unsigned integer into an array of bits (LSB first).
+ * @brief Convert an unsigned integer to binary representation (LSB first).
  *
- * @param value   The unsigned integer to decompose.
- * @param bits    Integer array to store bit values (0 or 1).
- * @param maxBits Maximum number of bits to extract (e.g., 32).
- *
- * @return Number of bits written to the array.
+ * @param value     Unsigned integer to convert
+ * @param bits      Output array for binary digits (0 or 1)
+ * @param maxBits   Maximum number of bits to store
+ * @return Number of bits written
  */
-int bit_utils_decompose(uint32_t value, int* bits, int maxBits);
+int bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits);
+
+/**
+ * @brief Convert an unsigned integer to binary representation (MSB first).
+ *
+ * @param value     Unsigned integer to convert
+ * @param bits      Output array for binary digits (0 or 1)
+ * @param maxBits   Maximum number of bits to store
+ * @return Number of bits written
+ */
+int bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits);
 
 /**
  * @brief Print the binary representation of an unsigned integer to stdout.

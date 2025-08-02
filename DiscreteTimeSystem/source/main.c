@@ -3,6 +3,7 @@
 #include "matrix_ops.h"
 #include "matrix_exp.h"
 #include "state_space.h"
+#include "bit_utils.h"
 
 int main()
 {
@@ -17,21 +18,50 @@ int main()
 	model = state_space_create(2, 1, 1);
 
 	//Set values in the matrices
-	matrix_set_identity(&(model.A));
+	matrix_ops_set_identity(&(model.A));
 
+	{
+		int bits[32];
+		int count = bit_utils_to_binary_lsb(19, bits, 32);
+
+		printf("19 in binary: ");
+		for (int i = 0; i < count; i++) {
+			printf("%d", bits[i]);
+		}
+		printf("\n");
+	}
+	{
+		Matrix A = matrix_create(3, 3);
+		Matrix result = matrix_create(3, 3);
+
+		matrix_ops_set(&A, 0, 0, 1);
+		matrix_ops_set(&A, 0, 1, 2);
+		matrix_ops_set(&A, 0, 2, 2);
+
+		matrix_ops_set(&A, 1, 0, 3);
+		matrix_ops_set(&A, 1, 1, 4);
+		matrix_ops_set(&A, 1, 2, 3);
+
+		matrix_ops_set(&A, 2, 0, 2);
+		matrix_ops_set(&A, 2, 1, 3);
+		matrix_ops_set(&A, 2, 2, 5);
+
+		matrix_ops_power(&A, 4, &result);
+		matrix_ops_print(&result);
+	}
 	//Practice using matrix_multiply
 	{
-		matrix_set(&model.A, 0, 0, 1);
-		matrix_set(&model.A, 0, 1, 2);
-		matrix_set(&model.A, 1, 0, 3);
-		matrix_set(&model.A, 1, 1, 4);
+		matrix_ops_set(&model.A, 0, 0, 1);
+		matrix_ops_set(&model.A, 0, 1, 2);
+		matrix_ops_set(&model.A, 1, 0, 3);
+		matrix_ops_set(&model.A, 1, 1, 4);
 
-		matrix_set(&model.B, 0, 0, 2);
-		matrix_set(&model.B, 1, 0, 3);
+		matrix_ops_set(&model.B, 0, 0, 2);
+		matrix_ops_set(&model.B, 1, 0, 3);
 
-		matrix_set_zero(&model.C);
+		matrix_ops_set_zero(&model.C);
 
-		matrix_multiply(&model.A, &model.B, &model2.B);
+		matrix_ops_multiply(&model.A, &model.B, &model2.B);
 
 		for (int i = 0; i < (model.A.cols * model.A.rows); i++)
 		{
@@ -42,5 +72,6 @@ int main()
 			printf("model.B.data[%d]: %f\n", i, model2.B.data[i]);
 		}
 	}
+
 }
 
