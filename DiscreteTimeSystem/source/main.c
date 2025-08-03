@@ -8,18 +8,20 @@
 int main()
 {
 	//Define a structure of StateSpaceModel
-	StateSpaceModel model;
+	StateSpaceModel* model;
 
-	StateSpaceModel model2;
-	model2 = state_space_create(2, 1, 1);
+	int status = 0;
+	StateSpaceModel* model2;
+	model2 = state_space_create(2, 1, 1, &status);
 
 
 	//Initialize the structure
-	model = state_space_create(2, 1, 1);
+	model = state_space_create(2, 1, 1, &status);
 
 	//Set values in the matrices
-	matrix_ops_set_identity(&(model.A));
+	matrix_ops_set_identity(&(model->A));
 
+	// Practice using bit_utils_to_binary_lsb
 	{
 		int bits[32];
 		int count = bit_utils_to_binary_lsb(19, bits, 32);
@@ -30,48 +32,105 @@ int main()
 		}
 		printf("\n");
 	}
+
+	// Practice using matrix_ops_power
 	{
-		Matrix A = matrix_create(3, 3);
-		Matrix result = matrix_create(3, 3);
+		int status = 0;
+		Matrix* A = matrix_create(3, 3, &status);
+		Matrix* result = matrix_create(3, 3, &status);
 
-		matrix_ops_set(&A, 0, 0, 1);
-		matrix_ops_set(&A, 0, 1, 2);
-		matrix_ops_set(&A, 0, 2, 2);
+		matrix_ops_set(A, 0, 0, 1);
+		matrix_ops_set(A, 0, 1, 2);
+		matrix_ops_set(A, 0, 2, 2);
 
-		matrix_ops_set(&A, 1, 0, 3);
-		matrix_ops_set(&A, 1, 1, 4);
-		matrix_ops_set(&A, 1, 2, 3);
+		matrix_ops_set(A, 1, 0, 3);
+		matrix_ops_set(A, 1, 1, 4);
+		matrix_ops_set(A, 1, 2, 3);
 
-		matrix_ops_set(&A, 2, 0, 2);
-		matrix_ops_set(&A, 2, 1, 3);
-		matrix_ops_set(&A, 2, 2, 5);
+		matrix_ops_set(A, 2, 0, 2);
+		matrix_ops_set(A, 2, 1, 3);
+		matrix_ops_set(A, 2, 2, 5);
 
-		matrix_ops_power(&A, 4, &result);
-		matrix_ops_print(&result);
+		matrix_ops_power(A, 4, result);
+		matrix_ops_print(result);
 	}
+	
 	//Practice using matrix_multiply
 	{
-		matrix_ops_set(&model.A, 0, 0, 1);
-		matrix_ops_set(&model.A, 0, 1, 2);
-		matrix_ops_set(&model.A, 1, 0, 3);
-		matrix_ops_set(&model.A, 1, 1, 4);
+		matrix_ops_set(&(model->A), 0, 0, 1);
+		matrix_ops_set(&(model->A), 0, 1, 2);
+		matrix_ops_set(&(model->A), 1, 0, 3);
+		matrix_ops_set(&(model->A), 1, 1, 4);
 
-		matrix_ops_set(&model.B, 0, 0, 2);
-		matrix_ops_set(&model.B, 1, 0, 3);
+		matrix_ops_set(&(model->B), 0, 0, 2);
+		matrix_ops_set(&(model->B), 1, 0, 3);
 
-		matrix_ops_set_zero(&model.C);
+		matrix_ops_set_zero(&(model->C));
 
-		matrix_ops_multiply(&model.A, &model.B, &model2.B);
+		matrix_ops_multiply(&(model->A), &(model->B), &(model2->B));
 
-		for (int i = 0; i < (model.A.cols * model.A.rows); i++)
+		for (int i = 0; i < (model->A.cols * model->A.rows); i++)
 		{
-			printf("model.A.data[%d]: %f\n", i, model.A.data[i]);
+			printf("model.A.data[%d]: %f\n", i, model->A.data[i]);
 		}
-		for (int i = 0; i < (model.B.cols * model.B.rows); i++)
+		for (int i = 0; i < (model->B.cols * model->B.rows); i++)
 		{
-			printf("model.B.data[%d]: %f\n", i, model2.B.data[i]);
+			printf("model.B.data[%d]: %f\n", i, model2->B.data[i]);
 		}
 	}
 
+	// Practice using matrix_exp_exponential
+	{
+		int status = 0;
+
+		Matrix* A = matrix_create(3, 3, &status);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+		Matrix* result = matrix_create(3, 3, &status);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+
+		status = matrix_ops_set(A, 0, 0, 1);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+		status = matrix_ops_set(A, 0, 1, 2);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+		status = matrix_ops_set(A, 0, 2, 2);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+		status = matrix_ops_set(A, 1, 0, 3);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+		status = matrix_ops_set(A, 1, 1, 4);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+		status = matrix_ops_set(A, 1, 2, 3);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+
+		status = matrix_ops_set(A, 2, 0, 2);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+		status = matrix_ops_set(A, 2, 1, 3);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+		status = matrix_ops_set(A, 2, 2, 5);
+		if (status != MATRIX_CORE_SUCCESS) {
+			MATRIX_CORE_ERR_MESSAGE(status);
+		}
+
+		matrix_exp_exponential(A, 3, result);
+	}
 }
 

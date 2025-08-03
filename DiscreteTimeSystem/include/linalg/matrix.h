@@ -23,11 +23,22 @@
 //------------------------------------------------
 //  Macro definitions
 //------------------------------------------------
-/* None */
+//#define MATRIX_CORE_ERR_MESSAGE "Error: process failed with error code %d\n"
+#define MATRIX_CORE_ERR_MESSAGE(code) \
+    fprintf(stderr, "Error: process failed with error code %d (File: %s, Line: %d)\n", \
+            (code), __FILE__, __LINE__)
+
 
 //------------------------------------------------
 //  Type definitions
 //------------------------------------------------
+typedef enum {
+    MATRIX_CORE_SUCCESS = 0,
+    MATRIX_CORE_ERR_NULL = -1,
+    MATRIX_CORE_ERR_DIMENSION = -2,
+    MATRIX_CORE_ERR_OUT_OF_BOUNDS = -3,
+    MATRIX_CORE_ERR_ALLOCATION_FAILED = -4,
+} MatrixCoreStatus;
 
 /**
  * @brief Structure representing a 2D matrix.
@@ -50,13 +61,14 @@ typedef struct {
  *
  * @param rows Number of rows.
  * @param cols Number of columns.
+ * @param err Error code.
  * @return A Matrix structure with allocated memory.
  */
-Matrix matrix_create(int rows, int cols);
+Matrix* matrix_create(int rows, int cols, int* err);
 
 /**
  * @brief Free the memory associated with a matrix.
  *
  * @param mat Pointer to the matrix to free.
  */
-void matrix_free(Matrix* mat);
+int matrix_free(Matrix* mat);

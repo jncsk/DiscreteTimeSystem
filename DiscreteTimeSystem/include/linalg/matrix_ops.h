@@ -25,7 +25,6 @@
  //------------------------------------------------
 //  Macro definitions
 //------------------------------------------------
-#define MATRIX_ERR_MESSAGE "Error: process failed with error code %d\n"
 
 //------------------------------------------------
 //  Type definitions

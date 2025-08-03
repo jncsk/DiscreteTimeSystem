@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "matrix_ops.h"
 #include "bit_utils.h"
+#include "matrix.h"
 
 int matrix_ops_fill(Matrix* mat, double value) {
     if (mat == NULL)
@@ -55,10 +56,12 @@ int matrix_ops_set_identity(Matrix* mat) {
 int matrix_ops_set(Matrix* mat, int i, int j, double value) {
     if (mat == NULL)
     {
+        MATRIX_CORE_ERR_MESSAGE(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
     if (i < 0 || i >= mat->rows || j < 0 || j >= mat->cols)
     {
+        MATRIX_CORE_ERR_MESSAGE(MATRIX_OPS_ERR_OUT_OF_BOUNDS);
         return MATRIX_OPS_ERR_OUT_OF_BOUNDS;
     }
 
@@ -127,7 +130,7 @@ int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
             for (int k = 0; k < a->cols; ++k) {
                 sum += matrix_ops_get(a, i, k, &status) * matrix_ops_get(b, k, j, &status);
                 if (status != MATRIX_OPS_SUCCESS) {
-                    printf(MATRIX_ERR_MESSAGE, status);
+                    MATRIX_CORE_ERR_MESSAGE(status);
                 }
             }
             matrix_ops_set(result, i, j, sum);
@@ -155,7 +158,7 @@ int matrix_ops_copy(const Matrix* src, Matrix* dest)
         for (int j = 0; j < src->cols; j++) {
             matrix_ops_set(dest, i, j, matrix_ops_get(src, i, j, &status));
             if (status != MATRIX_OPS_SUCCESS) {
-                printf(MATRIX_ERR_MESSAGE, status);
+                MATRIX_CORE_ERR_MESSAGE(status);
             }
 
         }
@@ -189,14 +192,22 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
 
     // Allocate memory
     int bits[32];
-    Matrix base = matrix_create(size, size);
-    Matrix temp_result = matrix_create(size, size);
+    int status;
+    Matrix* base = matrix_create(size, size, &status);
+    if (status != MATRIX_CORE_SUCCESS)
+    {
+        MATRIX_CORE_ERR_MESSAGE(status);
+    }
+    Matrix* temp_result = matrix_create(size, size, &status);
+    {
+        MATRIX_CORE_ERR_MESSAGE(status);
+    }
 
     // Convert exponent to binary representation
     int bitsNum = bit_utils_to_binary_lsb(n, bits, 32);
 
     // Initialize base as mat
-    matrix_ops_copy(mat, &base);
+    matrix_ops_copy(mat, base);
 
     // Initialize result as identity matrix
     matrix_ops_set_identity(result);
@@ -205,17 +216,17 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     for (int exp = 0; exp < bitsNum; exp++) {
         // If the current bit is 1, multiply result by base
         if (bits[exp] == 1) {
-            matrix_ops_multiply(result, &base, &temp_result);
-            matrix_ops_copy(&temp_result, result);
+            matrix_ops_multiply(result, base, temp_result);
+            matrix_ops_copy(temp_result, result);
         }
 
         // Square the base for the next bit
-        matrix_ops_multiply(&base, &base, &temp_result);
-        matrix_ops_copy(&temp_result, &base);
+        matrix_ops_multiply(base, base, temp_result);
+        matrix_ops_copy(temp_result, base);
     }
 
-    matrix_free(&base);
-    matrix_free(&temp_result);
+    matrix_free(base);
+    matrix_free(temp_result);
 
     return MATRIX_OPS_SUCCESS;
 };
@@ -236,7 +247,7 @@ int matrix_ops_print(const Matrix* mat)
             printf("%10.6f ", matrix_ops_get(mat, i, j, &status));
         }
         if (status != MATRIX_OPS_SUCCESS) {
-            printf(MATRIX_ERR_MESSAGE, status);
+            MATRIX_CORE_ERR_MESSAGE(status);
         }
 
         printf("]\n");

@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 /*
  * =============================================================================
  *  matrix_exp.h
@@ -38,6 +39,6 @@
  * @param mat   Pointer to the matrix.
  * @param value Scalar value to assign to each element.
  */
-void matrix_exp_exponential(Matrix* mat, double value);
+void matrix_exp_exponential(const Matrix* A, double t, Matrix* result);
 
 
