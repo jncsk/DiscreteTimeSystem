@@ -43,3 +43,6 @@ int matrix_free(Matrix* mat)
     mat->data = NULL;
 }
 
+MatrixError matrix_core_get_last_error(void) {
+    return g_matrix_last_error;
+}

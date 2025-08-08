@@ -23,10 +23,22 @@
 //------------------------------------------------
 //  Macro definitions
 //------------------------------------------------
-//#define MATRIX_CORE_ERR_MESSAGE "Error: process failed with error code %d\n"
 #define MATRIX_CORE_ERR_MESSAGE(code) \
     fprintf(stderr, "Error: process failed with error code %d (File: %s, Line: %d)\n", \
             (code), __FILE__, __LINE__)
+
+#define MATRIX_CORE_SET_ERROR(code) \
+    do { \
+        g_matrix_last_error.code = (code); \
+        g_matrix_last_error.file = __FILE__; \
+        g_matrix_last_error.line = __LINE__; \
+    } while(0)
+
+#define MATRIX_CORE_PRINT_LAST_ERROR() \
+    do { \
+        MatrixError err = matrix_core_get_last_error(); \
+        fprintf(stderr, "Error %d at %s:%d\n", err.code, err.file, err.line); \
+    } while (0)
 
 #if defined(_MSC_VER)
     #define THREAD_LOCAL __declspec(thread)
@@ -83,3 +95,5 @@ Matrix* matrix_create(int rows, int cols, int* err);
  * @param mat Pointer to the matrix to free.
  */
 int matrix_free(Matrix* mat);
+
+MatrixError matrix_core_get_last_error(void);
