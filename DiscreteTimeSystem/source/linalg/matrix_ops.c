@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "matrix_ops.h"
 #include "bit_utils.h"
-#include "matrix.h"
+#include "matrix_core.h"
 
 int matrix_ops_fill(Matrix* mat, double value) {
     if (mat == NULL)

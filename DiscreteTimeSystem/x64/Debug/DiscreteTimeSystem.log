@@ -1,4 +1,7 @@
-﻿  main.c
-  DiscreteTimeSystem.vcxproj -> C:\Users\佐々木潤\source\repos\DiscreteTimeSystem\x64\Debug\DiscreteTimeSystem.exe
+﻿  state_space.c
+  main.c
+  bit_utils.c
+  コードを生成中...
+  DiscreteTimeSystem.vcxproj -> C:\Users\佐々木潤\source\repos\test\DiscreteTimeSystem\x64\Debug\DiscreteTimeSystem.exe
   'pwsh.exe' は、内部コマンドまたは外部コマンド、
   操作可能なプログラムまたはバッチ ファイルとして認識されていません。

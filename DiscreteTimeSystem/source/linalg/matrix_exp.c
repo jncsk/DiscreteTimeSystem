@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <stdio.h>
-#include "matrix.h"
+#include "matrix_core.h"
 #include "matrix_exp.h"
 #include "matrix_ops.h"
 #include <math.h>
