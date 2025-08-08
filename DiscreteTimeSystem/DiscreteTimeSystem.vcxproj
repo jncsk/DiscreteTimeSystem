@@ -143,6 +143,9 @@
     <ClInclude Include="include\linalg\state_space.h" />
     <ClInclude Include="include\utils\bit_utils.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ToDo.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

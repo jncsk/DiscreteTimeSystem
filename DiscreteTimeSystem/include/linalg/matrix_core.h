@@ -27,9 +27,9 @@
     fprintf(stderr, "Error: process failed with error code %d (File: %s, Line: %d)\n", \
             (code), __FILE__, __LINE__)
 
-#define MATRIX_CORE_SET_ERROR(code) \
+#define MATRIX_CORE_SET_ERROR(errorcode) \
     do { \
-        g_matrix_last_error.code = (code); \
+        g_matrix_last_error.code = (errorcode); \
         g_matrix_last_error.file = __FILE__; \
         g_matrix_last_error.line = __LINE__; \
     } while(0)
@@ -45,7 +45,6 @@
 #else
     #define THREAD_LOCAL __thread
 #endif
-
 //------------------------------------------------
 //  Type definitions
 //------------------------------------------------
@@ -62,6 +61,8 @@ typedef struct {
     const char* file;
     int line;
 } MatrixError;
+
+extern THREAD_LOCAL MatrixError g_matrix_last_error;
 
 /**
  * @brief Structure representing a 2D matrix.

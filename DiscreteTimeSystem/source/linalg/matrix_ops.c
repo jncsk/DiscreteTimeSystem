@@ -8,6 +8,7 @@
 int matrix_ops_fill(Matrix* mat, double value) {
     if (mat == NULL)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
 
@@ -25,6 +26,7 @@ int matrix_ops_set_zero(Matrix* mat)
 {
     if (mat == NULL)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
 
@@ -36,10 +38,12 @@ int matrix_ops_set_zero(Matrix* mat)
 int matrix_ops_set_identity(Matrix* mat) {
     if (mat == NULL)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
     if (mat->rows != mat->cols)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
         return MATRIX_OPS_ERR_DIMENSION;
     }
 
@@ -56,12 +60,12 @@ int matrix_ops_set_identity(Matrix* mat) {
 int matrix_ops_set(Matrix* mat, int i, int j, double value) {
     if (mat == NULL)
     {
-        MATRIX_CORE_ERR_MESSAGE(MATRIX_OPS_ERR_NULL);
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
     if (i < 0 || i >= mat->rows || j < 0 || j >= mat->cols)
     {
-        MATRIX_CORE_ERR_MESSAGE(MATRIX_OPS_ERR_OUT_OF_BOUNDS);
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_OUT_OF_BOUNDS);
         return MATRIX_OPS_ERR_OUT_OF_BOUNDS;
     }
 
@@ -75,11 +79,13 @@ double matrix_ops_get(const Matrix* mat, int i, int j, int* err)
     if (mat == NULL)
     {
         if (err) *err = MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return 0.0; // default value
     }
     if (i < 0 || i >= mat->rows || j < 0 || j >= mat->cols)
     {
         if (err) *err = MATRIX_OPS_ERR_OUT_OF_BOUNDS;
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_OUT_OF_BOUNDS);
         return 0.0;
     }
 
@@ -90,11 +96,13 @@ double matrix_ops_get(const Matrix* mat, int i, int j, int* err)
 int matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
     if (a == NULL || b == NULL || result == NULL)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
     if (a->rows != b->rows || a->cols != b->cols ||
         a->rows != result->rows || a->cols != result->cols)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
         return MATRIX_OPS_ERR_DIMENSION;
     }
 
@@ -111,12 +119,14 @@ int matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
 int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
     if (a == NULL || b == NULL || result == NULL)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
     if (a->cols     !=  b->rows        ||
         a->rows    !=  result->rows || 
         b->cols     !=  result->cols) 
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
         return MATRIX_OPS_ERR_DIMENSION;
     }
 
@@ -130,7 +140,8 @@ int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
             for (int k = 0; k < a->cols; ++k) {
                 sum += matrix_ops_get(a, i, k, &status) * matrix_ops_get(b, k, j, &status);
                 if (status != MATRIX_OPS_SUCCESS) {
-                    MATRIX_CORE_ERR_MESSAGE(status);
+                    MATRIX_CORE_SET_ERROR(status);
+                    return status;
                 }
             }
             matrix_ops_set(result, i, j, sum);
@@ -144,10 +155,12 @@ int matrix_ops_copy(const Matrix* src, Matrix* dest)
 {
     if (src == NULL || dest == NULL)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
     if (src->rows != dest->rows || src->cols != dest->cols) 
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
         return MATRIX_OPS_ERR_DIMENSION;
     }
 
@@ -158,9 +171,9 @@ int matrix_ops_copy(const Matrix* src, Matrix* dest)
         for (int j = 0; j < src->cols; j++) {
             matrix_ops_set(dest, i, j, matrix_ops_get(src, i, j, &status));
             if (status != MATRIX_OPS_SUCCESS) {
-                MATRIX_CORE_ERR_MESSAGE(status);
+                MATRIX_CORE_SET_ERROR(status);
+                return status;
             }
-
         }
     }
 
@@ -171,10 +184,12 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
 {
     if (mat == NULL || result == NULL)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
     if (mat->rows != mat->cols)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
         return MATRIX_OPS_ERR_DIMENSION;
     }
 
@@ -196,11 +211,14 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     Matrix* base = matrix_create(size, size, &status);
     if (status != MATRIX_CORE_SUCCESS)
     {
-        MATRIX_CORE_ERR_MESSAGE(status);
+        MATRIX_CORE_SET_ERROR(status);
+        return status;
     }
     Matrix* temp_result = matrix_create(size, size, &status);
+    if (status != MATRIX_CORE_SUCCESS)
     {
-        MATRIX_CORE_ERR_MESSAGE(status);
+        MATRIX_CORE_SET_ERROR(status);
+        return status;
     }
 
     // Convert exponent to binary representation
@@ -235,6 +253,7 @@ int matrix_ops_print(const Matrix* mat)
 {
     if (mat == NULL)
     {
+        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }
 
@@ -247,7 +266,8 @@ int matrix_ops_print(const Matrix* mat)
             printf("%10.6f ", matrix_ops_get(mat, i, j, &status));
         }
         if (status != MATRIX_OPS_SUCCESS) {
-            MATRIX_CORE_ERR_MESSAGE(status);
+            MATRIX_CORE_SET_ERROR(status);
+            return status;
         }
 
         printf("]\n");
