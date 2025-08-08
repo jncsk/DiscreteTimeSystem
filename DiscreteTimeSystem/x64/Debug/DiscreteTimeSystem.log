@@ -1,7 +1,10 @@
-﻿  state_space.c
+﻿  matrix_core.c
+  matrix_exp.c
+  matrix_ops.c
+  state_space.c
   main.c
-  bit_utils.c
   コードを生成中...
+C:\Users\佐々木潤\source\repos\test\DiscreteTimeSystem\DiscreteTimeSystem\source\linalg\matrix_core.c(44,1): warning C4715: 'matrix_free': 値を返さないコントロール パスがあります。
   DiscreteTimeSystem.vcxproj -> C:\Users\佐々木潤\source\repos\test\DiscreteTimeSystem\x64\Debug\DiscreteTimeSystem.exe
   'pwsh.exe' は、内部コマンドまたは外部コマンド、
   操作可能なプログラムまたはバッチ ファイルとして認識されていません。

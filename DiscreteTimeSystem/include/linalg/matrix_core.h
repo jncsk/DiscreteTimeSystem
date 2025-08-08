@@ -28,6 +28,11 @@
     fprintf(stderr, "Error: process failed with error code %d (File: %s, Line: %d)\n", \
             (code), __FILE__, __LINE__)
 
+#if defined(_MSC_VER)
+    #define THREAD_LOCAL __declspec(thread)
+#else
+    #define THREAD_LOCAL __thread
+#endif
 
 //------------------------------------------------
 //  Type definitions
@@ -39,6 +44,12 @@ typedef enum {
     MATRIX_CORE_ERR_OUT_OF_BOUNDS = -3,
     MATRIX_CORE_ERR_ALLOCATION_FAILED = -4,
 } MatrixCoreStatus;
+
+typedef struct {
+    int code;
+    const char* file;
+    int line;
+} MatrixError;
 
 /**
  * @brief Structure representing a 2D matrix.

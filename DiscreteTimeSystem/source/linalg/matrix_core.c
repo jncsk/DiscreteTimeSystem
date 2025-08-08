@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "matrix_core.h"
 
+THREAD_LOCAL MatrixError g_matrix_last_error = { 0, NULL, 0 };
+
 Matrix* matrix_create(int rows, int cols, int* err)
 {
     if(rows < 0 || cols < 0)
