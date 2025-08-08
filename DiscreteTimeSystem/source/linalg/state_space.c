@@ -1,6 +1,6 @@
 
 #include <stdlib.h>
-#include "matrix.h"
+#include "matrix_core.h"
 #include "state_space.h"
 
 

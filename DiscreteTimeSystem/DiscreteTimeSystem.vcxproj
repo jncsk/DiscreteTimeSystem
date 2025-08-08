@@ -129,7 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\linalg\matrix.c" />
+    <ClCompile Include="source\linalg\matrix_core.c" />
     <ClCompile Include="source\linalg\matrix_exp.c" />
     <ClCompile Include="source\linalg\matrix_ops.c" />
     <ClCompile Include="source\linalg\state_space.c" />
@@ -137,7 +137,7 @@
     <ClCompile Include="source\utils\bit_utils.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\linalg\matrix.h" />
+    <ClInclude Include="include\linalg\matrix_core.h" />
     <ClInclude Include="include\linalg\matrix_exp.h" />
     <ClInclude Include="include\linalg\matrix_ops.h" />
     <ClInclude Include="include\linalg\state_space.h" />

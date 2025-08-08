@@ -21,7 +21,7 @@
     <ClCompile Include="source\linalg\matrix_ops.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="source\linalg\matrix.c">
+    <ClCompile Include="source\linalg\matrix_core.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="source\linalg\matrix_exp.c">
@@ -35,7 +35,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\linalg\matrix.h">
+    <ClInclude Include="include\linalg\matrix_core.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="include\linalg\matrix_exp.h">
