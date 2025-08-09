@@ -6,6 +6,16 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiscreteTimeSystem", "DiscreteTimeSystem\DiscreteTimeSystem.vcxproj", "{B9621742-9F73-478D-B1F7-1CEED0B710EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{4EED78D3-FE9B-4D18-9CB0-0FA1B151C64E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A} = {3D4907D2-9E0C-47EA-9173-80B7710FD97A}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiscreteTimeSystemLib", "DiscreteTimeSystemLib\DiscreteTimeSystemLib.vcxproj", "{3D4907D2-9E0C-47EA-9173-80B7710FD97A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DiscreteTimeSystemApp", "DiscreteTimeSystemApp\DiscreteTimeSystemApp.vcxproj", "{21F9937C-63B0-4DE9-BDD0-0835A65589A6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A} = {3D4907D2-9E0C-47EA-9173-80B7710FD97A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +41,22 @@ Global
 		{4EED78D3-FE9B-4D18-9CB0-0FA1B151C64E}.Release|x64.Build.0 = Release|x64
 		{4EED78D3-FE9B-4D18-9CB0-0FA1B151C64E}.Release|x86.ActiveCfg = Release|Win32
 		{4EED78D3-FE9B-4D18-9CB0-0FA1B151C64E}.Release|x86.Build.0 = Release|Win32
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A}.Debug|x64.ActiveCfg = Debug|x64
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A}.Debug|x64.Build.0 = Debug|x64
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A}.Debug|x86.ActiveCfg = Debug|Win32
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A}.Debug|x86.Build.0 = Debug|Win32
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A}.Release|x64.ActiveCfg = Release|x64
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A}.Release|x64.Build.0 = Release|x64
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A}.Release|x86.ActiveCfg = Release|Win32
+		{3D4907D2-9E0C-47EA-9173-80B7710FD97A}.Release|x86.Build.0 = Release|Win32
+		{21F9937C-63B0-4DE9-BDD0-0835A65589A6}.Debug|x64.ActiveCfg = Debug|x64
+		{21F9937C-63B0-4DE9-BDD0-0835A65589A6}.Debug|x64.Build.0 = Debug|x64
+		{21F9937C-63B0-4DE9-BDD0-0835A65589A6}.Debug|x86.ActiveCfg = Debug|Win32
+		{21F9937C-63B0-4DE9-BDD0-0835A65589A6}.Debug|x86.Build.0 = Debug|Win32
+		{21F9937C-63B0-4DE9-BDD0-0835A65589A6}.Release|x64.ActiveCfg = Release|x64
+		{21F9937C-63B0-4DE9-BDD0-0835A65589A6}.Release|x64.Build.0 = Release|x64
+		{21F9937C-63B0-4DE9-BDD0-0835A65589A6}.Release|x86.ActiveCfg = Release|Win32
+		{21F9937C-63B0-4DE9-BDD0-0835A65589A6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
