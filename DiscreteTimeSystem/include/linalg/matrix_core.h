@@ -2,7 +2,7 @@
 
 /*
  * =============================================================================
- *  matrix.h
+ *  matrix_core.h
  * =============================================================================
  *
  *  Description:
@@ -23,15 +23,6 @@
 //------------------------------------------------
 //  Macro definitions
 //------------------------------------------------
-#define MATRIX_CORE_ERR_MESSAGE(code) \
-    fprintf(stderr, "Error: process failed with error code %d (File: %s, Line: %d)\n", \
-            (code), __FILE__, __LINE__)
-
-#define MATRIX_CORE_PRINT_LAST_ERROR() \
-    do { \
-        MatrixError err = matrix_core_get_last_error(); \
-        fprintf(stderr, "Error %d at %s:%d\n", err.code, err.file, err.line); \
-    } while (0)
 
 #define MATRIX_CORE_PRINT_CALL_AND_LAST(errorcode) \
     do { \
@@ -111,13 +102,22 @@ typedef struct {
  * @param err Error code.
  * @return A Matrix structure with allocated memory.
  */
-Matrix* matrix_create(int rows, int cols, MatrixCoreStatus* err);
+Matrix* matrix_core_create(int rows, int cols, MatrixCoreStatus* err);
+
+/**
+ * @brief Create a new square matrix with specified dimensions.
+ *
+ * @param size Number of rows/columns.
+ * @param err Error code.
+ * @return A Matrix structure with allocated memory.
+ */
+Matrix* matrix_core_create_square(int size, MatrixCoreStatus* err);
 
 /**
  * @brief Free the memory associated with a matrix.
  *
  * @param mat Pointer to the matrix to free.
  */
-MatrixCoreStatus matrix_free(Matrix* mat);
+MatrixCoreStatus matrix_core_free(Matrix* mat);
 
 MatrixError matrix_core_get_last_error(void);

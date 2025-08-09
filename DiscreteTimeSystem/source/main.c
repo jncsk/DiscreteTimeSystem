@@ -36,8 +36,8 @@ int main()
 	// Practice using matrix_ops_power
 	{
 		MatrixCoreStatus status = 0;
-		Matrix* A = matrix_create(3, 3, &status);
-		Matrix* result = matrix_create(3, 3, &status);
+		Matrix* A = matrix_core_create(3, 3, &status);
+		Matrix* result = matrix_core_create(3, 3, &status);
 
 		matrix_ops_set(A, 0, 0, 1);
 		matrix_ops_set(A, 0, 1, 2);
@@ -83,10 +83,10 @@ int main()
 	{
 		MatrixCoreStatus status = 0;
 
-		Matrix* A = matrix_create(3, 100, &status);
+		Matrix* A = matrix_core_create(3, 100, &status);
 		MATRIX_CORE_HANDLE_ERR(status);
 
-		Matrix* result = matrix_create(3, 3, &status);
+		Matrix* result = matrix_core_create(3, 3, &status);
 		MATRIX_CORE_HANDLE_ERR(status);
 
 		status = matrix_ops_set(A, 0, 0, 1);
@@ -118,6 +118,25 @@ int main()
 
 		matrix_exp_exponential(A, 3, result);
 		MATRIX_CORE_HANDLE_ERR(status);
+	}
+
+	{
+		Matrix* B = matrix_core_create_square(2, &status);
+		MATRIX_CORE_HANDLE_ERR(status);
+
+		status = matrix_ops_set(B, 0, 0, 3);
+		MATRIX_CORE_HANDLE_ERR(status);
+
+		status = matrix_ops_set(B, 0, 1, 2);
+		MATRIX_CORE_HANDLE_ERR(status);
+
+		status = matrix_ops_set(B, 1, 0, 2);
+		MATRIX_CORE_HANDLE_ERR(status);
+
+		status = matrix_ops_set(B, 1, 1, 4);
+		MATRIX_CORE_HANDLE_ERR(status);
+
+		matrix_ops_print(B);
 	}
 }
 
