@@ -15,7 +15,7 @@
  *      - Matrix transposition
  *      - Identity and zero matrix generation
  *      - Matrix copy
- *      - Print the contents of a matrix
+ *      - Printing matrix contents
  *
  * =============================================================================
  */
@@ -39,7 +39,7 @@
  *
  * @param mat   Pointer to the matrix.
  * @param value Scalar value to assign to each element.
- * @return Error code.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_fill(Matrix* mat, double value);
 
@@ -50,7 +50,7 @@ MatrixCoreStatus matrix_ops_fill(Matrix* mat, double value);
  * @param i     Row index (0-based).
  * @param j     Column index (0-based).
  * @param value Value to set at (i, j).
- * @return Error code.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_set(Matrix* mat, int i, int j, double value);
 
@@ -58,7 +58,7 @@ MatrixCoreStatus matrix_ops_set(Matrix* mat, int i, int j, double value);
  * @brief Set all elements of a matrix to zero.
  *
  * @param mat Pointer to the matrix.
- * @return Error code.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_set_zero(Matrix* mat);
 
@@ -67,7 +67,7 @@ MatrixCoreStatus matrix_ops_set_zero(Matrix* mat);
  *
  * @param mat Pointer to the square matrix.
  * @return Error code.
- * @note This function does nothing if the matrix is not square.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_set_identity(Matrix* mat);
 
@@ -88,7 +88,7 @@ double matrix_ops_get(const Matrix* mat, int i, int j, MatrixCoreStatus* err);
  * @param a First input matrix (must match dimensions of b)
  * @param b Second input matrix
  * @param result Output matrix (preallocated with same dimensions as a/b)
- * @return Error code.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result);
 
@@ -98,7 +98,7 @@ MatrixCoreStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result
  * @param a            Left matrix (size m x n)
  * @param b           Right matrix (size n x p)
  * @param result    Output matrix (must be preallocated with size m x p)
- * @return Error code.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result);
 
@@ -108,7 +108,7 @@ MatrixCoreStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* r
  * @param mat        The input square matrix (size N x N)
  * @param n            Non-negative integer exponent
  * @param result	    Output matrix (must be preallocated with size N x N)
- * @return Error code.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result);
 
@@ -117,7 +117,7 @@ MatrixCoreStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result);
  *
  * @param src   Source matrix
  * @param dest  Destination matrix (must have same dimensions as src)
- * @return Error code.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_copy(const Matrix* src, Matrix* dest);
 
@@ -125,7 +125,7 @@ MatrixCoreStatus matrix_ops_copy(const Matrix* src, Matrix* dest);
  * @brief Print the contents of a matrix to stdout in a readable format.
  *
  * @param mat Pointer to the matrix to be printed.
- * @return Error code.
+ * @return MATRIX_CORE_SUCCESS if freed successfully, otherwise an error code.
  */
 MatrixCoreStatus matrix_ops_print(const Matrix* mat);
 
