@@ -8,6 +8,7 @@
 int matrix_ops_fill(Matrix* mat, double value) {
     if (mat == NULL)
     {
+        RETURN_ERROR(MATRIX_CORE_ERR_NULL);
         MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
         return MATRIX_OPS_ERR_NULL;
     }

@@ -34,6 +34,12 @@
         g_matrix_last_error.line = __LINE__; \
     } while(0)
 
+#define RETURN_ERROR(errorcode) \
+    do { \
+        MATRIX_CORE_SET_ERROR(errorcode); \
+        return errorcode; \
+    } while (0)
+
 #define MATRIX_CORE_PRINT_LAST_ERROR() \
     do { \
         MatrixError err = matrix_core_get_last_error(); \
