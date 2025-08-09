@@ -23,7 +23,7 @@ void matrix_exp_exponential(const Matrix* A, double t, Matrix* result)
 	int status = 0;
 	Matrix* At = matrix_create(3, 3, &status);
 	status = matrix_ops_set_zero(At);
-	if (status != MATRIX_OPS_SUCCESS)
+	if (status != MATRIX_CORE_SUCCESS)
 	{
 		MATRIX_CORE_SET_ERROR(status);
 		return status;
@@ -34,7 +34,7 @@ void matrix_exp_exponential(const Matrix* A, double t, Matrix* result)
 			{
 				printf("%d\n", i);
 				matrix_ops_set(At, i, j, matrix_ops_get(A, i, j, &status) * t);
-				if (status != MATRIX_OPS_SUCCESS) {
+				if (status != MATRIX_CORE_SUCCESS) {
 					MATRIX_CORE_SET_ERROR(status);
 					return status;
 				}

@@ -9,8 +9,8 @@ int matrix_ops_fill(Matrix* mat, double value) {
     if (mat == NULL)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
 
     int size = mat->rows * mat->cols;
@@ -20,32 +20,32 @@ int matrix_ops_fill(Matrix* mat, double value) {
         mat->data[i] = value;
     }
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 }
 
 int matrix_ops_set_zero(Matrix* mat)
 {
     if (mat == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
 
     matrix_ops_fill(mat, 0.0);
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 }
 
 int matrix_ops_set_identity(Matrix* mat) {
     if (mat == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
     if (mat->rows != mat->cols)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
-        return MATRIX_OPS_ERR_DIMENSION;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_DIMENSION);
+        return MATRIX_CORE_ERR_DIMENSION;
     }
 
     matrix_ops_set_zero(mat);
@@ -55,56 +55,56 @@ int matrix_ops_set_identity(Matrix* mat) {
         mat->data[i * mat->cols + i] = 1.0;
     }
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 }
 
 int matrix_ops_set(Matrix* mat, int i, int j, double value) {
     if (mat == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
     if (i < 0 || i >= mat->rows || j < 0 || j >= mat->cols)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_OUT_OF_BOUNDS);
-        return MATRIX_OPS_ERR_OUT_OF_BOUNDS;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
+        return MATRIX_CORE_ERR_OUT_OF_BOUNDS;
     }
 
     mat->data[i * mat->cols + j] = value;
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 }
 
 double matrix_ops_get(const Matrix* mat, int i, int j, int* err)
 {
     if (mat == NULL)
     {
-        if (err) *err = MATRIX_OPS_ERR_NULL;
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
+        if (err) *err = MATRIX_CORE_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
         return 0.0; // default value
     }
     if (i < 0 || i >= mat->rows || j < 0 || j >= mat->cols)
     {
-        if (err) *err = MATRIX_OPS_ERR_OUT_OF_BOUNDS;
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_OUT_OF_BOUNDS);
+        if (err) *err = MATRIX_CORE_ERR_OUT_OF_BOUNDS;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
         return 0.0;
     }
 
-    if (err) *err = MATRIX_OPS_SUCCESS;
+    if (err) *err = MATRIX_CORE_SUCCESS;
     return mat->data[i * mat->cols + j];
 }
 
 int matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
     if (a == NULL || b == NULL || result == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
     if (a->rows != b->rows || a->cols != b->cols ||
         a->rows != result->rows || a->cols != result->cols)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
-        return MATRIX_OPS_ERR_DIMENSION;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_DIMENSION);
+        return MATRIX_CORE_ERR_DIMENSION;
     }
 
     int size = a->rows * a->cols;
@@ -114,21 +114,21 @@ int matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
         result->data[i] = a->data[i] + b->data[i];
     }
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 }
 
 int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
     if (a == NULL || b == NULL || result == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
     if (a->cols     !=  b->rows        ||
         a->rows    !=  result->rows || 
         b->cols     !=  result->cols) 
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
-        return MATRIX_OPS_ERR_DIMENSION;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_DIMENSION);
+        return MATRIX_CORE_ERR_DIMENSION;
     }
 
     int status;
@@ -140,7 +140,7 @@ int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
             double sum = 0.0;
             for (int k = 0; k < a->cols; ++k) {
                 sum += matrix_ops_get(a, i, k, &status) * matrix_ops_get(b, k, j, &status);
-                if (status != MATRIX_OPS_SUCCESS) {
+                if (status != MATRIX_CORE_SUCCESS) {
                     MATRIX_CORE_SET_ERROR(status);
                     return status;
                 }
@@ -149,20 +149,20 @@ int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
         }
     }
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 }
 
 int matrix_ops_copy(const Matrix* src, Matrix* dest)
 {
     if (src == NULL || dest == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
     if (src->rows != dest->rows || src->cols != dest->cols) 
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
-        return MATRIX_OPS_ERR_DIMENSION;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_DIMENSION);
+        return MATRIX_CORE_ERR_DIMENSION;
     }
 
     int status;
@@ -171,27 +171,27 @@ int matrix_ops_copy(const Matrix* src, Matrix* dest)
     {
         for (int j = 0; j < src->cols; j++) {
             matrix_ops_set(dest, i, j, matrix_ops_get(src, i, j, &status));
-            if (status != MATRIX_OPS_SUCCESS) {
+            if (status != MATRIX_CORE_SUCCESS) {
                 MATRIX_CORE_SET_ERROR(status);
                 return status;
             }
         }
     }
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 }
 
 int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
 {
     if (mat == NULL || result == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
     if (mat->rows != mat->cols)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
-        return MATRIX_OPS_ERR_DIMENSION;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_DIMENSION);
+        return MATRIX_CORE_ERR_DIMENSION;
     }
 
     int size = mat->rows;
@@ -199,11 +199,11 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     // Handle special cases
     if (n == 0) {
         matrix_ops_set_identity(result);
-        return MATRIX_OPS_SUCCESS;
+        return MATRIX_CORE_SUCCESS;
     }
     if (n == 1) {
         matrix_ops_copy(mat, result);
-        return MATRIX_OPS_SUCCESS;
+        return MATRIX_CORE_SUCCESS;
     }
 
     // Allocate memory
@@ -247,15 +247,15 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     matrix_free(base);
     matrix_free(temp_result);
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 };
 
 int matrix_ops_print(const Matrix* mat)
 {
     if (mat == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_NULL);
-        return MATRIX_OPS_ERR_NULL;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
+        return MATRIX_CORE_ERR_NULL;
     }
 
     int status = 0;
@@ -266,7 +266,7 @@ int matrix_ops_print(const Matrix* mat)
         for (int j = 0; j < mat->cols; j++) {
             printf("%10.6f ", matrix_ops_get(mat, i, j, &status));
         }
-        if (status != MATRIX_OPS_SUCCESS) {
+        if (status != MATRIX_CORE_SUCCESS) {
             MATRIX_CORE_SET_ERROR(status);
             return status;
         }
@@ -275,6 +275,6 @@ int matrix_ops_print(const Matrix* mat)
     }
     printf("\n");
 
-    return MATRIX_OPS_SUCCESS;
+    return MATRIX_CORE_SUCCESS;
 }
 

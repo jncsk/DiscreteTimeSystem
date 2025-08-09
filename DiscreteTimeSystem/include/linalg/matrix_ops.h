@@ -29,12 +29,6 @@
 //------------------------------------------------
 //  Type definitions
 //------------------------------------------------
-typedef enum {
-    MATRIX_OPS_SUCCESS = 0,
-    MATRIX_OPS_ERR_NULL = -1,
-    MATRIX_OPS_ERR_DIMENSION = -2,
-    MATRIX_OPS_ERR_OUT_OF_BOUNDS = -3
-} MatrixOpsStatus;
 
 //------------------------------------------------
 //  Function Prototypes
