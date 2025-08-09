@@ -23,11 +23,50 @@
 //------------------------------------------------
 //  Macro definitions
 //------------------------------------------------
-//#define MATRIX_CORE_ERR_MESSAGE "Error: process failed with error code %d\n"
 #define MATRIX_CORE_ERR_MESSAGE(code) \
     fprintf(stderr, "Error: process failed with error code %d (File: %s, Line: %d)\n", \
             (code), __FILE__, __LINE__)
 
+#define MATRIX_CORE_PRINT_LAST_ERROR() \
+    do { \
+        MatrixError err = matrix_core_get_last_error(); \
+        fprintf(stderr, "Error %d at %s:%d\n", err.code, err.file, err.line); \
+    } while (0)
+
+#define MATRIX_CORE_PRINT_CALL_AND_LAST(errorcode) \
+    do { \
+        fprintf(stderr, "[Caller] Error %d at %s:%d\n", (errorcode), __FILE__, __LINE__); \
+        fprintf(stderr, "[Origin] Error %d at %s:%d\n", \
+                g_matrix_last_error.code, \
+                g_matrix_last_error.file, \
+                g_matrix_last_error.line); \
+    } while (0)
+
+#define MATRIX_CORE_HANDLE_ERR(status) \
+    do { \
+        if ((status) != MATRIX_CORE_SUCCESS) { \
+            MATRIX_CORE_PRINT_CALL_AND_LAST(status); \
+        } \
+    } while (0)
+
+#define MATRIX_CORE_SET_ERROR(errorcode) \
+    do { \
+        g_matrix_last_error.code = (errorcode); \
+        g_matrix_last_error.file = __FILE__; \
+        g_matrix_last_error.line = __LINE__; \
+    } while(0)
+
+#define RETURN_ERROR(errorcode) \
+    do { \
+        MATRIX_CORE_SET_ERROR(errorcode); \
+        return (errorcode); \
+    } while (0)
+
+#if defined(_MSC_VER)
+    #define THREAD_LOCAL __declspec(thread)
+#else
+    #define THREAD_LOCAL __thread
+#endif
 
 //------------------------------------------------
 //  Type definitions
@@ -39,6 +78,14 @@ typedef enum {
     MATRIX_CORE_ERR_OUT_OF_BOUNDS = -3,
     MATRIX_CORE_ERR_ALLOCATION_FAILED = -4,
 } MatrixCoreStatus;
+
+typedef struct {
+    int code;
+    const char* file;
+    int line;
+} MatrixError;
+
+extern THREAD_LOCAL MatrixError g_matrix_last_error;
 
 /**
  * @brief Structure representing a 2D matrix.
@@ -64,11 +111,13 @@ typedef struct {
  * @param err Error code.
  * @return A Matrix structure with allocated memory.
  */
-Matrix* matrix_create(int rows, int cols, int* err);
+Matrix* matrix_create(int rows, int cols, MatrixCoreStatus* err);
 
 /**
  * @brief Free the memory associated with a matrix.
  *
  * @param mat Pointer to the matrix to free.
  */
-int matrix_free(Matrix* mat);
+MatrixCoreStatus matrix_free(Matrix* mat);
+
+MatrixError matrix_core_get_last_error(void);
