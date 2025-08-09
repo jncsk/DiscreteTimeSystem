@@ -10,7 +10,7 @@ int main()
 	//Define a structure of StateSpaceModel
 	StateSpaceModel* model;
 
-	int status = 0;
+	MatrixCoreStatus status = 0;
 	StateSpaceModel* model2;
 	model2 = state_space_create(2, 1, 1, &status);
 
@@ -35,7 +35,7 @@ int main()
 
 	// Practice using matrix_ops_power
 	{
-		int status = 0;
+		MatrixCoreStatus status = 0;
 		Matrix* A = matrix_create(3, 3, &status);
 		Matrix* result = matrix_create(3, 3, &status);
 
@@ -81,71 +81,43 @@ int main()
 
 	// Practice using matrix_exp_exponential
 	{
-		int status = 0;
+		MatrixCoreStatus status = 0;
 
 		Matrix* A = matrix_create(3, 100, &status);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-			return status;
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
+
 		Matrix* result = matrix_create(3, 3, &status);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-			return status;
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
 
 		status = matrix_ops_set(A, 0, 0, 1);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
+
 		status = matrix_ops_set(A, 0, 1, 2);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
+
 		status = matrix_ops_set(A, 0, 2, 2);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
+
 		status = matrix_ops_set(A, 1, 0, 3);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
+
 		status = matrix_ops_set(A, 1, 1, 4);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
+
 		status = matrix_ops_set(A, 1, 2, 3);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
 
 		status = matrix_ops_set(A, 2, 0, 2);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
+
 		status = matrix_ops_set(A, 2, 1, 3);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
+
 		status = matrix_ops_set(A, 2, 2, 5);
-		if (status != MATRIX_CORE_SUCCESS) {
-			MATRIX_CORE_ERR_MESSAGE(status);
-			MATRIX_CORE_PRINT_LAST_ERROR();
-		}
+		MATRIX_CORE_HANDLE_ERR(status);
 
 		matrix_exp_exponential(A, 3, result);
-		MATRIX_CORE_ERR_MESSAGE(status);
-		MATRIX_CORE_PRINT_LAST_ERROR();
+		MATRIX_CORE_HANDLE_ERR(status);
 	}
 }
 

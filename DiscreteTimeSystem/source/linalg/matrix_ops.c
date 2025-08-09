@@ -5,7 +5,7 @@
 #include "bit_utils.h"
 #include "matrix_core.h"
 
-int matrix_ops_fill(Matrix* mat, double value) {
+MatrixCoreStatus matrix_ops_fill(Matrix* mat, double value) {
     if (mat == NULL)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
@@ -21,19 +21,23 @@ int matrix_ops_fill(Matrix* mat, double value) {
     return MATRIX_CORE_SUCCESS;
 }
 
-int matrix_ops_set_zero(Matrix* mat)
+MatrixCoreStatus matrix_ops_set_zero(Matrix* mat)
 {
     if (mat == NULL)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
     }
 
-    matrix_ops_fill(mat, 0.0);
+    MatrixCoreStatus status =matrix_ops_fill(mat, 0.0);
+    if (status != MATRIX_CORE_SUCCESS)
+    {
+        RETURN_ERROR(MATRIX_CORE_ERR_NULL);
+    }
 
     return MATRIX_CORE_SUCCESS;
 }
 
-int matrix_ops_set_identity(Matrix* mat) {
+MatrixCoreStatus matrix_ops_set_identity(Matrix* mat) {
     if (mat == NULL)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
@@ -43,7 +47,12 @@ int matrix_ops_set_identity(Matrix* mat) {
         RETURN_ERROR(MATRIX_CORE_ERR_DIMENSION);
     }
 
-    matrix_ops_set_zero(mat);
+    
+    MatrixCoreStatus status = matrix_ops_set_zero(mat);;
+    if (status != MATRIX_CORE_SUCCESS)
+    {
+        RETURN_ERROR(MATRIX_CORE_ERR_NULL);
+    }
 
     for (int i = 0; i < mat->rows; ++i) 
     {
@@ -53,7 +62,7 @@ int matrix_ops_set_identity(Matrix* mat) {
     return MATRIX_CORE_SUCCESS;
 }
 
-int matrix_ops_set(Matrix* mat, int i, int j, double value) {
+MatrixCoreStatus matrix_ops_set(Matrix* mat, int i, int j, double value) {
     if (mat == NULL)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
@@ -68,7 +77,7 @@ int matrix_ops_set(Matrix* mat, int i, int j, double value) {
     return MATRIX_CORE_SUCCESS;
 }
 
-double matrix_ops_get(const Matrix* mat, int i, int j, int* err)
+double matrix_ops_get(const Matrix* mat, int i, int j, MatrixCoreStatus* err)
 {
     if (mat == NULL)
     {
@@ -87,7 +96,7 @@ double matrix_ops_get(const Matrix* mat, int i, int j, int* err)
     return mat->data[i * mat->cols + j];
 }
 
-int matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
+MatrixCoreStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
     if (a == NULL || b == NULL || result == NULL)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
@@ -108,7 +117,7 @@ int matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
     return MATRIX_CORE_SUCCESS;
 }
 
-int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
+MatrixCoreStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
     if (a == NULL || b == NULL || result == NULL)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
@@ -120,7 +129,7 @@ int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
         RETURN_ERROR(MATRIX_CORE_ERR_DIMENSION);
     }
 
-    int status;
+    MatrixCoreStatus status;
 
     for (int i = 0; i < a->rows; ++i) 
     {
@@ -129,18 +138,23 @@ int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
             double sum = 0.0;
             for (int k = 0; k < a->cols; ++k) {
                 sum += matrix_ops_get(a, i, k, &status) * matrix_ops_get(b, k, j, &status);
-                if (status != MATRIX_CORE_SUCCESS) {
+                if (status != MATRIX_CORE_SUCCESS) 
+                {
                     RETURN_ERROR(status);
                 }
             }
-            matrix_ops_set(result, i, j, sum);
+            status =matrix_ops_set(result, i, j, sum);
+            if (status != MATRIX_CORE_SUCCESS) 
+            {
+                RETURN_ERROR(status);
+            }
         }
     }
 
     return MATRIX_CORE_SUCCESS;
 }
 
-int matrix_ops_copy(const Matrix* src, Matrix* dest)
+MatrixCoreStatus matrix_ops_copy(const Matrix* src, Matrix* dest)
 {
     if (src == NULL || dest == NULL)
     {
@@ -151,7 +165,7 @@ int matrix_ops_copy(const Matrix* src, Matrix* dest)
         RETURN_ERROR(MATRIX_CORE_ERR_DIMENSION);
     }
 
-    int status;
+    MatrixCoreStatus status;
 
     for (int i = 0; i < src->rows; i++) 
     {
@@ -166,7 +180,7 @@ int matrix_ops_copy(const Matrix* src, Matrix* dest)
     return MATRIX_CORE_SUCCESS;
 }
 
-int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
+MatrixCoreStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
 {
     if (mat == NULL || result == NULL)
     {
@@ -178,20 +192,33 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     }
 
     int size = mat->rows;
-
+    MatrixCoreStatus status = MATRIX_CORE_SUCCESS;
     // Handle special cases
     if (n == 0) {
-        matrix_ops_set_identity(result);
-        return MATRIX_CORE_SUCCESS;
+        status = matrix_ops_set_identity(result);
+        if (status != MATRIX_CORE_SUCCESS)
+        {
+            RETURN_ERROR(status);
+        }
+        else
+        {
+            return MATRIX_CORE_SUCCESS;
+        }
     }
     if (n == 1) {
-        matrix_ops_copy(mat, result);
-        return MATRIX_CORE_SUCCESS;
+        status =matrix_ops_copy(mat, result);
+        if (status != MATRIX_CORE_SUCCESS)
+        {
+            RETURN_ERROR(status);
+        }
+        else
+        {
+            return MATRIX_CORE_SUCCESS;
+        }
     }
 
     // Allocate memory
     int bits[32];
-    int status;
     Matrix* base = matrix_create(size, size, &status);
     if (status != MATRIX_CORE_SUCCESS)
     {
@@ -207,47 +234,81 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     int bitsNum = bit_utils_to_binary_lsb(n, bits, 32);
 
     // Initialize base as mat
-    matrix_ops_copy(mat, base);
+    status = matrix_ops_copy(mat, base);
+    if (status != MATRIX_CORE_SUCCESS)
+    {
+        RETURN_ERROR(status);
+    }
 
     // Initialize result as identity matrix
-    matrix_ops_set_identity(result);
+    status = matrix_ops_set_identity(result);
+    if (status != MATRIX_CORE_SUCCESS)
+    {
+        RETURN_ERROR(status);
+    }
 
     // Binary exponentiation
     for (int exp = 0; exp < bitsNum; exp++) {
         // If the current bit is 1, multiply result by base
         if (bits[exp] == 1) {
-            matrix_ops_multiply(result, base, temp_result);
-            matrix_ops_copy(temp_result, result);
+            status = matrix_ops_multiply(result, base, temp_result);
+            if (status != MATRIX_CORE_SUCCESS)
+            {
+                RETURN_ERROR(status);
+            }
+            status = matrix_ops_copy(temp_result, result);
+            if (status != MATRIX_CORE_SUCCESS)
+            {
+                RETURN_ERROR(status);
+            }
         }
 
         // Square the base for the next bit
-        matrix_ops_multiply(base, base, temp_result);
-        matrix_ops_copy(temp_result, base);
+        status = matrix_ops_multiply(base, base, temp_result);
+        if (status != MATRIX_CORE_SUCCESS)
+        {
+            RETURN_ERROR(status);
+        }
+        status = matrix_ops_copy(temp_result, base);
+        if (status != MATRIX_CORE_SUCCESS)
+        {
+            RETURN_ERROR(status);
+        }
     }
 
-    matrix_free(base);
-    matrix_free(temp_result);
+    status = matrix_free(base);
+    if (status != MATRIX_CORE_SUCCESS)
+    {
+        RETURN_ERROR(status);
+    }
+
+    status = matrix_free(temp_result);
+    if (status != MATRIX_CORE_SUCCESS)
+    {
+        RETURN_ERROR(status);
+    }
 
     return MATRIX_CORE_SUCCESS;
 };
 
-int matrix_ops_print(const Matrix* mat)
+MatrixCoreStatus matrix_ops_print(const Matrix* mat)
 {
     if (mat == NULL)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
     }
 
-    int status = 0;
+    MatrixCoreStatus status = 0;
 
     printf("Matrix (%d x %d):\n", mat->rows, mat->cols);
     for (int i = 0; i < mat->rows; i++) {
         printf("[ ");
         for (int j = 0; j < mat->cols; j++) {
             printf("%10.6f ", matrix_ops_get(mat, i, j, &status));
-        }
-        if (status != MATRIX_CORE_SUCCESS) {
-            RETURN_ERROR(status);
+            if (status != MATRIX_CORE_SUCCESS)
+            {
+                RETURN_ERROR(status);
+            }
         }
 
         printf("]\n");

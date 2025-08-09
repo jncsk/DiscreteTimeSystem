@@ -27,6 +27,28 @@
     fprintf(stderr, "Error: process failed with error code %d (File: %s, Line: %d)\n", \
             (code), __FILE__, __LINE__)
 
+#define MATRIX_CORE_PRINT_LAST_ERROR() \
+    do { \
+        MatrixError err = matrix_core_get_last_error(); \
+        fprintf(stderr, "Error %d at %s:%d\n", err.code, err.file, err.line); \
+    } while (0)
+
+#define MATRIX_CORE_PRINT_CALL_AND_LAST(errorcode) \
+    do { \
+        fprintf(stderr, "[Caller] Error %d at %s:%d\n", (errorcode), __FILE__, __LINE__); \
+        fprintf(stderr, "[Origin] Error %d at %s:%d\n", \
+                g_matrix_last_error.code, \
+                g_matrix_last_error.file, \
+                g_matrix_last_error.line); \
+    } while (0)
+
+#define MATRIX_CORE_HANDLE_ERR(status) \
+    do { \
+        if ((status) != MATRIX_CORE_SUCCESS) { \
+            MATRIX_CORE_PRINT_CALL_AND_LAST(status); \
+        } \
+    } while (0)
+
 #define MATRIX_CORE_SET_ERROR(errorcode) \
     do { \
         g_matrix_last_error.code = (errorcode); \
@@ -37,13 +59,7 @@
 #define RETURN_ERROR(errorcode) \
     do { \
         MATRIX_CORE_SET_ERROR(errorcode); \
-        return errorcode; \
-    } while (0)
-
-#define MATRIX_CORE_PRINT_LAST_ERROR() \
-    do { \
-        MatrixError err = matrix_core_get_last_error(); \
-        fprintf(stderr, "Error %d at %s:%d\n", err.code, err.file, err.line); \
+        return (errorcode); \
     } while (0)
 
 #if defined(_MSC_VER)
@@ -51,6 +67,7 @@
 #else
     #define THREAD_LOCAL __thread
 #endif
+
 //------------------------------------------------
 //  Type definitions
 //------------------------------------------------
@@ -94,13 +111,13 @@ typedef struct {
  * @param err Error code.
  * @return A Matrix structure with allocated memory.
  */
-Matrix* matrix_create(int rows, int cols, int* err);
+Matrix* matrix_create(int rows, int cols, MatrixCoreStatus* err);
 
 /**
  * @brief Free the memory associated with a matrix.
  *
  * @param mat Pointer to the matrix to free.
  */
-int matrix_free(Matrix* mat);
+MatrixCoreStatus matrix_free(Matrix* mat);
 
 MatrixError matrix_core_get_last_error(void);

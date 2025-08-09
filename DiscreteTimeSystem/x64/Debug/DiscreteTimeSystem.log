@@ -1,9 +1,4 @@
-﻿  matrix_core.c
-  matrix_ops.c
-  コードを生成中...
-C:\Users\佐々木潤\source\repos\test\DiscreteTimeSystem\DiscreteTimeSystem\source\linalg\matrix_core.c(12,9): warning C4047: 'return': 間接参照のレベルが 'Matrix *' と 'int' で異なっています。
-C:\Users\佐々木潤\source\repos\test\DiscreteTimeSystem\DiscreteTimeSystem\source\linalg\matrix_core.c(18,9): warning C4047: 'return': 間接参照のレベルが 'Matrix *' と 'int' で異なっています。
-C:\Users\佐々木潤\source\repos\test\DiscreteTimeSystem\DiscreteTimeSystem\source\linalg\matrix_core.c(28,9): warning C4047: 'return': 間接参照のレベルが 'Matrix *' と 'int' で異なっています。
+﻿  main.c
   DiscreteTimeSystem.vcxproj -> C:\Users\佐々木潤\source\repos\test\DiscreteTimeSystem\x64\Debug\DiscreteTimeSystem.exe
   'pwsh.exe' は、内部コマンドまたは外部コマンド、
   操作可能なプログラムまたはバッチ ファイルとして認識されていません。

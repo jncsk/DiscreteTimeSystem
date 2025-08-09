@@ -41,7 +41,7 @@
  * @param value Scalar value to assign to each element.
  * @return Error code.
  */
-int matrix_ops_fill(Matrix* mat, double value);
+MatrixCoreStatus matrix_ops_fill(Matrix* mat, double value);
 
 /**
  * @brief Set a specific element of a matrix.
@@ -52,7 +52,7 @@ int matrix_ops_fill(Matrix* mat, double value);
  * @param value Value to set at (i, j).
  * @return Error code.
  */
-int matrix_ops_set(Matrix* mat, int i, int j, double value);
+MatrixCoreStatus matrix_ops_set(Matrix* mat, int i, int j, double value);
 
 /**
  * @brief Set all elements of a matrix to zero.
@@ -60,7 +60,7 @@ int matrix_ops_set(Matrix* mat, int i, int j, double value);
  * @param mat Pointer to the matrix.
  * @return Error code.
  */
-int matrix_ops_set_zero(Matrix* mat);
+MatrixCoreStatus matrix_ops_set_zero(Matrix* mat);
 
 /**
  * @brief Initialize a square matrix as an identity matrix.
@@ -69,7 +69,7 @@ int matrix_ops_set_zero(Matrix* mat);
  * @return Error code.
  * @note This function does nothing if the matrix is not square.
  */
-int matrix_ops_set_identity(Matrix* mat);
+MatrixCoreStatus matrix_ops_set_identity(Matrix* mat);
 
 /**
  * @brief Get the value of a specific element in a matrix.
@@ -80,7 +80,7 @@ int matrix_ops_set_identity(Matrix* mat);
  * @param err Error code
  * @return Value at position (i, j). Returns 0.0 if out of bounds.
  */
-double matrix_ops_get(const Matrix* mat, int i, int j, int* err);
+double matrix_ops_get(const Matrix* mat, int i, int j, MatrixCoreStatus* err);
 
 /**
  * @brief Add two matrices: result = a + b
@@ -90,7 +90,7 @@ double matrix_ops_get(const Matrix* mat, int i, int j, int* err);
  * @param result Output matrix (preallocated with same dimensions as a/b)
  * @return Error code.
  */
-int matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result);
+MatrixCoreStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result);
 
 /**
  * @brief Multiply two matrices: result = a * b
@@ -100,7 +100,7 @@ int matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result);
  * @param result    Output matrix (must be preallocated with size m x p)
  * @return Error code.
  */
-int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result);
+MatrixCoreStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result);
 
 /**
  * @brief Compute the integer power of a square matrix (A^n)
@@ -110,7 +110,7 @@ int matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result);
  * @param result	    Output matrix (must be preallocated with size N x N)
  * @return Error code.
  */
-int matrix_ops_power(const Matrix* mat, int n, Matrix* result);
+MatrixCoreStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result);
 
 /**
  * @brief Copy all elements from one matrix to another.
@@ -119,7 +119,7 @@ int matrix_ops_power(const Matrix* mat, int n, Matrix* result);
  * @param dest  Destination matrix (must have same dimensions as src)
  * @return Error code.
  */
-int matrix_ops_copy(const Matrix* src, Matrix* dest);
+MatrixCoreStatus matrix_ops_copy(const Matrix* src, Matrix* dest);
 
 /**
  * @brief Print the contents of a matrix to stdout in a readable format.
@@ -127,5 +127,5 @@ int matrix_ops_copy(const Matrix* src, Matrix* dest);
  * @param mat Pointer to the matrix to be printed.
  * @return Error code.
  */
-int matrix_ops_print(const Matrix* mat);
+MatrixCoreStatus matrix_ops_print(const Matrix* mat);
 
