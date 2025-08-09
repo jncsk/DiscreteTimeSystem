@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <string.h>
 #include "matrix_ops.h"
 #include "bit_utils.h"
 #include "matrix_core.h"
@@ -67,7 +68,11 @@ MatrixCoreStatus matrix_ops_set(Matrix* mat, int i, int j, double value) {
     {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
     }
-    if (i < 0 || i >= mat->rows || j < 0 || j >= mat->cols)
+    if (i < 0 || i >= mat->rows)
+    {
+        RETURN_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
+    }    
+    if (j < 0 || j >= mat->cols)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
     }
@@ -156,26 +161,17 @@ MatrixCoreStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* r
 
 MatrixCoreStatus matrix_ops_copy(const Matrix* src, Matrix* dest)
 {
-    if (src == NULL || dest == NULL)
-    {
+    if (!src || !dest) {
         RETURN_ERROR(MATRIX_CORE_ERR_NULL);
     }
     if (src->rows != dest->rows || src->cols != dest->cols)
     {
         RETURN_ERROR(MATRIX_CORE_ERR_DIMENSION);
     }
+   if (src == dest) return MATRIX_CORE_SUCCESS; 
 
-    MatrixCoreStatus status;
-
-    for (int i = 0; i < src->rows; i++) 
-    {
-        for (int j = 0; j < src->cols; j++) {
-            matrix_ops_set(dest, i, j, matrix_ops_get(src, i, j, &status));
-            if (status != MATRIX_CORE_SUCCESS) {
-                RETURN_ERROR(status);
-            }
-        }
-    }
+    size_t n = (size_t)src->rows * (size_t)src->cols;
+    memcpy(dest->data, src->data, n * sizeof(double));
 
     return MATRIX_CORE_SUCCESS;
 }
