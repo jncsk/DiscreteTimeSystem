@@ -4,18 +4,20 @@
 
 THREAD_LOCAL MatrixError g_matrix_last_error = { 0, NULL, 0 };
 
-Matrix* matrix_create(int rows, int cols, MatrixCoreStatus* err)
+Matrix* matrix_core_create(int rows, int cols, MatrixCoreStatus* err)
 {
     if(rows < 0 || cols < 0)
     {
         *err = MATRIX_CORE_ERR_OUT_OF_BOUNDS;
         MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
+        return NULL;
     }
     Matrix* mat = (Matrix*)malloc(sizeof(Matrix));
     if (mat == NULL)
     {
         *err = MATRIX_CORE_ERR_ALLOCATION_FAILED;
         MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_ALLOCATION_FAILED);
+        return NULL;
     }
 
     mat->rows = rows;
@@ -26,14 +28,26 @@ Matrix* matrix_create(int rows, int cols, MatrixCoreStatus* err)
         free(mat);
         *err = MATRIX_CORE_ERR_ALLOCATION_FAILED;
         MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_ALLOCATION_FAILED);
+        return NULL;
     }
 
     *err = MATRIX_CORE_SUCCESS;
     return mat;
 }
 
+Matrix* matrix_core_create_square(int size, MatrixCoreStatus* err)
+{
+    if (size < 0)
+    {
+        *err = MATRIX_CORE_ERR_OUT_OF_BOUNDS;
+        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
+        return NULL;
+    }
 
-MatrixCoreStatus matrix_free(Matrix* mat)
+    return matrix_core_create(size, size, err);
+}
+
+MatrixCoreStatus matrix_core_free(Matrix* mat)
 {
     if (mat == NULL)
     {

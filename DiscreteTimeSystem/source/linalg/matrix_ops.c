@@ -215,12 +215,12 @@ MatrixCoreStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
 
     // Allocate memory
     int bits[32];
-    Matrix* base = matrix_create(size, size, &status);
+    Matrix* base = matrix_core_create(size, size, &status);
     if (status != MATRIX_CORE_SUCCESS)
     {
         RETURN_ERROR(status);
     }
-    Matrix* temp_result = matrix_create(size, size, &status);
+    Matrix* temp_result = matrix_core_create(size, size, &status);
     if (status != MATRIX_CORE_SUCCESS)
     {
         RETURN_ERROR(status);
@@ -272,13 +272,13 @@ MatrixCoreStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
         }
     }
 
-    status = matrix_free(base);
+    status = matrix_core_free(base);
     if (status != MATRIX_CORE_SUCCESS)
     {
         RETURN_ERROR(status);
     }
 
-    status = matrix_free(temp_result);
+    status = matrix_core_free(temp_result);
     if (status != MATRIX_CORE_SUCCESS)
     {
         RETURN_ERROR(status);

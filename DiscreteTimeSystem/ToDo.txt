@@ -1,10 +1,13 @@
 20250829
 正方行列専用の行列作成関数を追加し、必要に応じて置き換え
-Matrix* matrix_create_square(int size, int* err)
+Matrix* matrix_core_create_square(int size, int* err)
 {
-    return matrix_create(size, size, err);
+    return matrix_core_create(size, size, err);
 }
 
+
+
+Done
 エラーセット関数とreturnを一つの関数にまとめる
         MATRIX_CORE_SET_ERROR(MATRIX_OPS_ERR_DIMENSION);
         return MATRIX_OPS_ERR_DIMENSION;

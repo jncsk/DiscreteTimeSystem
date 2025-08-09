@@ -21,7 +21,7 @@ void matrix_exp_exponential(const Matrix* A, double t, Matrix* result)
 	int k = 0;
 
 	int status = 0;
-	Matrix* At = matrix_create(3, 3, &status);
+	Matrix* At = matrix_core_create(3, 3, &status);
 	status = matrix_ops_set_zero(At);
 	if (status != MATRIX_CORE_SUCCESS)
 	{
