@@ -9,15 +9,13 @@ Matrix* matrix_create(int rows, int cols, int* err)
     if(rows < 0 || cols < 0)
     {
         *err = MATRIX_CORE_ERR_OUT_OF_BOUNDS;
-        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
-        return NULL;
+        RETURN_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
     }
     Matrix* mat = (Matrix*)malloc(sizeof(Matrix));
     if (mat == NULL)
     {
         *err = MATRIX_CORE_ERR_ALLOCATION_FAILED;
-        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_ALLOCATION_FAILED);
-        return NULL;
+        RETURN_ERROR(MATRIX_CORE_ERR_ALLOCATION_FAILED);
     }
 
     mat->rows = rows;
@@ -27,8 +25,7 @@ Matrix* matrix_create(int rows, int cols, int* err)
     {
         free(mat);
         *err = MATRIX_CORE_ERR_ALLOCATION_FAILED;
-        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_ALLOCATION_FAILED);
-        return NULL;
+        RETURN_ERROR(MATRIX_CORE_ERR_ALLOCATION_FAILED);
     }
 
     *err = MATRIX_CORE_SUCCESS;
@@ -40,8 +37,7 @@ int matrix_free(Matrix* mat)
 {
     if (mat == NULL)
     {
-        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
-        return MATRIX_CORE_ERR_NULL;
+        RETURN_ERROR(MATRIX_CORE_ERR_NULL);
     }
     free(mat->data);
     mat->data = NULL;
