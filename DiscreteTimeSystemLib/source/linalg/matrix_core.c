@@ -2,21 +2,19 @@
 #include <stdio.h>
 #include "matrix_core.h"
 
-THREAD_LOCAL MatrixError g_matrix_last_error = { 0, NULL, 0 };
-
-Matrix* matrix_core_create(int rows, int cols, MatrixCoreStatus* err)
+Matrix* matrix_core_create(int rows, int cols, CoreErrorStatus* err)
 {
     if(rows <= 0 || cols <= 0)
     {
-        *err = MATRIX_CORE_ERR_OUT_OF_BOUNDS;
-        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
+        *err = CORE_ERROR_OUT_OF_BOUNDS;
+        CORE_ERROR_SET(CORE_ERROR_OUT_OF_BOUNDS);
         return NULL;
     }
     Matrix* mat = (Matrix*)malloc(sizeof(Matrix));
     if (mat == NULL)
     {
-        *err = MATRIX_CORE_ERR_ALLOCATION_FAILED;
-        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_ALLOCATION_FAILED);
+        *err = CORE_ERROR_ALLOCATION_FAILED;
+        CORE_ERROR_SET(CORE_ERROR_ALLOCATION_FAILED);
         return NULL;
     }
 
@@ -26,39 +24,36 @@ Matrix* matrix_core_create(int rows, int cols, MatrixCoreStatus* err)
     if (mat->data == NULL)
     {
         free(mat);
-        *err = MATRIX_CORE_ERR_ALLOCATION_FAILED;
-        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_ALLOCATION_FAILED);
+        *err = CORE_ERROR_ALLOCATION_FAILED;
+        CORE_ERROR_SET(CORE_ERROR_ALLOCATION_FAILED);
         return NULL;
     }
 
-    *err = MATRIX_CORE_SUCCESS;
+    *err = CORE_ERROR_SUCCESS;
     return mat;
 }
 
-Matrix* matrix_core_create_square(int size, MatrixCoreStatus* err)
+Matrix* matrix_core_create_square(int size, CoreErrorStatus* err)
 {
     if (size < 0)
     {
-        *err = MATRIX_CORE_ERR_OUT_OF_BOUNDS;
-        MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);
+        *err = CORE_ERROR_OUT_OF_BOUNDS;
+        CORE_ERROR_SET(CORE_ERROR_OUT_OF_BOUNDS);
         return NULL;
     }
 
     return matrix_core_create(size, size, err);
 }
 
-MatrixCoreStatus matrix_core_free(Matrix* mat)
+CoreErrorStatus matrix_core_free(Matrix* mat)
 {
     if (mat == NULL)
     {
-        RETURN_ERROR(MATRIX_CORE_ERR_NULL);
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }
     free(mat->data);
     mat->data = NULL;
 
-    return MATRIX_CORE_SUCCESS;
+    return CORE_ERROR_SUCCESS;
 }
 
-MatrixError matrix_core_get_last_error(void) {
-    return g_matrix_last_error;
-}

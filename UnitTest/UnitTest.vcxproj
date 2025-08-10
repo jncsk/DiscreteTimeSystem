@@ -103,7 +103,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\include;$(SolutionDir)DiscreteTimeSystemLib\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\include\utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\include;$(SolutionDir)DiscreteTimeSystemLib\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\include\utils;$(SolutionDir)DiscreteTimeSystemLib\include\core</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\include;$(SolutionDir)DiscreteTimeSystemLib\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\include\utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\include;$(SolutionDir)DiscreteTimeSystemLib\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\include\utils;$(SolutionDir)DiscreteTimeSystemLib\include\core</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="tests\core\core_error.cpp" />
     <ClCompile Include="tests\linalg\test_matrix_core.cpp" />
     <ClCompile Include="tests\linalg\test_matrix_exp.cpp" />
     <ClCompile Include="tests\linalg\test_matrix_ops.cpp" />
