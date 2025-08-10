@@ -1,14 +1,20 @@
 20250809
 Unit Testのビルド環境の構築方法のメモを作成する
+    libプロジェクトで作ったlldをAppとUnitTestで読み込む設定をする
+	各ファイルの追加インクルードディレクトリをlibプロジェクトのものにする.
 Lib, App, Unit testのプロジェクトを分離したことの背景
 	分離理由と参照関係
 	設定の変更箇所
-Unit Testのテストケースを全館数分追加
+
 Unit Testを自動で実行できるように設定
 	Test Explorer?
 	Gitフック？
 
 Done
+20250810
+Unit Testのテストケースを全館数分追加
+	a84812486a3ec11af46759e651383661b997f999
+	test(unit): add separated unit test project and initial test cases
 
 20250809
 正方行列専用の行列作成関数を追加し、必要に応じて置き換え
