@@ -8,8 +8,7 @@
 
 void matrix_exp_exponential(const Matrix* A, double t, Matrix* result)
 {
-	if (A == NULL || result == NULL)
-	{
+	if (A == NULL || result == NULL) {
 		MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_NULL);
 		return MATRIX_CORE_ERR_NULL;
 	}

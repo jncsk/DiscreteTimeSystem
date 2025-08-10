@@ -33,9 +33,9 @@
  * C: p x n (output matrix)
  */
 typedef struct {
-    Matrix A;  // n x n
-    Matrix B;  // n x m
-    Matrix C;  // p x n
+    Matrix* A;  // n x n
+    Matrix* B;  // n x m
+    Matrix* C;  // p x n
 } StateSpaceModel;
 
 //------------------------------------------------
@@ -57,4 +57,4 @@ StateSpaceModel* state_space_create(int n, int m, int p, MatrixCoreStatus* err);
  *
  * @param model Pointer to the StateSpaceModel to free.
  */
-void state_space_free(StateSpaceModel* model);
+MatrixCoreStatus state_space_free(StateSpaceModel* model);

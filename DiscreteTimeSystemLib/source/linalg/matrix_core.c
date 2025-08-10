@@ -6,7 +6,7 @@ THREAD_LOCAL MatrixError g_matrix_last_error = { 0, NULL, 0 };
 
 Matrix* matrix_core_create(int rows, int cols, MatrixCoreStatus* err)
 {
-    if(rows < 0 || cols < 0)
+    if(rows <= 0 || cols <= 0)
     {
         *err = MATRIX_CORE_ERR_OUT_OF_BOUNDS;
         MATRIX_CORE_SET_ERROR(MATRIX_CORE_ERR_OUT_OF_BOUNDS);

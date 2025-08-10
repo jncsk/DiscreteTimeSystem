@@ -54,30 +54,6 @@ int main()
 		matrix_ops_power(A, 4, result);
 		matrix_ops_print(result);
 	}
-	
-	//Practice using matrix_multiply
-	{
-		matrix_ops_set(&(model->A), 0, 0, 1);
-		matrix_ops_set(&(model->A), 0, 1, 2);
-		matrix_ops_set(&(model->A), 1, 0, 3);
-		matrix_ops_set(&(model->A), 1, 1, 4);
-
-		matrix_ops_set(&(model->B), 0, 0, 2);
-		matrix_ops_set(&(model->B), 1, 0, 3);
-
-		matrix_ops_set_zero(&(model->C));
-
-		matrix_ops_multiply(&(model->A), &(model->B), &(model2->B));
-
-		for (int i = 0; i < (model->A.cols * model->A.rows); i++)
-		{
-			printf("model.A.data[%d]: %f\n", i, model->A.data[i]);
-		}
-		for (int i = 0; i < (model->B.cols * model->B.rows); i++)
-		{
-			printf("model.B.data[%d]: %f\n", i, model2->B.data[i]);
-		}
-	}
 
 	// Practice using matrix_exp_exponential
 	{

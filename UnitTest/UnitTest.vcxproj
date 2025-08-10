@@ -103,7 +103,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystem\include;$(SolutionDir)DiscreteTimeSystem\include\linalg;$(SolutionDir)DiscreteTimeSystem\include\utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\include;$(SolutionDir)DiscreteTimeSystemLib\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\include\utils</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystem\include;$(SolutionDir)DiscreteTimeSystem\include\linalg;$(SolutionDir)DiscreteTimeSystem\include\utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\include;$(SolutionDir)DiscreteTimeSystemLib\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\include\utils</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,7 +132,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="tests\linalg\test_matrix_core.cpp" />
+    <ClCompile Include="tests\linalg\test_matrix_exp.cpp" />
+    <ClCompile Include="tests\linalg\test_matrix_ops.cpp" />
+    <ClCompile Include="tests\linalg\test_state_space.cpp" />
     <ClCompile Include="tests\main.cpp" />
+    <ClCompile Include="tests\utils\bit_utils.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
