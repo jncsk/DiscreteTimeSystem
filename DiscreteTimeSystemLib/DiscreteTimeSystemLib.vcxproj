@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)include\linalg;$(ProjectDir)include\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)include\linalg;$(ProjectDir)include\utils;$(ProjectDir)include\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)include\linalg;$(ProjectDir)include\utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)include\linalg;$(ProjectDir)include\utils;$(ProjectDir)include\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\core\core_error.c" />
     <ClCompile Include="source\linalg\matrix_core.c" />
     <ClCompile Include="source\linalg\matrix_exp.c" />
     <ClCompile Include="source\linalg\matrix_ops.c" />
@@ -133,6 +134,7 @@
     <ClCompile Include="source\utils\bit_utils.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\core\core_error.h" />
     <ClInclude Include="include\linalg\matrix_core.h" />
     <ClInclude Include="include\linalg\matrix_exp.h" />
     <ClInclude Include="include\linalg\matrix_ops.h" />

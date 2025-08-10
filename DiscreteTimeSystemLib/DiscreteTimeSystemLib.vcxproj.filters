@@ -33,6 +33,9 @@
     <ClCompile Include="source\linalg\matrix_core.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\core_error.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\linalg\matrix_core.h">
@@ -48,6 +51,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\bit_utils.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\core_error.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

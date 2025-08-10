@@ -13,6 +13,7 @@
  */
 
 #include "matrix_core.h"
+#include "core_error.h"
 
  //------------------------------------------------
  //  Macro definitions
@@ -33,9 +34,9 @@
  * C: p x n (output matrix)
  */
 typedef struct {
-    Matrix A;  // n x n
-    Matrix B;  // n x m
-    Matrix C;  // p x n
+    Matrix* A;  // n x n
+    Matrix* B;  // n x m
+    Matrix* C;  // p x n
 } StateSpaceModel;
 
 //------------------------------------------------
@@ -50,11 +51,11 @@ typedef struct {
  * @param p Number of outputs.
  * @return Initialized StateSpaceModel structure.
  */
-StateSpaceModel* state_space_create(int n, int m, int p, MatrixCoreStatus* err);
+StateSpaceModel* state_space_create(int n, int m, int p, CoreErrorStatus* err);
 
 /**
  * @brief Free all dynamically allocated memory in a state-space model.
  *
  * @param model Pointer to the StateSpaceModel to free.
  */
-void state_space_free(StateSpaceModel* model);
+CoreErrorStatus state_space_free(StateSpaceModel* model);
