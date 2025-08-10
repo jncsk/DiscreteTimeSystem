@@ -2,7 +2,6 @@
 
 extern "C" {
 #include "matrix_core.h"
-#include "matrix_ops.h"
 #include "core_error.h"
 }
 

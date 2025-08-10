@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include "core_error.h"
 
  //------------------------------------------------
  //  Macro definitions
@@ -35,19 +36,20 @@
  * @param value     Unsigned integer to convert
  * @param bits      Output array for binary digits (0 or 1)
  * @param maxBits   Maximum number of bits to store
- * @return Number of bits written
+ * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
  */
-int bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits);
+CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, int* out_len);
 
 /**
  * @brief Convert an unsigned integer to binary representation (MSB first).
  *
- * @param value     Unsigned integer to convert
- * @param bits      Output array for binary digits (0 or 1)
- * @param maxBits   Maximum number of bits to store
- * @return Number of bits written
+ * @param value Unsigned integer to convert
+ * @param bits Output array for binary digits (0 or 1)
+ * @param maxBits Maximum number of bits to store
+ * @param out_len the length of the bit of the given value
+ * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
  */
-int bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits);
+CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, int* out_len);
 
 /**
  * @brief Print the binary representation of an unsigned integer to stdout.
@@ -55,5 +57,5 @@ int bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits);
  * @param value            The unsigned integer to print.
  * @param bit_length    The number of bits to display in the output
  */
-void bit_utils_print_binary(uint32_t value, int bit_length);
+CoreErrorStatus bit_utils_print_binary(uint32_t value, int bit_length);
 

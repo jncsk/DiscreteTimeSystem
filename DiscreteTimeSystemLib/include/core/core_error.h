@@ -79,6 +79,7 @@ typedef enum {
     CORE_ERROR_DIMENSION = -2,
     CORE_ERROR_OUT_OF_BOUNDS = -3,
     CORE_ERROR_ALLOCATION_FAILED = -4,
+    CORE_ERROR_INVALID_ARG = -5,
 } CoreErrorStatus;
 
 /**

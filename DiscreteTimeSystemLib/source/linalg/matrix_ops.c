@@ -198,7 +198,11 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     }
 
     // Convert exponent to binary representation
-    int bitsNum = bit_utils_to_binary_lsb(n, bits, 32);
+    int bitsNum = 0;
+    status = bit_utils_to_binary_lsb(n, bits, 32, &bitsNum);
+    if (status != CORE_ERROR_SUCCESS) {
+        CORE_ERROR_RETURN(status);
+    }
 
     // Initialize base as mat
     status = matrix_ops_copy(mat, base);

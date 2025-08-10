@@ -1,9 +1,16 @@
 #pragma once
 
+#include "core_error.h"
 #include "bit_utils.h"
 
-int bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits)
-{
+CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, int* out_len) {
+    if (!bits || !out_len) {
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    }
+    if (maxBits <= 0) {
+        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    }
+
 	int i = 0;
 
     // Convert to binary (LSB first)
@@ -25,24 +32,30 @@ int bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits)
         bits[i - 1 - j] = temp;
     }
 
-    return i;
+    *out_len = i; 
+    return CORE_ERROR_SUCCESS;
 };
 
-int bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits)
+CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, int* out_len)
 {
-    int i = 0;
-
-    // Convert to binary (LSB first)
-    while (value > 0 && i < maxBits) {
-        bits[i] = value % 2;
-        value /= 2;
-        i++;
+    if (!bits || !out_len) {
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    }
+    if (maxBits <= 0) {
+        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
     }
 
-    return i;
+    int i = 0;
+    while (value > 0 && i < maxBits) {
+        bits[i++] = (int)(value & 1u);
+        value >>= 1;
+    }
+
+    *out_len = i;
+    return CORE_ERROR_SUCCESS;
 };
 
-void bit_utils_print_binary(uint32_t value, int bit_length)
+CoreErrorStatus bit_utils_print_binary(uint32_t value, int bit_length)
 {
     if (bit_length <= 0 || bit_length > 32) {
         bit_length = 32;  // Default value
@@ -53,5 +66,7 @@ void bit_utils_print_binary(uint32_t value, int bit_length)
         printf("%d", bit);
     }
     printf("\n");
+
+    return CORE_ERROR_SUCCESS;
 }
 

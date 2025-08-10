@@ -137,7 +137,7 @@
     <ClCompile Include="tests\linalg\test_matrix_ops.cpp" />
     <ClCompile Include="tests\linalg\test_state_space.cpp" />
     <ClCompile Include="tests\main.cpp" />
-    <ClCompile Include="tests\utils\bit_utils.c" />
+    <ClCompile Include="tests\utils\bit_utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
