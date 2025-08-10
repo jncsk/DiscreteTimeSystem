@@ -133,6 +133,7 @@
     <ClCompile Include="source\utils\bit_utils.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\core\core_error.h" />
     <ClInclude Include="include\linalg\matrix_core.h" />
     <ClInclude Include="include\linalg\matrix_exp.h" />
     <ClInclude Include="include\linalg\matrix_ops.h" />
