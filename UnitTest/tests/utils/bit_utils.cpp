@@ -13,7 +13,7 @@ TEST(BitUtils_ToBinaryMSB, ReturnsCORE_ERROR_SUCCESS) {
     EXPECT_EQ(out_len, 8);
 
     // 5 (00000101) Å® MSBèáÇ≈ÇÕ 00000101
-    int expected[8] = { 0,0,0,0,0,1,0,2 };
+    int expected[8] = { 0,0,0,0,0,1,0,1 };
     for (int i = 0; i < 8; i++) {
         EXPECT_EQ(bits[i], expected[i]);
     }
