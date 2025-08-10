@@ -577,3 +577,4 @@ TEST(MatrixOps_Power, GivenFibonacciMatrix_WhenPowerLargeExponent_ThenSmokeTest)
     EXPECT_EQ(matrix_core_free(A), MATRIX_CORE_SUCCESS);
     EXPECT_EQ(matrix_core_free(R), MATRIX_CORE_SUCCESS);
 }
+

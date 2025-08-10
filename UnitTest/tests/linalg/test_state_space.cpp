@@ -60,3 +60,4 @@ TEST(StateSpace_Free, GivenPartiallyAllocatedModel_WhenFree_ThenCleansUpSafely) 
     // B, C left as NULL on purpose
     EXPECT_EQ(state_space_free(sys), MATRIX_CORE_SUCCESS);
 }
+
