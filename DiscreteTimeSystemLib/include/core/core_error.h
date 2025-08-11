@@ -106,3 +106,4 @@ extern THREAD_LOCAL CoreError g_last_error;
  * @return MatrixError structure containing the last error's details.
  */
 CoreError matrix_core_get_last_error(void);
+
