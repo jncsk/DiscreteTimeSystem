@@ -11,9 +11,10 @@ git config core.hooksPath .githooks
 ```
 2. Ensure required tools are installed
 - PowerShell Code
-- Microsoft Build Tools / Visual Studio 2022
 - [PowerShell Core (pwsh)](https://learn.microsoft.com/powershell/) — Version 7.x or higher recommended
-- [Microsoft Build Tools / Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) — Ensure MSBuild.exe path matches `pre-commit.ps1`
+- Microsoft Build Tools / Visual Studio 2022
+- [Microsoft Build Tools / Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) 
+— Ensure MSBuild.exe path matches `pre-commit.ps1`
 
 3. Make scripts executable (Linux/macOS only)
 ```bash
