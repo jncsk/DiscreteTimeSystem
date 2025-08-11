@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "matrix_ops.h"
-#include "bit_utils.h"
+#include "core_bit_utils.h"
 #include "matrix_core.h"
 
 CoreErrorStatus matrix_ops_fill(Matrix* mat, double value) {

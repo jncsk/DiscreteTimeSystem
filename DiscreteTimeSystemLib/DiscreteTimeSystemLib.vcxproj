@@ -131,7 +131,7 @@
     <ClCompile Include="source\linalg\matrix_ops.c" />
     <ClCompile Include="source\linalg\state_space.c" />
     <ClCompile Include="source\main.c" />
-    <ClCompile Include="source\utils\bit_utils.c" />
+    <ClCompile Include="source\core\core_bit_utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\core_error.h" />
@@ -139,7 +139,7 @@
     <ClInclude Include="include\linalg\matrix_exp.h" />
     <ClInclude Include="include\linalg\matrix_ops.h" />
     <ClInclude Include="include\linalg\state_space.h" />
-    <ClInclude Include="include\utils\bit_utils.h" />
+    <ClInclude Include="include\core\core_bit_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

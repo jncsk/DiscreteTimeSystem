@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core_error.h"
-#include "bit_utils.h"
+#include "core_bit_utils.h"
 
 CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, int* out_len) {
     if (!bits || !out_len) {
