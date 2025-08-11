@@ -2,13 +2,15 @@
 # pre-commit hook: Build and run unit tests before committing
 # Exit non-zero to block the commit if tests fail
 
-# 設定
+# 1
+# Initialize build/test variables with defaults (can be overridden via environment variables)
 $Config       = if ($env:GIT_TEST_CONFIG)   { $env:GIT_TEST_CONFIG }   else { "Debug" }
 $Platform     = if ($env:GIT_TEST_PLATFORM) { $env:GIT_TEST_PLATFORM } else { "x64" }
 $SolutionName = if ($env:GIT_TEST_SOLUTION) { $env:GIT_TEST_SOLUTION } else { "DiscreteTimeSystem.sln" }
 $TimeoutSec   = 300
 
-# スクリプトディレクトリからソリューションルートを解決
+# 2
+# Determine the parent directory of the script’s location and store it as an absolute path in $solutionDir
 if ($PSScriptRoot) {
     $scriptDir = $PSScriptRoot
 } else {
@@ -16,14 +18,16 @@ if ($PSScriptRoot) {
 }
 $solutionDir = (Resolve-Path (Join-Path $scriptDir "..")).Path
 
-# Solution パスの確認
+# 3
+# Verify that the solution file (.sln) exists; if not, print error and abort commit
 $solutionPath = Join-Path $solutionDir $SolutionName
 if (-not (Test-Path -LiteralPath $solutionPath)) {
     Write-Error "Solution not found: $solutionPath"
     exit 1
 }
 
-# MSBuild の場所（環境に応じて変更）
+# 4
+# Locate MSBuild (adjust paths if Visual Studio is installed elsewhere)
 $msbuildCandidates = @(
     "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe",
     "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
@@ -34,13 +38,15 @@ if (-not $msbuildPath) {
     exit 1
 }
 
-# デバッグ出力
+# 5
+# Print debug information
 Write-Host "[pre-commit] SolutionDir = $solutionDir"
 Write-Host "[pre-commit] Configuration = $Config, Platform = $Platform"
 Write-Host "[pre-commit] MSBuild: $msbuildPath"
 Write-Host "[pre-commit] Solution: $solutionPath"
 
-# MSBuild 引数を文字列配列で作成
+# 6
+# Set MSBuild arguments
 $msbuildArgs = @(
     "$solutionPath",
     "/m",
@@ -48,14 +54,14 @@ $msbuildArgs = @(
     "/p:Configuration=$Config",
     "/p:Platform=$Platform"
 )
-
-# null / 空文字 チェック
+# Check for null or empty arguments
 if (-not $msbuildArgs -or ($msbuildArgs | Where-Object { $_ -eq $null -or "$_".Trim() -eq "" }).Count) {
     Write-Error "msbuild args are empty or contain null: $($msbuildArgs -join ' | ')"
     exit 1
 }
 
-# ビルド実行
+# 7
+# Run build process
 Write-Host "[pre-commit] Building solution..."
 $build = Start-Process -FilePath $msbuildPath -ArgumentList $msbuildArgs -Wait -PassThru
 if ($build.ExitCode -ne 0) {
@@ -63,14 +69,16 @@ if ($build.ExitCode -ne 0) {
     exit 1
 }
 
-# UnitTest 実行ファイルパス
+# 8
+# Check for unit test executable
 $unitTestExe = Join-Path $solutionDir "x64\$Config\UnitTest.exe"
 if (-not (Test-Path -LiteralPath $unitTestExe)) {
     Write-Error "[pre-commit] UnitTest.exe not found: $unitTestExe"
     exit 1
 }
 
-# UnitTest 実行
+# 9
+# Run unit tests
 Write-Host "[pre-commit] Running unit tests..."
 $test = Start-Process -FilePath $unitTestExe -ArgumentList "--gtest_color=yes" -Wait -PassThru -NoNewWindow
 if ($test.ExitCode -ne 0) {
@@ -78,5 +86,6 @@ if ($test.ExitCode -ne 0) {
     exit 1
 }
 
+# All tests passed
 Write-Host "[pre-commit] OK - All tests passed."
 exit 0
