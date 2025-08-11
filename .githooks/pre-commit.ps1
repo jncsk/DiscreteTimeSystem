@@ -61,11 +61,16 @@ if (-not $msbuildArgs -or ($msbuildArgs | Where-Object { $_ -eq $null -or "$_".T
 }
 
 # 7
-# Run build process
 Write-Host "[pre-commit] Building solution..."
-$build = Start-Process -FilePath $msbuildPath -ArgumentList $msbuildArgs -Wait -PassThru
-if ($build.ExitCode -ne 0) {
-    Write-Error "[pre-commit] Build failed with exit code $($build.ExitCode)"
+Push-Location $solutionDir
+try {
+    & $msbuildPath @msbuildArgs
+    $buildExit = $LASTEXITCODE
+} finally {
+    Pop-Location
+}
+if ($buildExit -ne 0) {
+    Write-Error "[pre-commit] Build failed with exit code $buildExit"
     exit 1
 }
 
