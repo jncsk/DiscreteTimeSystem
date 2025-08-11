@@ -3,7 +3,7 @@
 #include "matrix_ops.h"
 #include "matrix_exp.h"
 #include "state_space.h"
-#include "bit_utils.h"
+#include "core_bit_utils.h"
 
 int main()
 {	

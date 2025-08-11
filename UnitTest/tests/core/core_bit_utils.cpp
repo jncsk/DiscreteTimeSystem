@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 extern "C" {
-#include "bit_utils.h"
+#include "core_bit_utils.h"
 #include "core_error.h"
 }
 

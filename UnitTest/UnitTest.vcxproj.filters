@@ -30,7 +30,7 @@
     <ClCompile Include="tests\linalg\test_matrix_exp.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="tests\utils\bit_utils.cpp">
+    <ClCompile Include="tests\core\core_bit_utils.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="tests\core\core_error.cpp">
