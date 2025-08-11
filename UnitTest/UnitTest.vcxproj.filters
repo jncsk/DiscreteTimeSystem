@@ -36,5 +36,8 @@
     <ClCompile Include="tests\core\core_error.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="tests\core\core_math_utils.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

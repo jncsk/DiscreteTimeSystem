@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\core\core_error.c" />
+    <ClCompile Include="source\core\core_math_utils.c" />
     <ClCompile Include="source\linalg\matrix_core.c" />
     <ClCompile Include="source\linalg\matrix_exp.c" />
     <ClCompile Include="source\linalg\matrix_ops.c" />
@@ -135,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\core\core_error.h" />
+    <ClInclude Include="include\core\core_math_utils.h" />
     <ClInclude Include="include\linalg\matrix_core.h" />
     <ClInclude Include="include\linalg\matrix_exp.h" />
     <ClInclude Include="include\linalg\matrix_ops.h" />

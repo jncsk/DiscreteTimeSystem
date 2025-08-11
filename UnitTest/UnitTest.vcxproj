@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="tests\core\core_error.cpp" />
+    <ClCompile Include="tests\core\core_math_utils.cpp" />
     <ClCompile Include="tests\linalg\test_matrix_core.cpp" />
     <ClCompile Include="tests\linalg\test_matrix_exp.cpp" />
     <ClCompile Include="tests\linalg\test_matrix_ops.cpp" />

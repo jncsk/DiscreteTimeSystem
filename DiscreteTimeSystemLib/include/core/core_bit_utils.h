@@ -26,6 +26,11 @@
  //------------------------------------------------
  /* None */
 
+//------------------------------------------------
+//  Type definitions
+//------------------------------------------------
+ /* None */
+
  //------------------------------------------------
  //  Function Prototypes
  //------------------------------------------------
@@ -38,7 +43,7 @@
  * @param maxBits   Maximum number of bits to store
  * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
  */
-CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, int* out_len);
+CoreErrorStatus core_bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, int* out_len);
 
 /**
  * @brief Convert an unsigned integer to binary representation (MSB first).
@@ -49,7 +54,7 @@ CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, 
  * @param out_len the length of the bit of the given value
  * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
  */
-CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, int* out_len);
+CoreErrorStatus core_bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, int* out_len);
 
 /**
  * @brief Print the binary representation of an unsigned integer to stdout.
@@ -57,5 +62,5 @@ CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, 
  * @param value            The unsigned integer to print.
  * @param bit_length    The number of bits to display in the output
  */
-CoreErrorStatus bit_utils_print_binary(uint32_t value, int bit_length);
+CoreErrorStatus core_bit_utils_print_binary(uint32_t value, int bit_length);
 

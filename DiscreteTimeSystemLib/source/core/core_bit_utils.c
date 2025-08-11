@@ -3,7 +3,7 @@
 #include "core_error.h"
 #include "core_bit_utils.h"
 
-CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, int* out_len) {
+CoreErrorStatus core_bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, int* out_len) {
     if (!bits || !out_len) {
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }
@@ -36,7 +36,7 @@ CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, 
     return CORE_ERROR_SUCCESS;
 };
 
-CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, int* out_len)
+CoreErrorStatus core_bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, int* out_len)
 {
     if (!bits || !out_len) {
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
@@ -55,7 +55,7 @@ CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, 
     return CORE_ERROR_SUCCESS;
 };
 
-CoreErrorStatus bit_utils_print_binary(uint32_t value, int bit_length)
+CoreErrorStatus core_bit_utils_print_binary(uint32_t value, int bit_length)
 {
     if (bit_length <= 0 || bit_length > 32) {
         bit_length = 32;  // Default value
