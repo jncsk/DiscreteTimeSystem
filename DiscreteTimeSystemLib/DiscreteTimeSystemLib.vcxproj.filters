@@ -15,51 +15,51 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\main.c">
+    <ClCompile Include="app\src\main.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\core_bit_utils.c">
+    <ClCompile Include="numerics\src\bit_utils.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="source\linalg\state_space.c">
+    <ClCompile Include="control\src\state_space.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="source\linalg\matrix_ops.c">
+    <ClCompile Include="numerics\src\linalg\matrix_ops.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="source\linalg\matrix_exp.c">
+    <ClCompile Include="numerics\src\linalg\matrix_exp.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="source\linalg\matrix_core.c">
+    <ClCompile Include="core\src\matrix_core.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\core_error.c">
+    <ClCompile Include="core\src\core_error.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\core_math_utils.c">
+    <ClCompile Include="numerics\src\math_utils.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\linalg\matrix_core.h">
+    <ClInclude Include="core\include\core_matrix.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\linalg\matrix_exp.h">
+    <ClInclude Include="numerics\include\linalg\matrix_exp.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\linalg\matrix_ops.h">
+    <ClInclude Include="numerics\include\linalg\matrix_ops.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\linalg\state_space.h">
+    <ClInclude Include="control\include\state_space.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\core_bit_utils.h">
+    <ClInclude Include="numerics\include\bit_utils.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\core_error.h">
+    <ClInclude Include="core\include\core_error.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\core_math_utils.h">
+    <ClInclude Include="numerics\include\math_utils.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

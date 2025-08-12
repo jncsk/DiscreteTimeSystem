@@ -19,7 +19,7 @@
  */
 
 #include "core_error.h"
-#include "matrix_core.h"
+#include "core_matrix.h"
 
  //------------------------------------------------
 //  Macro definitions

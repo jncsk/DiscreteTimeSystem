@@ -1,6 +1,6 @@
 #pragma once
 #include <stdio.h>
-#include "matrix_core.h"
+#include "core_matrix.h"
 
 Matrix* matrix_core_create(int rows, int cols, CoreErrorStatus* err)
 {
