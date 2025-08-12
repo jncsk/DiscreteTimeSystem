@@ -18,8 +18,8 @@
  * =============================================================================
  */
 
-#include "matrix_core.h"
 #include "core_error.h"
+#include "matrix_core.h"
 
  //------------------------------------------------
 //  Macro definitions
@@ -40,6 +40,6 @@
  * @param mat   Pointer to the matrix.
  * @param value Scalar value to assign to each element.
  */
-void matrix_exp_exponential(const Matrix* A, double t, Matrix* result);
+CoreErrorStatus matrix_exp_exponential(const Matrix* A, double t, Matrix* result);
 
 
