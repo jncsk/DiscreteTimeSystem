@@ -32,9 +32,9 @@
     do { \
         fprintf(stderr, "[Caller] Error %d at %s:%d\n", (errorcode), __FILE__, __LINE__); \
         fprintf(stderr, "[Origin] Error %d at %s:%d\n", \
-                g_matrix_last_error.code, \
-                g_matrix_last_error.file, \
-                g_matrix_last_error.line); \
+                g_last_error.code, \
+                g_last_error.file, \
+                g_last_error.line); \
     } while (0)
 
 /**

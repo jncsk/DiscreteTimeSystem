@@ -1,8 +1,10 @@
 
-#include "matrix_core.h"
-#include "matrix_ops.h"
+
 #include <stdlib.h>
 #include "state_space.h"
+#include "core_error.h"
+#include "matrix_core.h"
+#include "matrix_ops.h"
 
 StateSpaceModel* state_space_create(int n, int m, int p, CoreErrorStatus* err)
 {
