@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core_math_utils.h"
+#include "math_utils.h"
 
-CoreErrorStatus core_math_utils_factorial(uint32_t n, uint64_t* result) {
+CoreErrorStatus math_utils_factorial(uint32_t n, uint64_t* result) {
     if (!result) {
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }

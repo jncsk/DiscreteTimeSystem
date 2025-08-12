@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "matrix_ops.h"
-#include "core_bit_utils.h"
-#include "matrix_core.h"
+#include "bit_utils.h"
+#include "core_matrix.h"
 
 CoreErrorStatus matrix_ops_fill(Matrix* mat, double value) {
     if (mat == NULL) {
@@ -199,7 +199,7 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
 
     // Convert exponent to binary representation
     int bitsNum = 0;
-    status = core_bit_utils_to_binary_lsb(n, bits, 32, &bitsNum);
+    status = bit_utils_to_binary_lsb(n, bits, 32, &bitsNum);
     if (status != CORE_ERROR_SUCCESS) {
         CORE_ERROR_RETURN(status);
     }

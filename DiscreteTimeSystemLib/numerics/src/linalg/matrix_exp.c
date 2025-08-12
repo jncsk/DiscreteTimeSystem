@@ -3,10 +3,10 @@
 #include <stdio.h>
 #include <math.h>
 #include "core_error.h"
-#include "matrix_core.h"
+#include "core_matrix.h"
 #include "matrix_exp.h"
 #include "matrix_ops.h"
-#include "core_math_utils.h"
+#include "math_utils.h"
 
 CoreErrorStatus matrix_exp_exponential(const Matrix* A, double t, Matrix* result)
 {

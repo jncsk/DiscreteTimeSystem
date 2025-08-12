@@ -2,7 +2,7 @@
 
 /*
  * =============================================================================
- *  core_math_utils.h
+ *  math_utils.h
  * =============================================================================
  *
  *  Description:
@@ -37,4 +37,4 @@
  * @param result Pointer to store the calculation result
  * @return CORE_ERROR_SUCCESS if successful, otherwise an error code
  */
-CoreErrorStatus core_math_utils_factorial(uint32_t n, uint64_t* result);
+CoreErrorStatus math_utils_factorial(uint32_t n, uint64_t* result);

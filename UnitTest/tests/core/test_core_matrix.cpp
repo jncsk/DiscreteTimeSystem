@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 extern "C" {
-#include "matrix_core.h"
+#include "core_matrix.h"
 #include "matrix_ops.h"
 #include "core_error.h"
 }
