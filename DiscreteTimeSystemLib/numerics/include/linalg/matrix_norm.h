@@ -32,13 +32,31 @@
 //  Function Prototypes
 //------------------------------------------------
 
-// 1ノルム（列の絶対値和の最大）
+/**
+ * @brief Calculate 1 norm.
+ *
+ * @param mat   Pointer to the matrix (must not be NULL).
+ * @param result Pointer to where the computed norm will be stored (must not be NULL).
+ * @return CORE_ERROR_SUCCESS if succeeds, otherwise an error code.
+ */
 CoreErrorStatus matrix_norm_1(const Matrix* mat, double* result);
 
-// ∞ノルム（行の絶対値和の最大）
+/**
+ * @brief Calculate 1 norm.
+ *
+ * @param mat   Pointer to the matrix (must not be NULL).
+ * @param result Pointer to where the computed norm will be stored (must not be NULL).
+ * @return CORE_ERROR_SUCCESS if succeeds, otherwise an error code.
+ */
 CoreErrorStatus matrix_norm_inf(const Matrix* mat, double* result);
 
-// Frobeniusノルム
+/**
+ * @brief Calculate 1 norm.
+ *
+ * @param mat   Pointer to the matrix (must not be NULL).
+ * @param result Pointer to where the computed norm will be stored (must not be NULL).
+ * @return CORE_ERROR_SUCCESS if succeeds, otherwise an error code.
+ */
 CoreErrorStatus matrix_norm_fro(const Matrix* mat, double* result);
 
 
