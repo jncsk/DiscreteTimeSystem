@@ -2,8 +2,6 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "core_error.h"
-#include "core_matrix.h"
 #include "matrix_exp.h"
 #include "matrix_ops.h"
 #include "math_utils.h"

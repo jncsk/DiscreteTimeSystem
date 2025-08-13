@@ -39,5 +39,8 @@
     <ClCompile Include="tests\numerics\test_math_utils.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="tests\numerics\linalg\test_matrix_norm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
