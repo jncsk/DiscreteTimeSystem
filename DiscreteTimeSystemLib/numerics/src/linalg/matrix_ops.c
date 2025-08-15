@@ -168,6 +168,10 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
         CORE_ERROR_RETURN(CORE_ERROR_DIMENSION);
     }
 
+    if (n < 0) {
+        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    }
+
     int size = mat->rows;
     CoreErrorStatus status = CORE_ERROR_SUCCESS;
     // Handle special cases
