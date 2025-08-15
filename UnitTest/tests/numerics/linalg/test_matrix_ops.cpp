@@ -536,6 +536,21 @@ TEST(MatrixOps_Power, GivenNonSquareMatrix_WhenPower_ThenReturnsErrDimension) {
     EXPECT_EQ(matrix_core_free(R), CORE_ERROR_SUCCESS);
 }
 
+TEST(MatrixOps_Power, GivenNegativeExponent_WhenPower_ThenReturnsErrInvalidArg) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+
+    Matrix* A = matrix_core_create_square(2, &err);
+    ASSERT_NE(A, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    Matrix* R = matrix_core_create_square(2, &err);
+    ASSERT_NE(R, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    EXPECT_EQ(matrix_ops_power(A, -1, R), CORE_ERROR_INVALID_ARG);
+
+    EXPECT_EQ(matrix_core_free(A), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_core_free(R), CORE_ERROR_SUCCESS);
+}
+
 TEST(MatrixOps_Power, GivenNullArguments_WhenPower_ThenReturnsErrNull) {
     CoreErrorStatus err = CORE_ERROR_SUCCESS;
     Matrix* R = matrix_core_create_square(2, &err);
