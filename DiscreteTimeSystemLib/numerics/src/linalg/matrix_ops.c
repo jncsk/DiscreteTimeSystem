@@ -59,9 +59,11 @@ CoreErrorStatus matrix_ops_set_zero(Matrix* mat)
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }
 
-    CoreErrorStatus status =matrix_ops_fill(mat, 0.0);
+    CoreErrorStatus status = matrix_ops_fill(mat, 0.0);
     if (status != CORE_ERROR_SUCCESS) {
-        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+        // Propagate the actual error code instead of always returning NULL
+        // so that callers receive precise diagnostics when filling fails.
+        CORE_ERROR_RETURN(status);
     }
 
     return CORE_ERROR_SUCCESS;
@@ -77,7 +79,9 @@ CoreErrorStatus matrix_ops_set_identity(Matrix* mat) {
         
     CoreErrorStatus status = matrix_ops_set_zero(mat);
     if (status != CORE_ERROR_SUCCESS) {
-        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+        // Preserve the specific error from matrix_ops_set_zero instead of
+        // obscuring it with CORE_ERROR_NULL.
+        CORE_ERROR_RETURN(status);
     }
 
     for (int i = 0; i < mat->rows; ++i)  {
