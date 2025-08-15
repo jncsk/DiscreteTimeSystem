@@ -67,8 +67,7 @@ CoreErrorStatus matrix_ops_set_zero(Matrix* mat);
  * @brief Initialize a square matrix as an identity matrix.
  *
  * @param mat Pointer to the square matrix.
- * @return Error code.
- * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
+ * @return CORE_ERROR_SUCCESS on success, otherwise an error code.
  */
 CoreErrorStatus matrix_ops_set_identity(Matrix* mat);
 
