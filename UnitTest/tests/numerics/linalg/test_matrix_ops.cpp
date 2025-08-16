@@ -252,6 +252,56 @@ TEST(MatrixOps_Get, GivenOutOfBoundsIndex_WhenGet_ThenSetsErrOutOfBoundsAndRetur
     EXPECT_EQ(matrix_core_free(m), CORE_ERROR_SUCCESS);
 }
 
+// ========== matrix_ops_copy ==========
+TEST(MatrixOps_Copy_Success, WhenCopy_ThenDestMatchesSrc) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    const int rows = 2, cols = 3;
+    Matrix* src = matrix_core_create(rows, cols, &err);
+    ASSERT_NE(src, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* dst = matrix_core_create(rows, cols, &err);
+    ASSERT_NE(dst, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    double v = 1.0;
+    for (int i = 0; i < rows; ++i)
+        for (int j = 0; j < cols; ++j)
+            EXPECT_EQ(matrix_ops_set(src, i, j, v++), CORE_ERROR_SUCCESS);
+
+    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_SUCCESS);
+    ExpectMatrixEq(src, dst);
+
+    EXPECT_EQ(matrix_core_free(src), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_core_free(dst), CORE_ERROR_SUCCESS);
+}
+
+TEST(MatrixOps_Copy_NullArgs, WhenSrcOrDestNull_ThenErrNull) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(1, 1, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    EXPECT_EQ(matrix_ops_copy(nullptr, m), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_copy(m, nullptr), CORE_ERROR_NULL);
+
+    EXPECT_EQ(matrix_core_free(m), CORE_ERROR_SUCCESS);
+}
+
+TEST(MatrixOps_Copy_DimensionMismatch, WhenSizesDiffer_ThenErrDimension) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* src = matrix_core_create(2, 3, &err);
+    ASSERT_NE(src, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* dst = matrix_core_create(3, 2, &err);
+    ASSERT_NE(dst, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_DIMENSION);
+
+    EXPECT_EQ(matrix_core_free(src), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_core_free(dst), CORE_ERROR_SUCCESS);
+}
+
 // ========== matrix_ops_add ==========
 TEST(MatrixOps_Add, GivenSameSizeMatrices_WhenAdd_ThenReturnsSuccessAndCorrectSum) {
     CoreErrorStatus err = CORE_ERROR_SUCCESS;
