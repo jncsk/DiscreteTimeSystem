@@ -45,5 +45,8 @@
     <ClCompile Include="tests\numerics\pade\pade.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="tests\numerics\pade\test_pade_expm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
