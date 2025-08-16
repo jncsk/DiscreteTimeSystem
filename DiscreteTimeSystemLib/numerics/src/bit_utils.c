@@ -11,14 +11,24 @@ CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, 
         CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
     }
 
-	int i = 0;
+    int i = 0;
+
+    // Handle zero explicitly so out_len becomes 1
+    if (value == 0) {
+        bits[i++] = 0;
+        while (i < maxBits) {
+            bits[i++] = 0;
+        }
+        *out_len = 1;
+        return CORE_ERROR_SUCCESS;
+    }
 
     // Convert to binary (LSB first)
-	while (value > 0 && i < maxBits) {
-		bits[i] = value % 2;
-		value = value / 2;
-		i++;
-	}
+    while (value > 0 && i < maxBits) {
+        bits[i] = value % 2;
+        value = value / 2;
+        i++;
+    }
 
     // Padding with zeros if necessary
     while (i < maxBits) {
@@ -32,7 +42,7 @@ CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, 
         bits[i - 1 - j] = temp;
     }
 
-    *out_len = i; 
+    *out_len = i;
     return CORE_ERROR_SUCCESS;
 };
 
