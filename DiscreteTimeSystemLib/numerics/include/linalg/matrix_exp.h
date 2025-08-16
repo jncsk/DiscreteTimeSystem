@@ -35,10 +35,19 @@
 //------------------------------------------------
 
 /**
- * @brief Fill all elements of a matrix with a given scalar value.
+ * @brief Compute \f$e^{tA}\f$ using a scaling and squaring Padé approximation.
  *
- * @param mat   Pointer to the matrix.
- * @param value Scalar value to assign to each element.
+ * The input matrix \p A is scaled by the scalar \p t and then the matrix
+ * exponential is evaluated via the Padé algorithm.  The result is written to
+ * the pre-allocated matrix \p result which must have the same dimensions as
+ * \p A.
+ *
+ * @param A      Pointer to the square matrix to exponentiate.
+ * @param t      Scalar multiplier applied to \p A prior to exponentiation.
+ * @param result Output matrix receiving the value of \f$e^{tA}\f$.
+ *
+ * @return ::CORE_ERROR_SUCCESS on success or an appropriate error code on
+ *         failure.
  */
 CoreErrorStatus matrix_exp_exponential(const Matrix* A, double t, Matrix* result);
 
