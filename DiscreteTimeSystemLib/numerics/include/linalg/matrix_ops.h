@@ -45,6 +45,21 @@
 CoreErrorStatus matrix_ops_fill(Matrix* mat, double value);
 
 /**
+ * @brief Fill a matrix with sequential values starting from a given number.
+ *
+ * Each element of the matrix is set to:
+ *     value = start + (index * step)
+ * where index runs in row-major order from 0 to (rows*cols - 1).
+ *
+ * @param mat   Pointer to the matrix to fill.
+ * @param start Starting value for the first element.
+ * @param step  Increment to apply between consecutive elements.
+ * @return CORE_ERROR_SUCCESS if the operation completes successfully,
+ *         otherwise an appropriate error code.
+ */
+CoreErrorStatus matrix_ops_fill_sequential(Matrix* mat, double start, double step);
+
+/**
  * @brief Set a specific element of a matrix.
  *
  * @param mat   Pointer to the matrix.
@@ -128,4 +143,29 @@ CoreErrorStatus matrix_ops_copy(const Matrix* src, Matrix* dest);
  * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
  */
 CoreErrorStatus matrix_ops_print(const Matrix* mat);
+
+/**
+ * @brief Scale each element in the matrix using input value, factor.
+ *
+ * @param mat Pointer to the matrix to be scaled.
+ * @param factor Scaling value
+ * @return CORE_ERROR_SUCCESS if success, otherwise an error code.
+ */
+CoreErrorStatus matrix_ops_scale(Matrix* mat, double factor);
+
+/**
+ * @brief Y <- alpha * X + Y  (matrix A times X Plus Y operation)
+ *
+ * Adds a scaled matrix X into matrix Y.
+ *
+ * @param[out] Y      Destination matrix (will be updated in-place).
+ * @param[in]  alpha  Scaling factor for X.
+ * @param[in]  X      Source matrix to be scaled and added.
+ * @return CORE_ERROR_SUCCESS if successful, otherwise an error code.
+ *
+ * @note
+ * - Both matrices must have the same dimensions.
+ * - Operation is performed element-wise.
+ */
+CoreErrorStatus matrix_ops_axpy(Matrix* Y, double alpha, const Matrix* X);
 

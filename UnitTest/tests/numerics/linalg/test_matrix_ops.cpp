@@ -591,3 +591,535 @@ TEST(MatrixOps_Power, GivenFibonacciMatrix_WhenPowerLargeExponent_ThenSmokeTest)
     EXPECT_EQ(matrix_core_free(R), CORE_ERROR_SUCCESS);
 }
 
+/* ===== Helpers ===== */
+static void fill_sequential(Matrix* m, double start = 1.0, double step = 1.0) {
+    ASSERT_NE(m, nullptr);
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    double v = start;
+    for (int i = 0; i < m->rows; ++i) {
+        for (int j = 0; j < m->cols; ++j) {
+            ASSERT_EQ(matrix_ops_set(m, i, j, v), CORE_ERROR_SUCCESS);
+            v += step;
+        }
+    }
+}
+
+static void expect_equal_matrix(const Matrix* a, const Matrix* b, double tol = 0.0) {
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    ASSERT_EQ(a->rows, b->rows);
+    ASSERT_EQ(a->cols, b->cols);
+    for (int i = 0; i < a->rows; ++i) {
+        for (int j = 0; j < a->cols; ++j) {
+            double va = matrix_ops_get(a, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            double vb = matrix_ops_get(b, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            if (tol == 0.0) {
+                EXPECT_DOUBLE_EQ(va, vb);
+            }
+            else {
+                EXPECT_NEAR(va, vb, tol);
+            }
+        }
+    }
+}
+
+// Helper: clone matrix (structure + data)
+static Matrix* clone_matrix(const Matrix* src) {
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    Matrix* dst = matrix_core_create(src->rows, src->cols, &st);
+    if (!dst || st != CORE_ERROR_SUCCESS) return nullptr;
+    for (int i = 0; i < src->rows; ++i) {
+        for (int j = 0; j < src->cols; ++j) {
+            double v = matrix_ops_get(src, i, j, &st);
+            if (st != CORE_ERROR_SUCCESS) return nullptr;
+            if (matrix_ops_set(dst, i, j, v) != CORE_ERROR_SUCCESS) return nullptr;
+        }
+    }
+    return dst;
+}
+
+/* =========================
+ * Basic behavior
+ * ========================= */
+
+TEST(MatrixScale, GivenFactorOne_WhenScale_ThenMatrixUnchanged) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(2, 3, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(m, 1.0);
+
+    Matrix* before = clone_matrix(m);
+    ASSERT_NE(before, nullptr);
+
+    EXPECT_EQ(matrix_ops_scale(m, 1.0), CORE_ERROR_SUCCESS);
+    expect_equal_matrix(m, before);
+
+    matrix_core_free(before);
+    matrix_core_free(m);
+}
+
+TEST(MatrixScale, GivenFactorZero_WhenScale_ThenAllZero) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(2, 2, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(m, 3.0);
+
+    EXPECT_EQ(matrix_ops_scale(m, 0.0), CORE_ERROR_SUCCESS);
+
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    for (int i = 0; i < m->rows; ++i) {
+        for (int j = 0; j < m->cols; ++j) {
+            double v = matrix_ops_get(m, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            EXPECT_DOUBLE_EQ(v, 0.0);
+        }
+    }
+    matrix_core_free(m);
+}
+
+TEST(MatrixScale, GivenPositiveFactor_WhenScale_ThenValuesMultiplied) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(2, 3, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(m, 1.0); // 1 2 3 / 4 5 6
+    const double k = 2.5;
+
+    EXPECT_EQ(matrix_ops_scale(m, k), CORE_ERROR_SUCCESS);
+
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    double expected = 1.0;
+    for (int i = 0; i < m->rows; ++i) {
+        for (int j = 0; j < m->cols; ++j) {
+            double v = matrix_ops_get(m, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            EXPECT_DOUBLE_EQ(v, expected * k);
+            expected += 1.0;
+        }
+    }
+    matrix_core_free(m);
+}
+
+TEST(MatrixScale, GivenNegativeFactor_WhenScale_ThenValuesNegatedAndScaled) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(2, 2, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(m, -1.0); // -1 -0 / 1 2 (depending on sequence)
+    const double k = -3.0;
+
+    EXPECT_EQ(matrix_ops_scale(m, k), CORE_ERROR_SUCCESS);
+
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    double expected = -1.0;
+    for (int i = 0; i < m->rows; ++i) {
+        for (int j = 0; j < m->cols; ++j) {
+            double v = matrix_ops_get(m, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            EXPECT_DOUBLE_EQ(v, expected * k);
+            expected += 1.0;
+        }
+    }
+    matrix_core_free(m);
+}
+
+/* =========================
+ * Error handling
+ * ========================= */
+
+TEST(MatrixScale, GivenNullMatrix_WhenScale_ThenErrNull) {
+    EXPECT_EQ(matrix_ops_scale(nullptr, 2.0), CORE_ERROR_NULL);
+}
+
+TEST(MatrixScale, GivenNullData_WhenScale_ThenErrNull) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(1, 1, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    // Simulate broken matrix
+    double* saved = m->data;
+    m->data = nullptr;
+    EXPECT_EQ(matrix_ops_scale(m, 2.0), CORE_ERROR_NULL);
+    m->data = saved;
+
+    matrix_core_free(m);
+}
+
+TEST(MatrixScale, GivenInvalidDims_WhenScale_ThenInvalidArg) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(2, 2, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    m->rows = 0;  // invalidate
+    EXPECT_EQ(matrix_ops_scale(m, 2.0), CORE_ERROR_INVALID_ARG);
+
+    m->rows = 2;
+    m->cols = 0;  // invalidate
+    EXPECT_EQ(matrix_ops_scale(m, 2.0), CORE_ERROR_INVALID_ARG);
+
+    matrix_core_free(m);
+}
+
+TEST(MatrixScale, GivenNaNFactor_WhenScale_ThenInvalidArgAndUnchanged) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(2, 2, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(m, 1.0);
+    Matrix* before = clone_matrix(m);
+    ASSERT_NE(before, nullptr);
+
+    const double nanv = std::numeric_limits<double>::quiet_NaN();
+    EXPECT_EQ(matrix_ops_scale(m, nanv), CORE_ERROR_INVALID_ARG);
+
+    expect_equal_matrix(m, before);
+    matrix_core_free(before);
+    matrix_core_free(m);
+}
+
+/* =========================
+ * In-place behavior
+ * ========================= */
+
+TEST(MatrixScale, GivenInPlace_WhenScale_ThenWorks) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(3, 3, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(m, 1.0);
+    Matrix* ref = clone_matrix(m);
+    ASSERT_NE(ref, nullptr);
+
+    const double k = 0.125; // 1/8
+    EXPECT_EQ(matrix_ops_scale(m, k), CORE_ERROR_SUCCESS);
+
+    // Compare with reference scaled offline
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    for (int i = 0; i < ref->rows; ++i) {
+        for (int j = 0; j < ref->cols; ++j) {
+            double v = matrix_ops_get(ref, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            ASSERT_EQ(matrix_ops_set(ref, i, j, v * k), CORE_ERROR_SUCCESS);
+        }
+    }
+    expect_equal_matrix(m, ref);
+
+    matrix_core_free(ref);
+    matrix_core_free(m);
+}
+
+
+/* ===== Helpers ===== */
+
+
+static Matrix* clone_by_copy(const Matrix* src) {
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    Matrix* dst = matrix_core_create(src->rows, src->cols, &st);
+    if (!dst || st != CORE_ERROR_SUCCESS) return nullptr;
+    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_SUCCESS);
+    return dst;
+}
+
+
+/* ===== Normal cases ===== */
+
+TEST(MatrixAxpy, GivenGeneralAlpha_WhenAxpy_ThenYEqualsY0PlusAlphaX) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(2, 3, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(2, 3, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(Y, 10.0, 1.0); // 10..15
+    fill_sequential(X, 1.0, 1.0); // 1..6
+    Matrix* Y0 = clone_by_copy(Y); ASSERT_NE(Y0, nullptr);
+
+    const double alpha = 2.5;
+    EXPECT_EQ(matrix_ops_axpy(Y, alpha, X), CORE_ERROR_SUCCESS);
+
+    // Check Y == Y0 + alpha*X
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    for (int i = 0; i < Y->rows; ++i) {
+        for (int j = 0; j < Y->cols; ++j) {
+            double y0 = matrix_ops_get(Y0, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            double x = matrix_ops_get(X, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            double y = matrix_ops_get(Y, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            EXPECT_DOUBLE_EQ(y, y0 + alpha * x);
+        }
+    }
+
+    matrix_core_free(Y0);
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+
+TEST(MatrixAxpy, GivenAlphaZero_WhenAxpy_ThenYUnchanged) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(3, 2, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(3, 2, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(Y, -2.0, 0.5);
+    fill_sequential(X, 5.0, 1.0);
+    Matrix* Y0 = clone_by_copy(Y); ASSERT_NE(Y0, nullptr);
+
+    EXPECT_EQ(matrix_ops_axpy(Y, 0.0, X), CORE_ERROR_SUCCESS);
+    expect_equal_matrix(Y, Y0);
+
+    matrix_core_free(Y0);
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+
+TEST(MatrixAxpy, GivenAlphaOne_WhenAxpy_ThenYPlusX) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(2, 2, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(2, 2, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(Y, 1.0, 1.0); // 1,2;3,4
+    fill_sequential(X, 4.0, -0.5);// 4,3.5;3,2.5
+    Matrix* ref = clone_by_copy(Y); ASSERT_NE(ref, nullptr);
+
+    // ref <- ref + X
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    for (int i = 0; i < ref->rows; ++i) {
+        for (int j = 0; j < ref->cols; ++j) {
+            double v = matrix_ops_get(ref, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            double x = matrix_ops_get(X, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            ASSERT_EQ(matrix_ops_set(ref, i, j, v + x), CORE_ERROR_SUCCESS);
+        }
+    }
+
+    EXPECT_EQ(matrix_ops_axpy(Y, 1.0, X), CORE_ERROR_SUCCESS);
+    expect_equal_matrix(Y, ref);
+
+    matrix_core_free(ref);
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+
+TEST(MatrixAxpy, GivenNegativeAlpha_WhenAxpy_ThenSubtractScaledX) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(2, 3, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(2, 3, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(Y, 0.0, 2.0);
+    fill_sequential(X, 1.0, 0.5);
+    Matrix* Y0 = clone_by_copy(Y); ASSERT_NE(Y0, nullptr);
+
+    const double alpha = -3.0;
+    EXPECT_EQ(matrix_ops_axpy(Y, alpha, X), CORE_ERROR_SUCCESS);
+
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    for (int i = 0; i < Y->rows; ++i) {
+        for (int j = 0; j < Y->cols; ++j) {
+            double y = matrix_ops_get(Y, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            double y0 = matrix_ops_get(Y0, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            double x = matrix_ops_get(X, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            EXPECT_DOUBLE_EQ(y, y0 + alpha * x);
+        }
+    }
+
+    matrix_core_free(Y0);
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+
+/* ===== In-place (Y == X) ===== */
+
+TEST(MatrixAxpy, GivenInPlace_WhenAxpy_ThenYUpdatedAsYPlusAlphaY) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(3, 3, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(Y, 1.0, 1.0);   // 1..9
+    Matrix* Y0 = clone_by_copy(Y);  // keep original
+    ASSERT_NE(Y0, nullptr);
+
+    const double alpha = 0.25;
+    // In-place: X == Y
+    EXPECT_EQ(matrix_ops_axpy(Y, alpha, Y), CORE_ERROR_SUCCESS);
+
+    // Expect: Y = (1 + alpha) * Y0
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    for (int i = 0; i < Y->rows; ++i) {
+        for (int j = 0; j < Y->cols; ++j) {
+            double y = matrix_ops_get(Y, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            double y0 = matrix_ops_get(Y0, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            EXPECT_DOUBLE_EQ(y, (1.0 + alpha) * y0);
+        }
+    }
+
+    matrix_core_free(Y0);
+    matrix_core_free(Y);
+}
+
+/* ===== Error handling ===== */
+
+TEST(MatrixAxpy, GivenNullY_WhenAxpy_ThenErrNull) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* X = matrix_core_create(1, 1, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_axpy(nullptr, 2.0, X), CORE_ERROR_NULL);
+    matrix_core_free(X);
+}
+
+TEST(MatrixAxpy, GivenNullX_WhenAxpy_ThenErrNull) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(1, 1, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_axpy(Y, 2.0, nullptr), CORE_ERROR_NULL);
+    matrix_core_free(Y);
+}
+
+TEST(MatrixAxpy, GivenDimMismatch_WhenAxpy_ThenInvalidArg) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(2, 3, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(3, 2, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    EXPECT_EQ(matrix_ops_axpy(Y, 1.0, X), CORE_ERROR_INVALID_ARG);
+
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+
+TEST(MatrixAxpy, GivenNullData_WhenAxpy_ThenErrNull) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(2, 2, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(2, 2, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    // Break destination data pointer
+    double* saved = Y->data;
+    Y->data = nullptr;
+    EXPECT_EQ(matrix_ops_axpy(Y, 1.0, X), CORE_ERROR_NULL);
+    Y->data = saved;
+
+    // Break source data pointer
+    saved = X->data;
+    X->data = nullptr;
+    EXPECT_EQ(matrix_ops_axpy(Y, 1.0, X), CORE_ERROR_NULL);
+    X->data = saved;
+
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+
+/* ===== Robustness / bigger size ===== */
+
+TEST(MatrixAxpy, GivenLargeMatrix_WhenAxpy_ThenAllElementsMatchReference) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    const int R = 64, C = 96;
+    Matrix* Y = matrix_core_create(R, C, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(R, C, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(Y, 0.0, 0.1);
+    fill_sequential(X, -5.0, 0.2);
+    Matrix* Yref = clone_by_copy(Y); ASSERT_NE(Yref, nullptr);
+
+    const double alpha = -0.75;
+
+    // Compute reference: Yref = Yref + alpha * X
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    for (int i = 0; i < R; ++i) {
+        for (int j = 0; j < C; ++j) {
+            double y0 = matrix_ops_get(Yref, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            double x = matrix_ops_get(X, i, j, &st);
+            ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+            ASSERT_EQ(matrix_ops_set(Yref, i, j, y0 + alpha * x), CORE_ERROR_SUCCESS);
+        }
+    }
+
+    EXPECT_EQ(matrix_ops_axpy(Y, alpha, X), CORE_ERROR_SUCCESS);
+    expect_equal_matrix(Y, Yref, /*tol=*/0.0);
+
+    matrix_core_free(Yref);
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+
+/* ===== Optional: behavior with NaN alpha =====
+   Enable one of the following depending on your contract.
+
+TEST(MatrixAxpy, GivenNaNAlpha_WhenAxpy_ThenInvalidArgAndUnchanged) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(2, 2, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(2, 2, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    fill_sequential(Y, 1.0, 1.0);
+    Matrix* Y0 = clone_by_copy(Y); ASSERT_NE(Y0, nullptr);
+
+    const double nanv = std::numeric_limits<double>::quiet_NaN();
+    EXPECT_EQ(matrix_ops_axpy(Y, nanv, X), CORE_ERROR_INVALID_ARG);
+    expect_equal_matrix(Y, Y0);
+
+    matrix_core_free(Y0);
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+
+TEST(MatrixAxpy, GivenNaNAlpha_WhenAxpy_ThenYBecomesNaNWhereXNonZero) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* Y = matrix_core_create(1, 3, &err);
+    ASSERT_NE(Y, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    Matrix* X = matrix_core_create(1, 3, &err);
+    ASSERT_NE(X, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    // Fill Y and X
+    ASSERT_EQ(matrix_ops_set(Y, 0, 0, 1.0), CORE_ERROR_SUCCESS);
+    ASSERT_EQ(matrix_ops_set(Y, 0, 1, 2.0), CORE_ERROR_SUCCESS);
+    ASSERT_EQ(matrix_ops_set(Y, 0, 2, 3.0), CORE_ERROR_SUCCESS);
+    ASSERT_EQ(matrix_ops_set(X, 0, 0, 0.0), CORE_ERROR_SUCCESS);
+    ASSERT_EQ(matrix_ops_set(X, 0, 1, 5.0), CORE_ERROR_SUCCESS);
+    ASSERT_EQ(matrix_ops_set(X, 0, 2, -7.0), CORE_ERROR_SUCCESS);
+
+    const double nanv = std::numeric_limits<double>::quiet_NaN();
+    EXPECT_EQ(matrix_ops_axpy(Y, nanv, X), CORE_ERROR_SUCCESS); // if NaN allowed
+
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
+    double v0 = matrix_ops_get(Y, 0, 0, &st); ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+    double v1 = matrix_ops_get(Y, 0, 1, &st); ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+    double v2 = matrix_ops_get(Y, 0, 2, &st); ASSERT_EQ(st, CORE_ERROR_SUCCESS);
+    // Only entries where X != 0 become NaN
+    EXPECT_FALSE(std::isnan(v0));
+    EXPECT_TRUE (std::isnan(v1));
+    EXPECT_TRUE (std::isnan(v2));
+
+    matrix_core_free(X);
+    matrix_core_free(Y);
+}
+*/
