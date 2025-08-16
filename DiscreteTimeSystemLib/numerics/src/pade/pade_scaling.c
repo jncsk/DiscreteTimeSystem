@@ -33,14 +33,14 @@ static CoreErrorStatus ceil_log2_pos(double x, int* out_result) {
 
     if (x <= 1.0) {
         *out_result = 0;
-        return CORE_ERROR_SUCCESS;
+        CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
     }
 
     double v = log(x) / log(2.0);
     int iv = (int)v;
     *out_result = (v == (double)iv) ? iv : iv + 1;
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 CoreErrorStatus pade_choose_scaling_and_order(double anorm, int* out_s, int* out_m) {
     if (!out_s || !out_m) {
@@ -53,7 +53,7 @@ CoreErrorStatus pade_choose_scaling_and_order(double anorm, int* out_s, int* out
     if (anorm == 0.0) {
         *out_s = 0;
         *out_m = 3;  /* any small order works when A == 0 */
-        return CORE_ERROR_SUCCESS;
+        CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
     }
 
     // Initialize with worst-case (max) values so that the first candidate
@@ -94,7 +94,7 @@ CoreErrorStatus pade_choose_scaling_and_order(double anorm, int* out_s, int* out
     *out_s = best_s;
     *out_m = best_m;
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_scale_down_pow2(const Matrix* src, int s, Matrix* dst) {
@@ -112,11 +112,11 @@ CoreErrorStatus matrix_scale_down_pow2(const Matrix* src, int s, Matrix* dst) {
     // Fast path: no scaling
     if (s == 0) {
         if (dst == src) {
-            return CORE_ERROR_SUCCESS;  // no-op
+            CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);  // no-op
         }
         status = matrix_ops_copy(src, dst);
         if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
-        return CORE_ERROR_SUCCESS;
+        CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
     }
 
     // Prepare destination
@@ -130,5 +130,5 @@ CoreErrorStatus matrix_scale_down_pow2(const Matrix* src, int s, Matrix* dst) {
     status = matrix_ops_scale(dst, factor);
     if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }

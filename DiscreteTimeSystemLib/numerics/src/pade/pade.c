@@ -83,7 +83,7 @@ static CoreErrorStatus build_even_powers(const Matrix* A, int max_power, EvenPow
         status = matrix_ops_multiply(P->A6, P->A6, P->A12); if (status) return status;
     }
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 /**
@@ -232,7 +232,7 @@ static CoreErrorStatus build_UV_with_powers(
     status = matrix_ops_multiply(A, tmpS, U);
     if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 /**
