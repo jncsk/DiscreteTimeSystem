@@ -172,60 +172,49 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
         CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
     }
 
-    if (n < 0) {
-        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
-    }
-
     int size = mat->rows;
     CoreErrorStatus status = CORE_ERROR_SUCCESS;
+    Matrix* base = NULL;
+    Matrix* temp_result = NULL;
+    int bits[32];
+    int bitsNum = 0;
+
     // Handle special cases
     if (n == 0) {
         status = matrix_ops_set_identity(result);
-        if (status != CORE_ERROR_SUCCESS) {
-            CORE_ERROR_RETURN(status);
-        }
-        else {
-            return CORE_ERROR_SUCCESS;
-        }
+        goto cleanup;
     }
     if (n == 1) {
-        status =matrix_ops_copy(mat, result);
-        if (status != CORE_ERROR_SUCCESS) {
-            CORE_ERROR_RETURN(status);
-        }
-        else {
-            return CORE_ERROR_SUCCESS;
-        }
+        status = matrix_ops_copy(mat, result);
+        goto cleanup;
     }
 
     // Allocate memory
-    int bits[32];
-    Matrix* base = matrix_core_create(size, size, &status);
+    base = matrix_core_create(size, size, &status);
     if (status != CORE_ERROR_SUCCESS){
-        CORE_ERROR_RETURN(status);
+        goto cleanup;
     }
-    Matrix* temp_result = matrix_core_create(size, size, &status);
+    temp_result = matrix_core_create(size, size, &status);
     if (status != CORE_ERROR_SUCCESS) {
-        CORE_ERROR_RETURN(status);
+        goto cleanup;
     }
 
     // Convert exponent to binary representation
-    int bitsNum = 0;
     status = bit_utils_to_binary_lsb(n, bits, 32, &bitsNum);
     if (status != CORE_ERROR_SUCCESS) {
-        CORE_ERROR_RETURN(status);
+        goto cleanup;
     }
 
     // Initialize base as mat
     status = matrix_ops_copy(mat, base);
     if (status != CORE_ERROR_SUCCESS) {
-        CORE_ERROR_RETURN(status);
+        goto cleanup;
     }
 
     // Initialize result as identity matrix
     status = matrix_ops_set_identity(result);
     if (status != CORE_ERROR_SUCCESS) {
-        CORE_ERROR_RETURN(status);
+        goto cleanup;
     }
 
     // Binary exponentiation
@@ -234,37 +223,41 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
         if (bits[exp] == 1) {
             status = matrix_ops_multiply(result, base, temp_result);
             if (status != CORE_ERROR_SUCCESS) {
-                CORE_ERROR_RETURN(status);
+                goto cleanup;
             }
             status = matrix_ops_copy(temp_result, result);
             if (status != CORE_ERROR_SUCCESS) {
-                CORE_ERROR_RETURN(status);
+                goto cleanup;
             }
         }
 
         // Square the base for the next bit
         status = matrix_ops_multiply(base, base, temp_result);
         if (status != CORE_ERROR_SUCCESS) {
-            CORE_ERROR_RETURN(status);
+            goto cleanup;
         }
         status = matrix_ops_copy(temp_result, base);
         if (status != CORE_ERROR_SUCCESS) {
-            CORE_ERROR_RETURN(status);
+            goto cleanup;
         }
     }
 
-    status = matrix_core_free(base);
-    if (status != CORE_ERROR_SUCCESS) {
-        CORE_ERROR_RETURN(status);
+cleanup:
+    if (base) {
+        CoreErrorStatus tmp = matrix_core_free(base);
+        if (status == CORE_ERROR_SUCCESS && tmp != CORE_ERROR_SUCCESS) {
+            status = tmp;
+        }
+    }
+    if (temp_result) {
+        CoreErrorStatus tmp = matrix_core_free(temp_result);
+        if (status == CORE_ERROR_SUCCESS && tmp != CORE_ERROR_SUCCESS) {
+            status = tmp;
+        }
     }
 
-    status = matrix_core_free(temp_result);
-    if (status != CORE_ERROR_SUCCESS) {
-        CORE_ERROR_RETURN(status);
-    }
-
-    return CORE_ERROR_SUCCESS;
-};
+    CORE_ERROR_RETURN(status);
+}
 
 CoreErrorStatus matrix_ops_print(const Matrix* mat)
 {
