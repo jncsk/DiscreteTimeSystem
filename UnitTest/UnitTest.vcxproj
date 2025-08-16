@@ -134,6 +134,7 @@
     <ClCompile Include="tests\core\test_core_error.cpp" />
     <ClCompile Include="tests\numerics\linalg\test_matrix_norm.cpp" />
     <ClCompile Include="tests\numerics\pade\pade.cpp" />
+    <ClCompile Include="tests\numerics\pade\test_pade_expm.cpp" />
     <ClCompile Include="tests\numerics\test_math_utils.cpp" />
     <ClCompile Include="tests\core\test_core_matrix.cpp" />
     <ClCompile Include="tests\numerics\linalg\test_matrix_exp.cpp" />
