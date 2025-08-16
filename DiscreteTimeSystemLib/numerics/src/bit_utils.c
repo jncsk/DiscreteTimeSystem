@@ -20,7 +20,7 @@ CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, 
             bits[i++] = 0;
         }
         *out_len = 1;
-        return CORE_ERROR_SUCCESS;
+        CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
     }
 
     // Convert to binary (LSB first)
@@ -43,7 +43,7 @@ CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, 
     }
 
     *out_len = i;
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 };
 
 CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, int* out_len)
@@ -62,7 +62,7 @@ CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, 
     }
 
     *out_len = i;
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 };
 
 CoreErrorStatus bit_utils_print_binary(uint32_t value, int bit_length)
@@ -77,6 +77,6 @@ CoreErrorStatus bit_utils_print_binary(uint32_t value, int bit_length)
     }
     printf("\n");
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 

@@ -16,5 +16,5 @@ CoreErrorStatus math_utils_factorial(uint32_t n, uint64_t* result) {
         r *= i;
     }
     *result = r;
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }

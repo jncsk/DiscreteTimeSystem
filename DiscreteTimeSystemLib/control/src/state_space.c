@@ -27,21 +27,21 @@ StateSpaceModel* state_space_create(int n, int m, int p, CoreErrorStatus* err)
     // A: n x n
     model->A = matrix_core_create(n, n, err);
     if (*err != CORE_ERROR_SUCCESS || !model->A) {
-        state_space_free(model);  // safe: B,C �� NULL
+        state_space_free(model);  // safe: B,C は NULL
         return NULL;
     }
 
     // B: n x m
     model->B = matrix_core_create(n, m, err);
     if (*err != CORE_ERROR_SUCCESS || !model->B) {
-        state_space_free(model);  // A �͊m�ۍς�
+        state_space_free(model);  // A は確保済み
         return NULL;
     }
 
     // C: p x n
     model->C = matrix_core_create(p, n, err);
     if (*err != CORE_ERROR_SUCCESS || !model->C) {
-        state_space_free(model);  // A,B �͊m�ۍς�
+        state_space_free(model);  // A,B は確保済み
         return NULL;
     }
 
@@ -78,5 +78,5 @@ CoreErrorStatus state_space_free(StateSpaceModel* model)
     if (first_err != CORE_ERROR_SUCCESS) {
         CORE_ERROR_RETURN(first_err);
     }
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }

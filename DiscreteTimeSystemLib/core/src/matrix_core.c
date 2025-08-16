@@ -57,6 +57,6 @@ CoreErrorStatus matrix_core_free(Matrix* mat)
     free(mat);
     mat = NULL;
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 

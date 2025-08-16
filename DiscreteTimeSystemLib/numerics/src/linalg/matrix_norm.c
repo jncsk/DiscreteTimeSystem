@@ -27,7 +27,7 @@ CoreErrorStatus matrix_norm_1(const Matrix* mat, double* result) {
     }
 
     *result = max_col_sum;
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_norm_inf(const Matrix* mat, double* result) {

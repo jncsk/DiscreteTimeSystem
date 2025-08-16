@@ -18,7 +18,7 @@ CoreErrorStatus matrix_ops_fill(Matrix* mat, double value) {
         mat->data[i] = value;
     }
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_set(Matrix* mat, int i, int j, double value) {
@@ -34,7 +34,7 @@ CoreErrorStatus matrix_ops_set(Matrix* mat, int i, int j, double value) {
 
     mat->data[i * mat->cols + j] = value;
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 double matrix_ops_get(const Matrix* mat, int i, int j, CoreErrorStatus* err)
@@ -67,7 +67,7 @@ CoreErrorStatus matrix_ops_set_zero(Matrix* mat)
         CORE_ERROR_RETURN(status);
     }
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_set_identity(Matrix* mat) {
@@ -89,7 +89,7 @@ CoreErrorStatus matrix_ops_set_identity(Matrix* mat) {
         mat->data[i * mat->cols + i] = 1.0;
     }
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
@@ -107,7 +107,7 @@ CoreErrorStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result)
         result->data[i] = a->data[i] + b->data[i];
     }
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
@@ -140,7 +140,7 @@ CoreErrorStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* re
         }
     }
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_copy(const Matrix* src, Matrix* dest)
@@ -152,12 +152,12 @@ CoreErrorStatus matrix_ops_copy(const Matrix* src, Matrix* dest)
     {
         CORE_ERROR_RETURN(CORE_ERROR_DIMENSION);
     }
-   if (src == dest) return CORE_ERROR_SUCCESS; 
+   if (src == dest) CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 
     size_t n = (size_t)src->rows * (size_t)src->cols;
     memcpy(dest->data, src->data, n * sizeof(double));
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
@@ -281,7 +281,7 @@ CoreErrorStatus matrix_ops_print(const Matrix* mat)
     }
     printf("\n");
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_scale(Matrix* mat, double factor) {
@@ -297,7 +297,7 @@ CoreErrorStatus matrix_ops_scale(Matrix* mat, double factor) {
 
     /* Fast paths */
     if (factor == 1.0) {
-        return CORE_ERROR_SUCCESS; 
+        CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
     }
     if (factor == 0.0) {
         return matrix_ops_set_zero(mat);
@@ -310,7 +310,7 @@ CoreErrorStatus matrix_ops_scale(Matrix* mat, double factor) {
     for (int i = 0; i < n; ++i) {
         d[i] *= factor;
     }
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_axpy(Matrix* Y, double alpha, const Matrix* X)
@@ -336,7 +336,7 @@ CoreErrorStatus matrix_ops_axpy(Matrix* Y, double alpha, const Matrix* X)
         ydata[i] += alpha * xdata[i];
     }
 
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_ops_fill_sequential(Matrix* mat, double start, double step) {
