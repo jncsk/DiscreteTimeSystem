@@ -31,8 +31,12 @@ CoreErrorStatus matrix_norm_1(const Matrix* mat, double* result) {
 }
 
 CoreErrorStatus matrix_norm_inf(const Matrix* mat, double* result) {
-    if (!mat || !result) return CORE_ERROR_NULL;
-    if (mat->rows <= 0 || mat->cols <= 0) return CORE_ERROR_INVALID_ARG;
+    if (!mat || !result) {
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    }
+    if (mat->rows <= 0 || mat->cols <= 0) {
+        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    }
 
     double max_row_sum = 0.0;
     for (int i = 0; i < mat->rows; i++) {
@@ -40,18 +44,26 @@ CoreErrorStatus matrix_norm_inf(const Matrix* mat, double* result) {
         for (int j = 0; j < mat->cols; j++) {
             CoreErrorStatus status;
             double val = matrix_ops_get(mat, i, j, &status);
-            if (status != CORE_ERROR_SUCCESS) return status;
+            if (status != CORE_ERROR_SUCCESS) {
+                CORE_ERROR_RETURN(status);
+            }
             row_sum += fabs(val);
         }
-        if (i == 0 || row_sum > max_row_sum) max_row_sum = row_sum;
+        if (i == 0 || row_sum > max_row_sum) {
+            max_row_sum = row_sum;
+        }
     }
     *result = max_row_sum;
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
 CoreErrorStatus matrix_norm_fro(const Matrix* mat, double* result) {
-    if (!mat || !result) return CORE_ERROR_NULL;
-    if (mat->rows <= 0 || mat->cols <= 0) return CORE_ERROR_INVALID_ARG;
+    if (!mat || !result) {
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    }
+    if (mat->rows <= 0 || mat->cols <= 0) {
+        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    }
 
     double sum_sq = 0.0;
     for (int i = 0; i < mat->rows; i++) {
@@ -65,5 +77,5 @@ CoreErrorStatus matrix_norm_fro(const Matrix* mat, double* result) {
         }
     }
     *result = sqrt(sum_sq);
-    return CORE_ERROR_SUCCESS;
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
