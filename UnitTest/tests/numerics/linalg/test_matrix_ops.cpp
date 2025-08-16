@@ -539,6 +539,7 @@ TEST(MatrixOps_Power, GivenNonSquareMatrix_WhenPower_ThenReturnsErrDimension) {
 TEST(MatrixOps_Power, GivenNegativeExponent_WhenPower_ThenReturnsErrInvalidArg) {
     CoreErrorStatus err = CORE_ERROR_SUCCESS;
 
+    Matrix* A = matrix_core_create_square(2, &err);
     Matrix* R = matrix_core_create_square(2, &err);
     ASSERT_NE(R, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
 
