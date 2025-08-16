@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <corecrt_math.h>
+#include <math.h>
 #include "matrix_ops.h"
 #include "bit_utils.h"
 #include "core_matrix.h"
@@ -293,13 +293,13 @@ CoreErrorStatus matrix_ops_print(const Matrix* mat)
 
 CoreErrorStatus matrix_ops_scale(Matrix* mat, double factor) {
     if (!mat || !mat->data) {
-        return CORE_ERROR_NULL;
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }
     if (mat->rows <= 0 || mat->cols <= 0) {
-        return CORE_ERROR_INVALID_ARG;
+        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
     }
     if (isnan(factor)) {
-        return CORE_ERROR_INVALID_ARG;
+        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
     }
 
     /* Fast paths */
