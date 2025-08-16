@@ -59,7 +59,7 @@ Matrix* matrix_core_create(int rows, int cols, CoreErrorStatus* err);
 /**
  * @brief Create a new square matrix with specified dimensions.
  *
- * @param size Number of rows/columns.
+ * @param size Number of rows/columns; must be greater than 0.
  * @param err Pointer to CoreErrorStatus for storing error code (can be NULL).
  * @return Pointer to allocated Matrix, or NULL on failure.
  */

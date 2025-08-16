@@ -35,7 +35,8 @@ Matrix* matrix_core_create(int rows, int cols, CoreErrorStatus* err)
 
 Matrix* matrix_core_create_square(int size, CoreErrorStatus* err)
 {
-    if (size < 0)
+    // size must be positive to form a valid square matrix
+    if (size <= 0)
     {
         *err = CORE_ERROR_OUT_OF_BOUNDS;
         CORE_ERROR_SET(CORE_ERROR_OUT_OF_BOUNDS);
