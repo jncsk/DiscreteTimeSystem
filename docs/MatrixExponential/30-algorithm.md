@@ -107,3 +107,11 @@ max_even_power_for_m(...)
 
 build_UV_with_powers(...)
 → 既に構築済みの偶数乗を使って U, V を構築する
+
+---
+
+## 5. 実装メモ
+
+ライブラリ関数 `matrix_exp_exponential` は入力行列 `A` をスカラー `t` で
+スケーリングした後、ここで説明したスケーリング&スクエアリング付きの
+Padé 近似 (`pade_expm`) を用いて \(e^{tA}\) を計算する。

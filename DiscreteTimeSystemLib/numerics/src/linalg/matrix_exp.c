@@ -1,26 +1,41 @@
 ﻿#pragma once
 
-#include <stdio.h>
-#include <math.h>
 #include "matrix_exp.h"
 #include "matrix_ops.h"
-#include "math_utils.h"
+#include "pade.h"
 
 CoreErrorStatus matrix_exp_exponential(const Matrix* A, double t, Matrix* result)
 {
-	if (A == NULL || result == NULL) {
-		CORE_ERROR_SET(CORE_ERROR_NULL);
-		return CORE_ERROR_NULL;
-	}
-	if (A->rows != A->cols) {
-		CORE_ERROR_SET(CORE_ERROR_DIMENSION);
-		return CORE_ERROR_DIMENSION;
-	}
+    if (!A || !result) {
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    }
+    if (A->rows != A->cols ||
+        result->rows != A->rows ||
+        result->cols != A->cols) {
+        CORE_ERROR_RETURN(CORE_ERROR_DIMENSION);
+    }
 
-	int k = 0;
-	CoreErrorStatus status = CORE_ERROR_SUCCESS;
+    CoreErrorStatus status = CORE_ERROR_SUCCESS;
+    Matrix* At = matrix_core_create(A->rows, A->cols, &status);
+    if (status != CORE_ERROR_SUCCESS) {
+        CORE_ERROR_RETURN(status);
+    }
 
-	return CORE_ERROR_SUCCESS;
+    status = matrix_ops_copy(A, At);
+    if (status != CORE_ERROR_SUCCESS) {
+        goto cleanup;
+    }
+
+    status = matrix_ops_scale(At, t);
+    if (status != CORE_ERROR_SUCCESS) {
+        goto cleanup;
+    }
+
+    status = pade_expm(At, result);
+
+cleanup:
+    matrix_core_free(At);
+    CORE_ERROR_RETURN(status);
 }
 
 
