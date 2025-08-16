@@ -1,5 +1,3 @@
-﻿#pragma once
-
 #include "pade_exp_coeffs.h"
 #include "core_error.h"
 #include "core_matrix.h"

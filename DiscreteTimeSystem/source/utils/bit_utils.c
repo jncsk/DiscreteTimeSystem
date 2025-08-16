@@ -1,5 +1,3 @@
-#pragma once
-
 #include "bit_utils.h"
 
 int bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits)

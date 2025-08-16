@@ -1,5 +1,3 @@
-﻿#pragma once
-
 #include <stdio.h>
 #include <math.h>
 #include "matrix_exp.h"

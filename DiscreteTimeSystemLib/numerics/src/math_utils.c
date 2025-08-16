@@ -1,5 +1,3 @@
-#pragma once
-
 #include "math_utils.h"
 
 CoreErrorStatus math_utils_factorial(uint32_t n, uint64_t* result) {

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "core_error.h"
 #include "bit_utils.h"
 
