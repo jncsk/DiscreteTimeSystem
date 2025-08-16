@@ -103,7 +103,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\app\include;$(SolutionDir)DiscreteTimeSystemLib\control\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\core\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\app\include;$(SolutionDir)DiscreteTimeSystemLib\control\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\core\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\pade</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\app\include;$(SolutionDir)DiscreteTimeSystemLib\control\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\core\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\app\include;$(SolutionDir)DiscreteTimeSystemLib\control\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\core\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\pade</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="tests\core\test_core_error.cpp" />
     <ClCompile Include="tests\numerics\linalg\test_matrix_norm.cpp" />
+    <ClCompile Include="tests\numerics\pade\pade.cpp" />
     <ClCompile Include="tests\numerics\test_math_utils.cpp" />
     <ClCompile Include="tests\core\test_core_matrix.cpp" />
     <ClCompile Include="tests\numerics\linalg\test_matrix_exp.cpp" />

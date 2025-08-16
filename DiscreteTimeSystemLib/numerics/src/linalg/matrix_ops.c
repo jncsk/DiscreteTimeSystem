@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <corecrt_math.h>
 #include "matrix_ops.h"
 #include "bit_utils.h"
 #include "core_matrix.h"
@@ -279,3 +280,73 @@ CoreErrorStatus matrix_ops_print(const Matrix* mat)
     return CORE_ERROR_SUCCESS;
 }
 
+CoreErrorStatus matrix_ops_scale(Matrix* mat, double factor) {
+    if (!mat || !mat->data) {
+        return CORE_ERROR_NULL;
+    }
+    if (mat->rows <= 0 || mat->cols <= 0) {
+        return CORE_ERROR_INVALID_ARG;
+    }
+    if (isnan(factor)) {
+        return CORE_ERROR_INVALID_ARG;
+    }
+
+    /* Fast paths */
+    if (factor == 1.0) {
+        return CORE_ERROR_SUCCESS; 
+    }
+    if (factor == 0.0) {
+        return matrix_ops_set_zero(mat);
+    }
+
+    const int n = mat->rows * mat->cols;
+
+    // General case
+    double* __restrict d = mat->data;
+    for (int i = 0; i < n; ++i) {
+        d[i] *= factor;
+    }
+    return CORE_ERROR_SUCCESS;
+}
+
+CoreErrorStatus matrix_ops_axpy(Matrix* Y, double alpha, const Matrix* X)
+{
+    if (!Y || !X)
+    {
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    }
+    if (!Y->data || !X->data)
+    {
+        CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    }
+    if (Y->rows != X->rows || Y->cols != X->cols) {
+        CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    }
+
+    const int nrows = Y->rows;
+    const int ncols = Y->cols;
+    double* ydata = Y->data;
+    const double* xdata = X->data;
+
+    for (int i = 0; i < nrows * ncols; ++i) {
+        ydata[i] += alpha * xdata[i];
+    }
+
+    return CORE_ERROR_SUCCESS;
+}
+
+CoreErrorStatus matrix_ops_fill_sequential(Matrix* mat, double start, double step) {
+    if(!mat) CORE_ERROR_RETURN(CORE_ERROR_NULL);
+
+    CoreErrorStatus status = CORE_ERROR_SUCCESS;
+
+    double v = start;
+    for (int i = 0; i < mat->rows; ++i) {
+        for (int j = 0; j < mat->cols; ++j) {
+            status = matrix_ops_set(mat, i, j, v);
+            if(status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
+            v += step;
+        }
+    }
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
+}

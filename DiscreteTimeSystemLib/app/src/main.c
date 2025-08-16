@@ -5,9 +5,12 @@
 #include "matrix_norm.h"
 #include "state_space.h"
 #include "bit_utils.h"
+#include "pade.h"
+#include "pade_scaling.h"
 
 #define DEBUG_STATE_SPACE 0
-#define DEBUG_MATRIX_NORM 1
+#define DEBUG_MATRIX_NORM 0
+#define DEBUG_PADE 1
 
 int main()
 {	
@@ -146,7 +149,35 @@ int main()
 		status = matrix_norm_inf(mat, &res);
 		status = matrix_norm_fro(mat, &res);
 		printf("res; %f\n", res);
+	}
 
+	if (DEBUG_PADE)
+	{
+		printf("=======matrix_norm=========\n");
+		CoreErrorStatus status = CORE_ERROR_SUCCESS;
+		Matrix* mat = matrix_core_create_square(3, &status);
+		status = matrix_ops_fill_sequential(mat, 1, 1);
+		if (status != CORE_ERROR_SUCCESS) {
+			CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		}
+
+		Matrix* res = matrix_core_create_square(3, &status);
+		if (status != CORE_ERROR_SUCCESS) {
+			CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		}
+		status = matrix_ops_set_zero(res);
+		if (status != CORE_ERROR_SUCCESS) {
+			CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		}
+
+		double anorm = 0;
+
+		status = pade_expm(mat, res);
+		if (status != CORE_ERROR_SUCCESS) {
+			CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		}
+
+		matrix_ops_print(res);
 	}
 	printf("hello world!\n");
 }

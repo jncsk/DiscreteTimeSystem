@@ -54,10 +54,24 @@
  *
  * @param errorcode Error code to set and return.
 */
+//#define CORE_ERROR_RETURN(errorcode) \
+//    do { \
+//        if(errorcode == CORE_ERROR_SUCCESS){ \
+//            return (errorcode); \
+//        } \
+//     else { \
+//        CORE_ERROR_SET(errorcode); \
+//        return (errorcode); \
+//      } \
+//    } while (0)
+
 #define CORE_ERROR_RETURN(errorcode) \
     do { \
-        CORE_ERROR_SET(errorcode); \
-        return (errorcode); \
+        CoreErrorStatus __e = (errorcode); \
+        if (__e != CORE_ERROR_SUCCESS) { \
+            CORE_ERROR_SET(__e); \
+        } \
+        return __e; \
     } while (0)
 
 #if defined(_MSC_VER)
@@ -80,6 +94,8 @@ typedef enum {
     CORE_ERROR_OUT_OF_BOUNDS = -3,
     CORE_ERROR_ALLOCATION_FAILED = -4,
     CORE_ERROR_INVALID_ARG = -5,
+    CORE_ERROR_NOMEM = -6,
+    CORE_ERROR_NUMERIC = -7,
 } CoreErrorStatus;
 
 /**

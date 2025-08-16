@@ -18,7 +18,6 @@ CoreErrorStatus matrix_exp_exponential(const Matrix* A, double t, Matrix* result
 	}
 
 	int k = 0;
-	double pow;
 	CoreErrorStatus status = CORE_ERROR_SUCCESS;
 
 	return CORE_ERROR_SUCCESS;

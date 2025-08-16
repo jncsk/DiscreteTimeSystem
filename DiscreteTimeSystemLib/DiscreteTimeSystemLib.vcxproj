@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)numerics\include;$(ProjectDir)control\include;$(ProjectDir)core\include;$(ProjectDir)app\include;$(ProjectDir)numerics\include\linalg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)numerics\include;$(ProjectDir)control\include;$(ProjectDir)core\include;$(ProjectDir)app\include;$(ProjectDir)numerics\include\linalg;$(ProjectDir)numerics\include\pade;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)numerics\include;$(ProjectDir)control\include;$(ProjectDir)core\include;$(ProjectDir)app\include;$(ProjectDir)numerics\include\linalg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)numerics\include;$(ProjectDir)control\include;$(ProjectDir)core\include;$(ProjectDir)app\include;$(ProjectDir)numerics\include\linalg;$(ProjectDir)numerics\include\pade;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="core\src\core_error.c" />
+    <ClCompile Include="numerics\src\linalg\matrix_solve.c" />
     <ClCompile Include="numerics\src\linalg\matrix_norm.c" />
     <ClCompile Include="numerics\src\math_utils.c" />
     <ClCompile Include="core\src\matrix_core.c" />
@@ -134,6 +135,9 @@
     <ClCompile Include="control\src\state_space.c" />
     <ClCompile Include="app\src\main.c" />
     <ClCompile Include="numerics\src\bit_utils.c" />
+    <ClCompile Include="numerics\src\pade\pade.c" />
+    <ClCompile Include="numerics\src\pade\pade_exp_coeffs.c" />
+    <ClCompile Include="numerics\src\pade\pade_scaling.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\include\core_error.h" />
@@ -144,6 +148,10 @@
     <ClInclude Include="numerics\include\linalg\matrix_ops.h" />
     <ClInclude Include="control\include\state_space.h" />
     <ClInclude Include="numerics\include\bit_utils.h" />
+    <ClInclude Include="numerics\include\pade\pade_exp_coeffs.h" />
+    <ClInclude Include="numerics\include\pade\pade.h" />
+    <ClInclude Include="numerics\include\pade\pade_scaling.h" />
+    <ClInclude Include="numerics\include\linalg\matrix_solve.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
