@@ -25,6 +25,12 @@ A C++ library and sample application for exploring discrete-time system models. 
 4. **Build → Build Solution** to compile the library and application.
 5. Use **Test → Run All Tests** to build and execute the `UnitTest` project.
 
+## Usage
+
+1. In Visual Studio's Solution Explorer, select the `DiscreteTimeSystemApp` project and set it as the startup project if needed.
+2. Press **Ctrl+F5** (Run Without Debugging) to launch the application.
+3. A console window appears showing sample output from the discrete-time system and then closes when execution completes.
+
 ## Prerequisites
 
 - Windows with Visual Studio 2022
