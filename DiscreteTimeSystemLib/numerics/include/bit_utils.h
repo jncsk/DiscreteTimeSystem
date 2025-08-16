@@ -53,6 +53,9 @@ CoreErrorStatus bit_utils_to_binary_lsb(uint32_t value, int* bits, int maxBits, 
  * @param maxBits Maximum number of bits to store
  * @param out_len the length of the bit of the given value
  * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
+ *
+ * If @p value is 0, the first bit is set to 0, @p out_len becomes 1 and any
+ * remaining bits up to @p maxBits are padded with 0.
  */
 CoreErrorStatus bit_utils_to_binary_msb(uint32_t value, int* bits, int maxBits, int* out_len);
 
