@@ -132,13 +132,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="tests\core\test_core_error.cpp" />
-    <ClCompile Include="tests\numerics\linalg\test_matrix_norm.cpp" />
+    <ClCompile Include="tests\numerics\linalg\test_matrix_ops.cpp" />
+    <ClCompile Include="tests\numerics\linalg\test_matrix_solve.cpp" />
     <ClCompile Include="tests\numerics\pade\pade.cpp" />
     <ClCompile Include="tests\numerics\pade\test_pade_expm.cpp" />
+    <ClCompile Include="tests\numerics\pade\test_pade_scaling.cpp" />
     <ClCompile Include="tests\numerics\test_math_utils.cpp" />
     <ClCompile Include="tests\core\test_core_matrix.cpp" />
-    <ClCompile Include="tests\numerics\linalg\test_matrix_exp.cpp" />
-    <ClCompile Include="tests\numerics\linalg\test_matrix_ops.cpp" />
     <ClCompile Include="tests\control\test_state_space.cpp" />
     <ClCompile Include="tests\main.cpp" />
     <ClCompile Include="tests\numerics\test_bit_utils.cpp" />

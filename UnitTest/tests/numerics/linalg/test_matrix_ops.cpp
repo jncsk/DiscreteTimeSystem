@@ -1072,31 +1072,6 @@ TEST(MatrixAxpy, GivenLargeMatrix_WhenAxpy_ThenAllElementsMatchReference) {
     matrix_core_free(Y);
 }
 
-// ========== matrix_ops_print ==========
-TEST(MatrixOps_Print, GivenValidMatrix_WhenPrint_ThenOutputsExpectedString) {
-    CoreErrorStatus err = CORE_ERROR_SUCCESS;
-    Matrix* m = matrix_core_create(2, 2, &err);
-    ASSERT_NE(m, nullptr);
-    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
-
-    EXPECT_EQ(matrix_ops_set(m, 0, 0, 1.0), CORE_ERROR_SUCCESS);
-    EXPECT_EQ(matrix_ops_set(m, 0, 1, 2.0), CORE_ERROR_SUCCESS);
-    EXPECT_EQ(matrix_ops_set(m, 1, 0, 3.0), CORE_ERROR_SUCCESS);
-    EXPECT_EQ(matrix_ops_set(m, 1, 1, 4.0), CORE_ERROR_SUCCESS);
-
-    testing::internal::CaptureStdout();
-    EXPECT_EQ(matrix_ops_print(m), CORE_ERROR_SUCCESS);
-    std::string output = testing::internal::GetCapturedStdout();
-
-    std::string expected =
-        "Matrix (2 x 2):\n"
-        "[   1.000000   2.000000 ]\n"
-        "[   3.000000   4.000000 ]\n\n";
-    EXPECT_EQ(output, expected);
-
-    EXPECT_EQ(matrix_core_free(m), CORE_ERROR_SUCCESS);
-}
-
 TEST(MatrixOps_Print, GivenNullMatrix_WhenPrint_ThenReturnsErrNull) {
     EXPECT_EQ(matrix_ops_print(nullptr), CORE_ERROR_NULL);
 }

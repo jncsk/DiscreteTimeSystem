@@ -56,7 +56,7 @@ CoreErrorStatus pade_choose_scaling_and_order(double anorm, int* out_s, int* out
 static inline void choose_scale_and_order_with_step(double normA1, double t,
     int* out_s, int* out_m) {
     const double anorm = fmax(0.0, normA1) * fmax(0.0, t);
-    choose_scale_and_order(anorm, out_s, out_m);
+    pade_choose_scaling_and_order(anorm, out_s, out_m);
 }
 
 CoreErrorStatus matrix_scale_down_pow2(const Matrix* src, int s, Matrix* dst);

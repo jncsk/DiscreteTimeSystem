@@ -21,13 +21,7 @@
     <ClCompile Include="tests\main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="tests\numerics\linalg\test_matrix_ops.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="tests\control\test_state_space.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\numerics\linalg\test_matrix_exp.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="tests\numerics\test_bit_utils.cpp">
@@ -39,13 +33,19 @@
     <ClCompile Include="tests\numerics\test_math_utils.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="tests\numerics\linalg\test_matrix_norm.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="tests\numerics\pade\pade.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="tests\numerics\pade\test_pade_expm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\numerics\linalg\test_matrix_ops.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\numerics\linalg\test_matrix_solve.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\numerics\pade\test_pade_scaling.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
