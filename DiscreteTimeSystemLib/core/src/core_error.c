@@ -1,6 +1,5 @@
-#pragma once
 #include <stdio.h>
-#include "core_matrix.h"
+#include "core_error.h"
 
 THREAD_LOCAL CoreError g_last_error = { 0, NULL, 0 };
 
