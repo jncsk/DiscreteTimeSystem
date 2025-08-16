@@ -46,6 +46,76 @@ TEST(MatrixOps_Fill, GivenNullMatrix_WhenFill_ThenReturnsErrNull) {
     EXPECT_EQ(err, CORE_ERROR_NULL);
 }
 
+// ========== matrix_ops_fill_sequential ==========
+TEST(MatrixOps_FillSequential, GivenVariousStartAndStep_WhenFillSequential_ThenFillsExpectedSequence) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    const int rows = 2;
+    const int cols = 3;
+    struct Case { double start; double step; } cases[] = {
+        {0.0, 1.0},
+        {1.0, 2.0},
+        {-5.0, 0.5},
+        {10.0, -2.0}
+    };
+
+    for (const auto& c : cases) {
+        Matrix* m = matrix_core_create(rows, cols, &err);
+        ASSERT_NE(m, nullptr);
+        ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+        EXPECT_EQ(matrix_ops_fill_sequential(m, c.start, c.step), CORE_ERROR_SUCCESS);
+
+        double v = c.start;
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                double val = matrix_ops_get(m, i, j, &err);
+                ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+                EXPECT_DOUBLE_EQ(val, v);
+                v += c.step;
+            }
+        }
+
+        EXPECT_EQ(matrix_core_free(m), CORE_ERROR_SUCCESS);
+    }
+}
+
+TEST(MatrixOps_FillSequential, GivenNullMatrix_WhenFillSequential_ThenReturnsErrNull) {
+    EXPECT_EQ(matrix_ops_fill_sequential(nullptr, 0.0, 1.0), CORE_ERROR_NULL);
+}
+
+extern "C" {
+static CoreErrorStatus matrix_ops_set_fail_stub(Matrix* mat, int i, int j, double value) {
+    (void)mat; (void)i; (void)j; (void)value;
+    CORE_ERROR_RETURN(CORE_ERROR_OUT_OF_BOUNDS);
+}
+
+static CoreErrorStatus matrix_ops_fill_sequential_with_fail(Matrix* mat, double start, double step) {
+    if (!mat) CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    CoreErrorStatus status = CORE_ERROR_SUCCESS;
+    double v = start;
+    for (int i = 0; i < mat->rows; ++i) {
+        for (int j = 0; j < mat->cols; ++j) {
+            status = matrix_ops_set_fail_stub(mat, i, j, v);
+            if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
+            v += step;
+        }
+    }
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
+}
+}
+
+TEST(MatrixOps_FillSequential, GivenMatrixOpsSetFails_WhenFillSequential_ThenPropagatesError) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* m = matrix_core_create(1, 1, &err);
+    ASSERT_NE(m, nullptr);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    err = matrix_ops_fill_sequential_with_fail(m, 0.0, 1.0);
+    EXPECT_EQ(err, CORE_ERROR_OUT_OF_BOUNDS);
+
+    EXPECT_EQ(matrix_core_free(m), CORE_ERROR_SUCCESS);
+}
+
 // ========== matrix_ops_set_zero ==========
 TEST(MatrixOps_SetZero, GivenValidMatrix_WhenSetZero_ThenReturnsSuccessAndAllZeros) {
     CoreErrorStatus err = CORE_ERROR_SUCCESS;
