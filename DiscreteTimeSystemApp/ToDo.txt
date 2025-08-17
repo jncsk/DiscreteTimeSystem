@@ -1,34 +1,6 @@
-20250811
-Šeİ’èƒtƒ@ƒCƒ‹‚É•ÏX‚ğ‰Á‚¦‚½‚ÌƒCƒ“ƒpƒNƒgƒ}ƒgƒŠƒNƒX‚ğì¬‚·‚é
-core‘w‚Ìƒtƒ@ƒCƒ‹‚Ì–¼‘O‚ğ•Ï‚¦‚éBcore‚Í‚¢‚ç‚È‚¢
+ã™ã¹ã¦ã®ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’çµ±ä¸€ã™ã‚‹
+.mdãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹
+ã€€Padeæ³•ã®å®Œæˆ
+ã€€é›¢æ•£åŒ–ã®æ–¹æ³•ã®å®Œæˆï¼šVan Loanæ³•
 
-
-20250809
-Unit Test‚Ìƒrƒ‹ƒhŠÂ‹«‚Ì\’z•û–@‚Ìƒƒ‚‚ğì¬‚·‚é
-    libƒvƒƒWƒFƒNƒg‚Åì‚Á‚½lld‚ğApp‚ÆUnitTest‚Å“Ç‚İ‚Şİ’è‚ğ‚·‚é
-	Šeƒtƒ@ƒCƒ‹‚Ì’Ç‰ÁƒCƒ“ƒNƒ‹[ƒhƒfƒBƒŒƒNƒgƒŠ‚ğlibƒvƒƒWƒFƒNƒg‚Ì‚à‚Ì‚É‚·‚é.
-Lib, App, Unit test‚ÌƒvƒƒWƒFƒNƒg‚ğ•ª—£‚µ‚½‚±‚Æ‚Ì”wŒi
-	•ª—£——R‚ÆQÆŠÖŒW
-	İ’è‚Ì•ÏX‰ÓŠ
-
-
-
-Done
-20250811
-Unit Test‚ğ©“®‚ÅÀs‚Å‚«‚é‚æ‚¤‚Éİ’è
-ec537b82073025b2f48e4e711c8975722755b3d8
-
-20250810
-Unit Test‚ÌƒeƒXƒgƒP[ƒX‚ğ‘SŠÙ”•ª’Ç‰Á
-	a84812486a3ec11af46759e651383661b997f999
-	test(unit): add separated unit test project and initial test cases
-
-20250809
-³•ûs—ñê—p‚Ìs—ñì¬ŠÖ”‚ğ’Ç‰Á‚µA•K—v‚É‰‚¶‚Ä’u‚«Š·‚¦
-	012fad2924f95ef766a907deb202294bdd343f9b
-	feat(matrix_core): add matrix_core_create_square for easier square matrix creation
-
-20250809
-ƒGƒ‰[ƒZƒbƒgŠÖ”‚Æreturn‚ğˆê‚Â‚ÌŠÖ”‚É‚Ü‚Æ‚ß‚é
-	e321e4036802052ec8b004e772880701af1de645
-	Merge pull request #2 from JunColinSasaki/feature/error-handling
+RKã®APIä½œæˆï¼Ÿ
