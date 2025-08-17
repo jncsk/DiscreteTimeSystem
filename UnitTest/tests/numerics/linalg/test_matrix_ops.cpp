@@ -1249,3 +1249,98 @@ TEST(MatrixAxpy, GivenNaNAlpha_WhenAxpy_ThenYBecomesNaNWhereXNonZero) {
     matrix_core_free(Y);
 }
 */
+
+/**
+ * Helper: create matrix and fill with sequential values (row-major)
+ */
+static Matrix* create_seq_matrix(int rows, int cols, double start) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* M = matrix_core_create(rows, cols, &err);
+    EXPECT_EQ(err, CORE_ERROR_SUCCESS);
+    EXPECT_NE(M, nullptr);
+
+    double v = start;
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
+            M->data[r * cols + c] = v++;
+        }
+    }
+    return M;
+}
+
+TEST(MatrixOpsSetBlock, NormalCopyCenter) {
+    Matrix* dst = create_seq_matrix(4, 5, 0.0);  // 4x5 matrix with values 0..19
+    Matrix* src = create_seq_matrix(2, 2, 100.0); // 2x2 matrix [100,101;102,103]
+
+    CoreErrorStatus st = matrix_ops_set_block(dst, 1, 2, src);
+    EXPECT_EQ(st, CORE_ERROR_SUCCESS);
+
+    // check dst at (1,2) -> (2,3) is overwritten by src
+    EXPECT_DOUBLE_EQ(dst->data[1 * 5 + 2], 100.0);
+    EXPECT_DOUBLE_EQ(dst->data[1 * 5 + 3], 101.0);
+    EXPECT_DOUBLE_EQ(dst->data[2 * 5 + 2], 102.0);
+    EXPECT_DOUBLE_EQ(dst->data[2 * 5 + 3], 103.0);
+
+    matrix_core_free(dst);
+    matrix_core_free(src);
+}
+
+TEST(MatrixOpsSetBlock, CopyAtOrigin) {
+    Matrix* dst = create_seq_matrix(3, 3, 0.0);
+    Matrix* src = create_seq_matrix(2, 2, 50.0);
+
+    CoreErrorStatus st = matrix_ops_set_block(dst, 0, 0, src);
+    EXPECT_EQ(st, CORE_ERROR_SUCCESS);
+
+    EXPECT_DOUBLE_EQ(dst->data[0 * 3 + 0], 50.0);
+    EXPECT_DOUBLE_EQ(dst->data[0 * 3 + 1], 51.0);
+    EXPECT_DOUBLE_EQ(dst->data[1 * 3 + 0], 52.0);
+    EXPECT_DOUBLE_EQ(dst->data[1 * 3 + 1], 53.0);
+
+    matrix_core_free(dst);
+    matrix_core_free(src);
+}
+
+TEST(MatrixOpsSetBlock, CopyAtBottomRightCorner) {
+    Matrix* dst = create_seq_matrix(4, 4, 0.0);
+    Matrix* src = create_seq_matrix(2, 2, 200.0);
+
+    CoreErrorStatus st = matrix_ops_set_block(dst, 2, 2, src);
+    EXPECT_EQ(st, CORE_ERROR_SUCCESS);
+
+    EXPECT_DOUBLE_EQ(dst->data[2 * 4 + 2], 200.0);
+    EXPECT_DOUBLE_EQ(dst->data[2 * 4 + 3], 201.0);
+    EXPECT_DOUBLE_EQ(dst->data[3 * 4 + 2], 202.0);
+    EXPECT_DOUBLE_EQ(dst->data[3 * 4 + 3], 203.0);
+
+    matrix_core_free(dst);
+    matrix_core_free(src);
+}
+
+TEST(MatrixOpsSetBlock, ErrorNullPointer) {
+    Matrix* dst = create_seq_matrix(3, 3, 0.0);
+    CoreErrorStatus st = matrix_ops_set_block(dst, 0, 0, NULL);
+    EXPECT_EQ(st, CORE_ERROR_NULL);
+
+    matrix_core_free(dst);
+}
+
+TEST(MatrixOpsSetBlock, ErrorNegativeOffset) {
+    Matrix* dst = create_seq_matrix(3, 3, 0.0);
+    Matrix* src = create_seq_matrix(1, 1, 10.0);
+    CoreErrorStatus st = matrix_ops_set_block(dst, -1, 0, src);
+    EXPECT_EQ(st, CORE_ERROR_INVALID_ARG);
+
+    matrix_core_free(dst);
+    matrix_core_free(src);
+}
+
+TEST(MatrixOpsSetBlock, ErrorOutOfBounds) {
+    Matrix* dst = create_seq_matrix(3, 3, 0.0);
+    Matrix* src = create_seq_matrix(2, 2, 20.0);
+    CoreErrorStatus st = matrix_ops_set_block(dst, 2, 2, src); // 2+2 > 3
+    EXPECT_EQ(st, CORE_ERROR_OUT_OF_BOUNDS);
+
+    matrix_core_free(dst);
+    matrix_core_free(src);
+}

@@ -54,6 +54,9 @@
     <ClCompile Include="numerics\src\linalg\matrix_solve.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="numerics\src\c2d\c2d_block_expm.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\include\core_matrix.h">
@@ -90,6 +93,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="numerics\include\linalg\matrix_solve.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="numerics\include\c2d\c2d_block_expm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,8 +10,8 @@
 
 #define DEBUG_STATE_SPACE 0
 #define DEBUG_MATRIX_NORM 0
-#define DEBUG_PADE 1
-
+#define DEBUG_PADE 0
+#define DEBUG_MATRIX_SET_BLOCK 1
 int main()
 {	
 	if (DEBUG_STATE_SPACE)
@@ -178,6 +178,39 @@ int main()
 		}
 
 		matrix_ops_print(res);
+	}
+
+	if (DEBUG_MATRIX_SET_BLOCK)
+	{
+		CoreErrorStatus status;
+		Matrix* A =matrix_core_create(3, 3, &status);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		
+		status = matrix_ops_fill_sequential(A, 1, 1);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		Matrix* B = matrix_core_create(3, 1, &status);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_fill_sequential(B, 1, 1);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		Matrix* dst = matrix_core_create(A->rows + B->rows, A->cols + B->cols, &status);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_set_zero(dst);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		matrix_ops_print(A);
+		matrix_ops_print(B);
+		matrix_ops_print(dst);
+
+		status = matrix_ops_set_block(dst, 1, 1, A);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		matrix_ops_print(dst);
+
+		//matrix_ops_set_block();
 	}
 	printf("hello world!\n");
 }
