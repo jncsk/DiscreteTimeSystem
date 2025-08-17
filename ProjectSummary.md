@@ -66,26 +66,37 @@ Core Layer
 
 ```
 /DiscreteTimeSystem
-├── core/                # Core Layer
-│   ├── core_error.h
-│   ├── matrix_core.h
-│   ├── core_math_utils.h
-│   └── bit_utils.h
-│
-├── numerics/            # Computation / Numerics Layer
-│   ├── matrix_ops.h
-│   └── other_numerics_modules...
-│
-├── control/             # Control Layer
-│   └── other_numerics_modules...
-│   ├── state_space.h
-│   ├── pid_controller.c
-│   └── simulation_runner.c
-│
-├── app/                 # Application Layer
-│   ├── main.c
-│
-└── tests/               # Unit tests for all layers
+├── DiscreteTimeSystemLib/
+│   ├── app/                                           # Application Layer
+│   │   └── src/
+│   │       └── main.c
+│   ├── control/                                       # Control Layer
+│   │   ├── include/
+│   │   │   └── state_space.h
+│   │   └── src/
+│   │       └── state_space.c
+│   ├── numerics/                                      # Numerics Layer
+│   │   ├── include/
+│   │   │   ├── bit_utils.h
+│   │   │   ├── linalg/
+│   │   │   ├── math_utils.h
+│   │   │   └── pade/
+│   │   └── src/
+│   │       └── ...
+│   └── core/                                          # Core Layer
+│       ├── include/
+│       │   ├── core_error.h
+│       │   └── core_matrix.h
+│       └── src/
+│           └── ...
+├── DiscreteTimeSystemApp/
+│   └── main.c                                         # Example application
+└── UnitTest/
+    └── tests/                                         # Unit tests
+        ├── core/
+        ├── control/
+        ├── numerics/
+        └── main.cpp
 ```
 
 ---
