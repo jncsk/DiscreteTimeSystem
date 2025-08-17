@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 /*
  * =============================================================================
@@ -140,7 +140,7 @@ CoreErrorStatus matrix_ops_copy(const Matrix* src, Matrix* dest);
  * @brief Print the contents of a matrix to stdout in a readable format.
  *
  * @param mat Pointer to the matrix to be printed.
- * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
+ * @return CORE_ERROR_SUCCESS if success, otherwise an error code.
  */
 CoreErrorStatus matrix_ops_print(const Matrix* mat);
 
@@ -169,3 +169,34 @@ CoreErrorStatus matrix_ops_scale(Matrix* mat, double factor);
  */
 CoreErrorStatus matrix_ops_axpy(Matrix* Y, double alpha, const Matrix* X);
 
+/**
+ * @brief Copy a rectangular source matrix into a sub-block of the destination matrix.
+ *
+ * @param[out] dst         Destination matrix to receive the block copy.
+ * @param[in]  offset_row  Top-left row index in @p dst where @p src is placed (0-based).
+ * @param[in]  offset_col  Top-left column index in @p dst where @p src is placed (0-based).
+ * @param[in]  src         Source matrix to copy from.
+ *
+ * @return CORE_ERROR_SUCCESS if success, otherwise an error code.
+ *
+ */
+CoreErrorStatus matrix_ops_set_block(Matrix * dst, int offset_row, int offset_col, const Matrix * src);
+
+/**
+ * @brief Copy a sub-block (submatrix) from @p src into an already-allocated @p dst.
+ *
+ * Copies the rectangular region of @p src starting at (@p offset_row, @p offset_col)
+ * with size (@p dst->rows, @p dst->cols) into @p dst. 
+ *
+ * @param[in]  src         Source matrix.
+ * @param[in]  offset_row  Starting row index in @p src (0-based, >= 0).
+ * @param[in]  offset_col  Starting column index in @p src (0-based, >= 0).
+ * @param[out] dst         Destination matrix (pre-allocated, size defines copy area).
+ *
+ * @return CORE_ERROR_SUCCESS on success
+ * @return CORE_ERROR_NULL if @p src or @p dst is NULL
+ * @return CORE_ERROR_INVALID_ARG if offsets are negative or @p dst has non-positive dims
+ * @return CORE_ERROR_OUT_OF_BOUNDS if the requested block exceeds @p src dimensions
+ *
+ */
+CoreErrorStatus matrix_ops_get_block(const Matrix* src, int offset_row, int offset_col, Matrix* out);
