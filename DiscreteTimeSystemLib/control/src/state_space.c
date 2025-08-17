@@ -1,5 +1,4 @@
 
-
 #include <stdlib.h>
 #include "state_space.h"
 #include "core_error.h"
@@ -27,21 +26,21 @@ StateSpaceModel* state_space_create(int n, int m, int p, CoreErrorStatus* err)
     // A: n x n
     model->A = matrix_core_create(n, n, err);
     if (*err != CORE_ERROR_SUCCESS || !model->A) {
-        state_space_free(model);  // safe: B,C は NULL
+        state_space_free(model);
         return NULL;
     }
 
     // B: n x m
     model->B = matrix_core_create(n, m, err);
     if (*err != CORE_ERROR_SUCCESS || !model->B) {
-        state_space_free(model);  // A は確保済み
+        state_space_free(model);
         return NULL;
     }
 
     // C: p x n
     model->C = matrix_core_create(p, n, err);
     if (*err != CORE_ERROR_SUCCESS || !model->C) {
-        state_space_free(model);  // A,B は確保済み
+        state_space_free(model);
         return NULL;
     }
 

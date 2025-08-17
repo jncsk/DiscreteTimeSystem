@@ -4,6 +4,7 @@
 #include "matrix_exp.h"
 #include "matrix_norm.h"
 #include "state_space.h"
+#include "state_space_c2d.h"
 #include "bit_utils.h"
 #include "pade.h"
 #include "pade_scaling.h"
@@ -183,34 +184,64 @@ int main()
 	if (DEBUG_MATRIX_SET_BLOCK)
 	{
 		CoreErrorStatus status;
-		Matrix* A =matrix_core_create(3, 3, &status);
-		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
-		
-		status = matrix_ops_fill_sequential(A, 1, 1);
-		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		StateSpaceModel* sys = state_space_create(3, 1, 1, &status);
 
-		Matrix* B = matrix_core_create(3, 1, &status);
+		status = matrix_ops_set(sys->A, 0, 0, 0);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		status = matrix_ops_fill_sequential(B, 1, 1);
+		status = matrix_ops_set(sys->A, 0, 1, 2);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		Matrix* dst = matrix_core_create(A->rows + B->rows, A->cols + B->cols, &status);
+		status = matrix_ops_set(sys->A, 0, 2, 0);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		status = matrix_ops_set_zero(dst);
+		status = matrix_ops_set(sys->A, 1, 0, 2);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		matrix_ops_print(A);
-		matrix_ops_print(B);
-		matrix_ops_print(dst);
-
-		status = matrix_ops_set_block(dst, 1, 1, A);
+		status = matrix_ops_set(sys->A, 1, 1, 0);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		matrix_ops_print(dst);
+		status = matrix_ops_set(sys->A, 1, 2, 1);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		//matrix_ops_set_block();
+		status = matrix_ops_set(sys->A, 2, 0, 0);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_set(sys->A, 2, 1, 1);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_set(sys->A, 2, 2, -1);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_set(sys->B, 0, 0, 0.5);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_set(sys->B, 1, 0, -1);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_set(sys->B, 2, 0, 0);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_print(sys->A);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_print(sys->B);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		Matrix* Ad = matrix_core_create(sys->A->rows, sys->A->cols, &status);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		Matrix* Bd = matrix_core_create(sys->B->rows, sys->B->cols, &status);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+				
+		status = state_space_c2d(sys, 1, Ad, Bd);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_print(Ad);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+
+		status = matrix_ops_print(Bd);
+		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 	}
 	printf("hello world!\n");
 }

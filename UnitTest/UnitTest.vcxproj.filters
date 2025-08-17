@@ -54,5 +54,8 @@
     <ClCompile Include="tests\numerics\linalg\test_matrix_exp.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="tests\control\test_state_space_c2d.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

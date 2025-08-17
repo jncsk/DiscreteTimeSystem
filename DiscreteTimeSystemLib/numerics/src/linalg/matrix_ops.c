@@ -355,16 +355,16 @@ CoreErrorStatus matrix_ops_fill_sequential(Matrix* mat, double start, double ste
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
-CoreErrorStatus matrix_ops_set_block(Matrix* dst, int offset_rows, int offset_cols, const Matrix* src) {
+CoreErrorStatus matrix_ops_set_block(Matrix* dst, int offset_row, int offset_col, const Matrix* src) {
     if (!dst || !src) CORE_ERROR_RETURN(CORE_ERROR_NULL);
-    if (offset_rows < 0 || offset_cols < 0) CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
-    if (src->rows + offset_rows > dst->rows) CORE_ERROR_RETURN(CORE_ERROR_OUT_OF_BOUNDS);
-    if (src->cols + offset_cols > dst->cols) CORE_ERROR_RETURN(CORE_ERROR_OUT_OF_BOUNDS);
+    if (offset_row < 0 || offset_col < 0) CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    if (src->rows + offset_row > dst->rows) CORE_ERROR_RETURN(CORE_ERROR_OUT_OF_BOUNDS);
+    if (src->cols + offset_col > dst->cols) CORE_ERROR_RETURN(CORE_ERROR_OUT_OF_BOUNDS);
   
     CoreErrorStatus status = CORE_ERROR_SUCCESS;
 
     for (int r = 0; r < src->rows; ++r) {
-        double* dst_row = &dst->data[(offset_rows + r) * dst->cols + offset_cols];
+        double* dst_row = &dst->data[(offset_row + r) * dst->cols + offset_col];
         const double* src_row = &src->data[r * src->cols];
 
         memcpy(dst_row, src_row, sizeof(double) * src->cols);
@@ -372,4 +372,19 @@ CoreErrorStatus matrix_ops_set_block(Matrix* dst, int offset_rows, int offset_co
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
+CoreErrorStatus matrix_ops_get_block(const Matrix* src, int offset_row, int offset_col, Matrix* out)
+{
+    if (!src || !out)                          CORE_ERROR_RETURN(CORE_ERROR_NULL);
+    if (offset_row < 0 || offset_col < 0)      CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    if (out->rows <= 0 || out->cols <= 0)      CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    if (offset_row + out->rows > src->rows ||
+        offset_col + out->cols > src->cols)    CORE_ERROR_RETURN(CORE_ERROR_OUT_OF_BOUNDS);
 
+    for (int r = 0; r < out->rows; ++r) {
+        const double* src_row = &src->data[(offset_row + r) * src->cols + offset_col];
+        double* out_row = &out->data[r * out->cols];
+        memcpy(out_row, src_row, sizeof(double) * (size_t)out->cols);
+    }
+
+    CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
+}

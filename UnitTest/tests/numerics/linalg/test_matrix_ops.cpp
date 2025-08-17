@@ -1344,3 +1344,108 @@ TEST(MatrixOpsSetBlock, ErrorOutOfBounds) {
     matrix_core_free(dst);
     matrix_core_free(src);
 }
+
+TEST(MatrixOpsGetBlock_Into, NormalExtractionCenter) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* A = create_seq_matrix(4, 5, 0.0); // values 0..19
+    Matrix* sub = matrix_core_create(2, 2, &err);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+    ASSERT_NE(sub, nullptr);
+
+    CoreErrorStatus st = matrix_ops_get_block(A, 1, 2, sub);
+    EXPECT_EQ(st, CORE_ERROR_SUCCESS);
+
+    // A(1,2)=7, (1,3)=8, (2,2)=12, (2,3)=13
+    EXPECT_DOUBLE_EQ(sub->data[0], 7.0);
+    EXPECT_DOUBLE_EQ(sub->data[1], 8.0);
+    EXPECT_DOUBLE_EQ(sub->data[2], 12.0);
+    EXPECT_DOUBLE_EQ(sub->data[3], 13.0);
+
+    matrix_core_free(sub);
+    matrix_core_free(A);
+}
+
+TEST(MatrixOpsGetBlock_Into, ExtractAtOrigin) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* A = create_seq_matrix(3, 3, 0.0); // 0..8
+    Matrix* sub = matrix_core_create(2, 2, &err);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    CoreErrorStatus st = matrix_ops_get_block(A, 0, 0, sub);
+    EXPECT_EQ(st, CORE_ERROR_SUCCESS);
+
+    EXPECT_DOUBLE_EQ(sub->data[0], 0.0);
+    EXPECT_DOUBLE_EQ(sub->data[1], 1.0);
+    EXPECT_DOUBLE_EQ(sub->data[2], 3.0);
+    EXPECT_DOUBLE_EQ(sub->data[3], 4.0);
+
+    matrix_core_free(sub);
+    matrix_core_free(A);
+}
+
+TEST(MatrixOpsGetBlock_Into, ExtractAtBottomRightCorner) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* A = create_seq_matrix(4, 4, 0.0);
+    Matrix* sub = matrix_core_create(2, 2, &err);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    CoreErrorStatus st = matrix_ops_get_block(A, 2, 2, sub);
+    EXPECT_EQ(st, CORE_ERROR_SUCCESS);
+
+    // (2,2)=10, (2,3)=11, (3,2)=14, (3,3)=15
+    EXPECT_DOUBLE_EQ(sub->data[0], 10.0);
+    EXPECT_DOUBLE_EQ(sub->data[1], 11.0);
+    EXPECT_DOUBLE_EQ(sub->data[2], 14.0);
+    EXPECT_DOUBLE_EQ(sub->data[3], 15.0);
+
+    matrix_core_free(sub);
+    matrix_core_free(A);
+}
+
+TEST(MatrixOpsGetBlock_Into, ErrorNullArgs) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* A = create_seq_matrix(2, 2, 0.0);
+    Matrix* sub = matrix_core_create(1, 1, &err);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    EXPECT_EQ(matrix_ops_get_block(NULL, 0, 0, sub), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_get_block(A, 0, 0, NULL), CORE_ERROR_NULL);
+
+    matrix_core_free(sub);
+    matrix_core_free(A);
+}
+
+TEST(MatrixOpsGetBlock_Into, ErrorNegativeOffset) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* A = create_seq_matrix(3, 3, 0.0);
+    Matrix* sub = matrix_core_create(1, 1, &err);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    EXPECT_EQ(matrix_ops_get_block(A, -1, 0, sub), CORE_ERROR_INVALID_ARG);
+    EXPECT_EQ(matrix_ops_get_block(A, 0, -1, sub), CORE_ERROR_INVALID_ARG);
+
+    matrix_core_free(sub);
+    matrix_core_free(A);
+}
+
+TEST(MatrixOpsGetBlock_Into, ErrorInvalidDstSize) {
+    // dst->rows/cols <= 0 は通常 create では起きないが、APIの堅牢性テストとして
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix bogus = { 0 }; // 手で壊した不正行列
+    Matrix* A = create_seq_matrix(2, 2, 0.0);
+    EXPECT_EQ(matrix_ops_get_block(A, 0, 0, &bogus), CORE_ERROR_INVALID_ARG);
+    matrix_core_free(A);
+}
+
+TEST(MatrixOpsGetBlock_Into, ErrorOutOfBounds) {
+    CoreErrorStatus err = CORE_ERROR_SUCCESS;
+    Matrix* A = create_seq_matrix(3, 3, 0.0);
+    Matrix* sub = matrix_core_create(2, 2, &err);
+    ASSERT_EQ(err, CORE_ERROR_SUCCESS);
+
+    // 2x2 を (2,2) からはみ出して要求（2+2 > 3）
+    EXPECT_EQ(matrix_ops_get_block(A, 2, 2, sub), CORE_ERROR_OUT_OF_BOUNDS);
+
+    matrix_core_free(sub);
+    matrix_core_free(A);
+}

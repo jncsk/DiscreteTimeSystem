@@ -181,3 +181,22 @@ CoreErrorStatus matrix_ops_axpy(Matrix* Y, double alpha, const Matrix* X);
  *
  */
 CoreErrorStatus matrix_ops_set_block(Matrix * dst, int offset_row, int offset_col, const Matrix * src);
+
+/**
+ * @brief Copy a sub-block (submatrix) from @p src into an already-allocated @p dst.
+ *
+ * Copies the rectangular region of @p src starting at (@p offset_row, @p offset_col)
+ * with size (@p dst->rows, @p dst->cols) into @p dst. 
+ *
+ * @param[in]  src         Source matrix.
+ * @param[in]  offset_row  Starting row index in @p src (0-based, >= 0).
+ * @param[in]  offset_col  Starting column index in @p src (0-based, >= 0).
+ * @param[out] dst         Destination matrix (pre-allocated, size defines copy area).
+ *
+ * @return CORE_ERROR_SUCCESS on success
+ * @return CORE_ERROR_NULL if @p src or @p dst is NULL
+ * @return CORE_ERROR_INVALID_ARG if offsets are negative or @p dst has non-positive dims
+ * @return CORE_ERROR_OUT_OF_BOUNDS if the requested block exceeds @p src dimensions
+ *
+ */
+CoreErrorStatus matrix_ops_get_block(const Matrix* src, int offset_row, int offset_col, Matrix* out);
