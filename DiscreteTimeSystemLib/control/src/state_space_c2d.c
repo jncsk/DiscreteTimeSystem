@@ -1,6 +1,7 @@
 
 #include "state_space_c2d.h"
 #include "matrix_ops.h"
+#include "matrix_exp.h"
 #include "pade.h"
 
 CoreErrorStatus state_space_c2d(const StateSpaceModel* sys, double Ts, Matrix* Ad, Matrix* Bd) {
@@ -32,12 +33,9 @@ CoreErrorStatus state_space_c2d(const StateSpaceModel* sys, double Ts, Matrix* A
 	status = matrix_ops_set_block(M, 0, 0, sys->A);                      if (status) goto FAIL;
 	status = matrix_ops_set_block(M, 0, sys->A->cols, sys->B);   if (status) goto FAIL;
 
-	// M <- Ts * M
-	status = matrix_ops_scale(M, Ts);                                             if (status) goto FAIL;
-
 	// E = exp(M)
 	E = matrix_core_create(M->rows, M->cols, &status);             if (status) goto FAIL;
-	status = pade_expm(M, E);                                                      if (status) goto FAIL;
+	status = matrix_exp_exponential(M, Ts, E);                              if (status) goto FAIL;
 
 	// Ad = E(0:n-1, 0:n-1)
 	status = matrix_ops_get_block(E, 0, 0, Ad);                              if (status) goto FAIL;
