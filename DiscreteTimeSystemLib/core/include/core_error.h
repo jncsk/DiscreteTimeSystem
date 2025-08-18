@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stdlib.h>
+#include <stdio.h> // For fprintf in macros
+
 /*
  * =============================================================================
  *  core_error.h
@@ -15,9 +18,6 @@
  *
  * =============================================================================
  */
-
-#include <stdlib.h>
-#include <stdio.h> // For fprintf in macros
 
  //------------------------------------------------
  //  Macro definitions

@@ -3,13 +3,20 @@
 #include "core_matrix.h"
 #include <math.h>
 
-#pragma once
-
 /*
  * =============================================================================
  *  pade_scaling.h
  * =============================================================================
  *
+ *  Description:
+ *      Utilities for selecting Padé approximant order and scaling factor
+ *      in the scaling-and-squaring algorithm for the matrix exponential.
+ *
+ *  Features:
+ *      - Chooses (s, m) so that ||A||_1 * t / 2^s <= theta_m
+ *      - Candidate orders: m ∈ {3, 5, 7, 9, 13}
+ *      - Cost-based selection (minimize multiplication count + squarings)
+ *      - Helper to apply down-scaling by powers of two
  *
  * =============================================================================
  */
@@ -24,8 +31,7 @@
 //------------------------------------------------
 //  Type definitions
 //------------------------------------------------
-
-
+/* None */
 
 //------------------------------------------------
 //  Function Prototypes
@@ -52,6 +58,11 @@ CoreErrorStatus pade_choose_scaling_and_order(double anorm, int* out_s, int* out
 
 /**
  * @brief Convenience wrapper when you have ||A||_1 and step t separately.
+ *
+ * @param[in]  normA1  ||A||_1 (≥0)
+ * @param[in]  t       Step size (≥0)
+ * @param[out] out_s   Chosen number of squarings
+ * @param[out] out_m   Chosen Padé order
  */
 static inline void choose_scale_and_order_with_step(double normA1, double t,
     int* out_s, int* out_m) {
@@ -59,4 +70,15 @@ static inline void choose_scale_and_order_with_step(double normA1, double t,
     pade_choose_scaling_and_order(anorm, out_s, out_m);
 }
 
+/**
+ * @brief Scale a matrix down by a power of 2: dst = src / 2^s
+ *
+ * @param[in]  src  Input matrix
+ * @param[in]  s    Scaling power (≥0)
+ * @param[out] dst  Output matrix (same dimension as src)
+ *
+ * @return CORE_ERROR_SUCCESS on success
+ * @return CORE_ERROR_DIMENSION if src and dst have mismatched sizes
+ * @return CORE_ERROR_NULL if any argument is NULL
+ */
 CoreErrorStatus matrix_scale_down_pow2(const Matrix* src, int s, Matrix* dst);

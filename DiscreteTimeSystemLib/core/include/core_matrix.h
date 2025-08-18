@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdlib.h>
+#include <stdio.h> // For fprintf in macros
+#include "core_error.h"
+
 /*
  * =============================================================================
  *  core_matrix.h
@@ -17,10 +21,6 @@
  *
  * =============================================================================
  */
-
-#include <stdlib.h>
-#include <stdio.h> // For fprintf in macros
-#include "core_error.h"
 
 //------------------------------------------------
 //  Macro definitions
