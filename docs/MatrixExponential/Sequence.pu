@@ -1,0 +1,89 @@
+@startuml pade_expm_sequence
+title pade_expm() – Scaling & Squaring with [m/m] Padé
+
+actor Caller
+participant "pade_expm" as EXPM
+participant "matrix_norm_1" as Norm1
+participant "pade_choose_scaling_and_order" as Choose
+participant "matrix_core_create" as MCreate
+participant "matrix_scale_down_pow2" as Scale
+participant "pade_exp_get_table" as GetTbl
+participant "build_UV_for_m" as BuildUV
+participant "matrix_ops_copy" as Copy
+participant "matrix_ops_axpy" as AXPY
+participant "matrix_solve_LU" as SolveLU
+participant "matrix_ops_multiply" as Mul
+participant "matrix_core_free" as MFree
+
+== Entry / Validation ==
+Caller -> EXPM : pade_expm(A, result)
+EXPM -> EXPM : check A!=NULL && result!=NULL
+EXPM -> EXPM : status = CORE_ERROR_SUCCESS
+
+== Norm ==
+EXPM -> Norm1 : matrix_norm_1(A, &anorm)
+Norm1 --> EXPM : status
+
+== Choose scaling s and order m ==
+EXPM -> Choose : pade_choose_scaling_and_order(anorm, &scale, &order)
+Choose --> EXPM : status (or void by your API)
+
+== Scale A -> As ==
+EXPM -> MCreate : As = matrix_core_create(n, n, &status)
+MCreate --> EXPM : As
+EXPM -> Scale : matrix_scale_down_pow2(A, scale, As)
+Scale --> EXPM : status
+EXPM -> EXPM : (optional) matrix_ops_print(A), matrix_ops_print(As)
+
+== Fetch Padé coeffs ==
+EXPM -> GetTbl : pade_exp_get_table(order)
+GetTbl --> EXPM : const PadeExpTable* (even/odd coeffs)
+
+== Allocate U,V,tmpS,I ==
+EXPM -> MCreate : U,V,tmpS,I = create(...)
+MCreate --> EXPM : U,V,tmpS,I
+
+== Build U and V ==
+EXPM -> BuildUV : build_UV_for_m(As, order,\n  even,even_len, odd,odd_len,\n  U,V,tmpS,I)
+BuildUV --> EXPM : status
+
+== Form (V - U) and (V + U) ==
+EXPM -> MCreate : VminusU = create(...)\nVplusU = create(...)
+MCreate --> EXPM : VminusU, VplusU
+EXPM -> Copy : matrix_ops_copy(VminusU, V)   ' dst,src per your API
+Copy --> EXPM : status
+EXPM -> AXPY : matrix_ops_axpy(VminusU, -1.0, U)  ' V-U
+AXPY --> EXPM : status
+EXPM -> Copy : matrix_ops_copy(VplusU, V)
+Copy --> EXPM : status
+EXPM -> AXPY : matrix_ops_axpy(VplusU, +1.0, U)   ' V+U
+AXPY --> EXPM : status
+
+== Solve (V - U) * X = (V + U) ==
+EXPM -> SolveLU : matrix_solve_LU(VminusU, result, VplusU)
+SolveLU --> EXPM : status
+
+== Squaring: exp(A) = (exp(As))^(2^s) ==
+loop i = 1..scale
+  EXPM -> MCreate : Tmp = matrix_core_create(n, n, &status)
+  MCreate --> EXPM : Tmp
+  EXPM -> Mul : matrix_ops_multiply(Tmp, result, result) ' Tmp = R*R
+  Mul --> EXPM : status
+  EXPM -> Copy : matrix_ops_copy(result, Tmp)
+  Copy --> EXPM : status
+  EXPM -> MFree : matrix_core_free(Tmp)
+  MFree --> EXPM : -
+end
+
+== Cleanup ==
+EXPM -> MFree : free(As,U,V,tmpS,I,VminusU,VplusU)
+MFree --> EXPM : -
+EXPM --> Caller : CORE_ERROR_SUCCESS (or error on early exit)
+
+note bottom
+Implementation notes:
+- Use scale (s) in the squaring loop; do NOT use `status` for loop count.
+- matrix_ops_copy argument order must match your API (dst, src vs src, dst).
+- All early errors should jump to cleanup to avoid leaks.
+end note
+@enduml
