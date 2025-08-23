@@ -136,7 +136,7 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result);
  * @param dest  Destination matrix (must have same dimensions as src)
  * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
  */
-CoreErrorStatus matrix_ops_copy(const Matrix* src, Matrix* dest);
+CoreErrorStatus matrix_ops_copy(Matrix* dest, const Matrix* src);
 
 /**
  * @brief Print the contents of a matrix to stdout in a readable format.

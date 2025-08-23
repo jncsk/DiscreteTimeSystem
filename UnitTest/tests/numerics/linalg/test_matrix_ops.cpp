@@ -268,7 +268,7 @@ TEST(MatrixOps_Copy_Success, WhenCopy_ThenDestMatchesSrc) {
         for (int j = 0; j < cols; ++j)
             EXPECT_EQ(matrix_ops_set(src, i, j, v++), CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_copy(dst, src), CORE_ERROR_SUCCESS);
     ExpectMatrixEq(src, dst);
 
     EXPECT_EQ(matrix_core_free(src), CORE_ERROR_SUCCESS);
@@ -281,8 +281,8 @@ TEST(MatrixOps_Copy_NullArgs, WhenSrcOrDestNull_ThenErrNull) {
     ASSERT_NE(m, nullptr);
     ASSERT_EQ(err, CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_copy(nullptr, m), CORE_ERROR_NULL);
     EXPECT_EQ(matrix_ops_copy(m, nullptr), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_copy(nullptr, m), CORE_ERROR_NULL);
 
     EXPECT_EQ(matrix_core_free(m), CORE_ERROR_SUCCESS);
 }
@@ -296,7 +296,7 @@ TEST(MatrixOps_Copy_DimensionMismatch, WhenSizesDiffer_ThenErrDimension) {
     ASSERT_NE(dst, nullptr);
     ASSERT_EQ(err, CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_DIMENSION);
+    EXPECT_EQ(matrix_ops_copy(dst, src), CORE_ERROR_DIMENSION);
 
     EXPECT_EQ(matrix_core_free(src), CORE_ERROR_SUCCESS);
     EXPECT_EQ(matrix_core_free(dst), CORE_ERROR_SUCCESS);
@@ -949,7 +949,7 @@ static Matrix* clone_by_copy(const Matrix* src) {
     CoreErrorStatus st = CORE_ERROR_SUCCESS;
     Matrix* dst = matrix_core_create(src->rows, src->cols, &st);
     if (!dst || st != CORE_ERROR_SUCCESS) return nullptr;
-    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_copy(dst, src), CORE_ERROR_SUCCESS);
     return dst;
 }
 
