@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)numerics\include;$(ProjectDir)control\include;$(ProjectDir)core\include;$(ProjectDir)app\include;$(ProjectDir)numerics\include\linalg;$(ProjectDir)numerics\include\pade;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)numerics\include;$(ProjectDir)control\include;$(ProjectDir)core\include;$(ProjectDir)app\include;$(ProjectDir)numerics\include\linalg;$(ProjectDir)numerics\include\pade;$(ProjectDir)app/include\app_motor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)numerics\include;$(ProjectDir)control\include;$(ProjectDir)core\include;$(ProjectDir)app\include;$(ProjectDir)numerics\include\linalg;$(ProjectDir)numerics\include\pade;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)numerics\include;$(ProjectDir)control\include;$(ProjectDir)core\include;$(ProjectDir)app\include;$(ProjectDir)numerics\include\linalg;$(ProjectDir)numerics\include\pade;$(ProjectDir)app/include\app_motor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+
     <ClCompile Include="control\src\state_space_discrete.c" />
     <ClCompile Include="core\src\core_error.c" />
     <ClCompile Include="control\src\state_space_c2d.c" />

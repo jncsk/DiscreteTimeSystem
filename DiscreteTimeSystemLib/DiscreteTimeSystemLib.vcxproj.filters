@@ -104,5 +104,6 @@
     <ClInclude Include="control\include\state_space_discrete.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+
   </ItemGroup>
 </Project>

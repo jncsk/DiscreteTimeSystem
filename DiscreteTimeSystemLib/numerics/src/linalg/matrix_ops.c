@@ -110,7 +110,7 @@ CoreErrorStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result)
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
-CoreErrorStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
+CoreErrorStatus matrix_ops_multiply(Matrix* result, const Matrix* a, const Matrix* b) {
     if (a == NULL || b == NULL || result == NULL) {
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }
@@ -143,7 +143,7 @@ CoreErrorStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* re
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
-CoreErrorStatus matrix_ops_copy(const Matrix* src, Matrix* dest)
+CoreErrorStatus matrix_ops_copy(Matrix* dest, const Matrix* src)
 {
     if (!src || !dest) {
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
@@ -185,7 +185,7 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
         goto cleanup;
     }
     if (n == 1) {
-        status = matrix_ops_copy(mat, result);
+        status = matrix_ops_copy(result, mat);
         goto cleanup;
     }
 
@@ -206,7 +206,7 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     }
 
     // Initialize base as mat
-    status = matrix_ops_copy(mat, base);
+    status = matrix_ops_copy(base, mat);
     if (status != CORE_ERROR_SUCCESS) {
         goto cleanup;
     }
@@ -221,22 +221,22 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     for (int exp = 0; exp < bitsNum; exp++) {
         // If the current bit is 1, multiply result by base
         if (bits[exp] == 1) {
-            status = matrix_ops_multiply(result, base, temp_result);
+            status = matrix_ops_multiply(temp_result, result, base);
             if (status != CORE_ERROR_SUCCESS) {
                 goto cleanup;
             }
-            status = matrix_ops_copy(temp_result, result);
+            status = matrix_ops_copy(result, temp_result);
             if (status != CORE_ERROR_SUCCESS) {
                 goto cleanup;
             }
         }
 
         // Square the base for the next bit
-        status = matrix_ops_multiply(base, base, temp_result);
+        status = matrix_ops_multiply(temp_result, base, base);
         if (status != CORE_ERROR_SUCCESS) {
             goto cleanup;
         }
-        status = matrix_ops_copy(temp_result, base);
+        status = matrix_ops_copy(base, temp_result);
         if (status != CORE_ERROR_SUCCESS) {
             goto cleanup;
         }

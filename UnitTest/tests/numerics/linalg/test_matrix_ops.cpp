@@ -268,7 +268,7 @@ TEST(MatrixOps_Copy_Success, WhenCopy_ThenDestMatchesSrc) {
         for (int j = 0; j < cols; ++j)
             EXPECT_EQ(matrix_ops_set(src, i, j, v++), CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_copy(dst, src), CORE_ERROR_SUCCESS);
     ExpectMatrixEq(src, dst);
 
     EXPECT_EQ(matrix_core_free(src), CORE_ERROR_SUCCESS);
@@ -281,8 +281,8 @@ TEST(MatrixOps_Copy_NullArgs, WhenSrcOrDestNull_ThenErrNull) {
     ASSERT_NE(m, nullptr);
     ASSERT_EQ(err, CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_copy(nullptr, m), CORE_ERROR_NULL);
     EXPECT_EQ(matrix_ops_copy(m, nullptr), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_copy(nullptr, m), CORE_ERROR_NULL);
 
     EXPECT_EQ(matrix_core_free(m), CORE_ERROR_SUCCESS);
 }
@@ -296,7 +296,7 @@ TEST(MatrixOps_Copy_DimensionMismatch, WhenSizesDiffer_ThenErrDimension) {
     ASSERT_NE(dst, nullptr);
     ASSERT_EQ(err, CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_DIMENSION);
+    EXPECT_EQ(matrix_ops_copy(dst, src), CORE_ERROR_DIMENSION);
 
     EXPECT_EQ(matrix_core_free(src), CORE_ERROR_SUCCESS);
     EXPECT_EQ(matrix_core_free(dst), CORE_ERROR_SUCCESS);
@@ -400,7 +400,7 @@ TEST(MatrixOps_Multiply, GivenRectangularMatrices_WhenMultiply_ThenReturnsSucces
     EXPECT_EQ(matrix_ops_set(B, 2, 0, 11.0), CORE_ERROR_SUCCESS);
     EXPECT_EQ(matrix_ops_set(B, 2, 1, 12.0), CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_multiply(A, B, R), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_multiply(R, A, B), CORE_ERROR_SUCCESS);
 
     CoreErrorStatus s;
     double v;
@@ -434,11 +434,11 @@ TEST(MatrixOps_Multiply, GivenIdentityMatrix_WhenMultiply_ThenReturnsSuccessAndP
     EXPECT_EQ(matrix_ops_set_identity(I), CORE_ERROR_SUCCESS);
 
     // A * I = A
-    EXPECT_EQ(matrix_ops_multiply(A, I, R), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_multiply(R, A, I), CORE_ERROR_SUCCESS);
     ExpectMatrixEq(R, A);
 
     // I * A = A
-    EXPECT_EQ(matrix_ops_multiply(I, A, R), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_multiply(R, I, A), CORE_ERROR_SUCCESS);
     ExpectMatrixEq(R, A);
 
     EXPECT_EQ(matrix_core_free(A), CORE_ERROR_SUCCESS);
@@ -459,7 +459,7 @@ TEST(MatrixOps_Multiply, GivenZeroMatrix_WhenMultiply_ThenReturnsSuccessAndResul
     EXPECT_EQ(matrix_ops_fill(A, 5.0), CORE_ERROR_SUCCESS);
     EXPECT_EQ(matrix_ops_set_zero(Z), CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_multiply(A, Z, R), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_multiply(R, A, Z), CORE_ERROR_SUCCESS);
     for (int i = 0; i < R->rows; ++i)
         for (int j = 0; j < R->cols; ++j) {
             CoreErrorStatus s;
@@ -482,7 +482,7 @@ TEST(MatrixOps_Multiply, GivenDimensionMismatch_WhenMultiply_ThenReturnsErrDimen
     Matrix* R = matrix_core_create(2, 2, &err);
     ASSERT_NE(R, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_multiply(A, B, R), CORE_ERROR_DIMENSION);
+    EXPECT_EQ(matrix_ops_multiply(R, A, B), CORE_ERROR_DIMENSION);
 
     EXPECT_EQ(matrix_core_free(A), CORE_ERROR_SUCCESS);
     EXPECT_EQ(matrix_core_free(B), CORE_ERROR_SUCCESS);
@@ -496,9 +496,9 @@ TEST(MatrixOps_Multiply, GivenNullArguments_WhenMultiply_ThenReturnsErrNull) {
     Matrix* R = matrix_core_create(1, 1, &err);
     ASSERT_NE(A, nullptr); ASSERT_NE(B, nullptr); ASSERT_NE(R, nullptr);
 
-    EXPECT_EQ(matrix_ops_multiply(nullptr, B, R), CORE_ERROR_NULL);
-    EXPECT_EQ(matrix_ops_multiply(A, nullptr, R), CORE_ERROR_NULL);
-    EXPECT_EQ(matrix_ops_multiply(A, B, nullptr), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_multiply(R, nullptr, B), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_multiply(R, A, nullptr), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_multiply(nullptr, A, B), CORE_ERROR_NULL);
 
     EXPECT_EQ(matrix_core_free(A), CORE_ERROR_SUCCESS);
     EXPECT_EQ(matrix_core_free(B), CORE_ERROR_SUCCESS);
@@ -949,7 +949,7 @@ static Matrix* clone_by_copy(const Matrix* src) {
     CoreErrorStatus st = CORE_ERROR_SUCCESS;
     Matrix* dst = matrix_core_create(src->rows, src->cols, &st);
     if (!dst || st != CORE_ERROR_SUCCESS) return nullptr;
-    EXPECT_EQ(matrix_ops_copy(src, dst), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_copy(dst, src), CORE_ERROR_SUCCESS);
     return dst;
 }
 

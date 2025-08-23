@@ -60,27 +60,27 @@ static CoreErrorStatus build_even_powers(const Matrix* A, int max_power, EvenPow
 
     // A2 = A*A
     if (max_power >= 2) {
-        status = matrix_ops_multiply(A, A, P->A2); if (status) return status;
+        status = matrix_ops_multiply(P->A2, A, A); if (status) return status;
     }
     // A4 = A2*A2
     if (max_power >= 4) {
-        status = matrix_ops_multiply(P->A2, P->A2, P->A4); if (status) return status;
+        status = matrix_ops_multiply(P->A4, P->A2, P->A2); if (status) return status;
     }
     // A6 = A4*A2
     if (max_power >= 6) {
-        status = matrix_ops_multiply(P->A4, P->A2, P->A6); if (status) return status;
+        status = matrix_ops_multiply(P->A6, P->A4, P->A2); if (status) return status;
     }
     // A8 = A4*A4
     if (max_power >= 8) {
-        status = matrix_ops_multiply(P->A4, P->A4, P->A8); if (status) return status;
+        status = matrix_ops_multiply(P->A8, P->A4, P->A4); if (status) return status;
     }
     // A10 = A8*A2
     if (max_power >= 10) {
-        status = matrix_ops_multiply(P->A8, P->A2, P->A10); if (status) return status;
+        status = matrix_ops_multiply(P->A10, P->A8, P->A2); if (status) return status;
     }
     // A12 = A6*A6
     if (max_power >= 12) {
-        status = matrix_ops_multiply(P->A6, P->A6, P->A12); if (status) return status;
+        status = matrix_ops_multiply(P->A12, P->A6, P->A6); if (status) return status;
     }
 
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
@@ -187,7 +187,7 @@ static CoreErrorStatus build_UV_with_powers(
     status = matrix_ops_set_identity(I);
     if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
 
-    status = matrix_ops_copy(I, V);
+    status = matrix_ops_copy(V, I);
     if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
 
     status = matrix_ops_scale(V, b_even[0]);     
@@ -207,7 +207,7 @@ static CoreErrorStatus build_UV_with_powers(
     // --- Step 2: build inner odd polynomial S = b1*I + b3*A^2 + b5*A^4 + ... ---
     if (odd_len > 0) {
         // --- Step 2.1 : tmpS = c1 * I ---
-        status = matrix_ops_copy(I, tmpS);
+        status = matrix_ops_copy(tmpS, I);
         if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
 
         status = matrix_ops_scale(tmpS, b_odd[0]);
@@ -229,7 +229,7 @@ static CoreErrorStatus build_UV_with_powers(
     }
 
     // ---Step 2.3: V = A (c1 * I + c3 * A^2 + c5 * A^4 + ...) ---
-    status = matrix_ops_multiply(A, tmpS, U);
+    status = matrix_ops_multiply(U, A, tmpS);
     if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
 
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
@@ -383,13 +383,13 @@ CoreErrorStatus pade_expm(const Matrix* A, Matrix* result) {
     if (status) { CORE_ERROR_SET(status); goto CLEANUP_EARLY; }
 
     /* VminusU = V - U */
-    status = matrix_ops_copy(V, VminusU); 
+    status = matrix_ops_copy(VminusU, V);
     if (status) { CORE_ERROR_SET(status); goto CLEANUP_EARLY; }
     status = matrix_ops_axpy(VminusU, -1.0, U);
     if (status) { CORE_ERROR_SET(status); goto CLEANUP_EARLY; }
 
     /* VplusU = V + U */
-    status = matrix_ops_copy(V, VplusU); 
+    status = matrix_ops_copy(VplusU, V);
     if (status) { CORE_ERROR_SET(status); goto CLEANUP_EARLY; }
     status = matrix_ops_axpy(VplusU, 1.0, U);  
     if (status) { CORE_ERROR_SET(status); goto CLEANUP_EARLY; }
@@ -415,11 +415,11 @@ CoreErrorStatus pade_expm(const Matrix* A, Matrix* result) {
 
         for (int i = 0; i < scale; ++i) {
             /* Tmp = result * result  */
-            status = matrix_ops_multiply(result, result, Tmp);
+            status = matrix_ops_multiply(Tmp, result, result);
             if (status) { matrix_core_free(Tmp); goto CLEANUP_EARLY; }
 
             /* result <- Tmp */
-            status = matrix_ops_copy(Tmp, result);
+            status = matrix_ops_copy(result, Tmp);
             if (status) { matrix_core_free(Tmp); goto CLEANUP_EARLY; }
         }
 
