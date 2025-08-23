@@ -110,7 +110,7 @@ CoreErrorStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result)
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
-CoreErrorStatus matrix_ops_multiply(const Matrix* a, const Matrix* b, Matrix* result) {
+CoreErrorStatus matrix_ops_multiply(Matrix* result, const Matrix* a, const Matrix* b) {
     if (a == NULL || b == NULL || result == NULL) {
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }
@@ -221,7 +221,7 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
     for (int exp = 0; exp < bitsNum; exp++) {
         // If the current bit is 1, multiply result by base
         if (bits[exp] == 1) {
-            status = matrix_ops_multiply(result, base, temp_result);
+            status = matrix_ops_multiply(temp_result, result, base);
             if (status != CORE_ERROR_SUCCESS) {
                 goto cleanup;
             }
@@ -232,7 +232,7 @@ CoreErrorStatus matrix_ops_power(const Matrix* mat, int n, Matrix* result)
         }
 
         // Square the base for the next bit
-        status = matrix_ops_multiply(base, base, temp_result);
+        status = matrix_ops_multiply(temp_result, base, base);
         if (status != CORE_ERROR_SUCCESS) {
             goto cleanup;
         }
