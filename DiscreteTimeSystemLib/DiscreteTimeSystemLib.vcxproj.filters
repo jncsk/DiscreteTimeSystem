@@ -60,6 +60,9 @@
     <ClCompile Include="control\src\state_space_discrete.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="app\src\app_motor\app_motor.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\include\core_matrix.h">
@@ -104,6 +107,8 @@
     <ClInclude Include="control\include\state_space_discrete.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-
+    <ClInclude Include="app\include\app_motor\app_motor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

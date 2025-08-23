@@ -326,7 +326,7 @@ TEST(MatrixOps_Add, GivenSameSizeMatrices_WhenAdd_ThenReturnsSuccessAndCorrectSu
         }
     }
 
-    EXPECT_EQ(matrix_ops_add(a, b, r), CORE_ERROR_SUCCESS);
+    EXPECT_EQ(matrix_ops_add(r, a, b), CORE_ERROR_SUCCESS);
 
     // Expected: r[i][j] = 11 * (i*cols + j)
     for (int i = 0; i < rows; ++i) {
@@ -349,9 +349,9 @@ TEST(MatrixOps_Add, GivenNullArguments_WhenAdd_ThenReturnsErrNull) {
     Matrix* r = matrix_core_create(1, 1, &err);
     ASSERT_NE(a, nullptr); ASSERT_NE(r, nullptr);
 
-    EXPECT_EQ(matrix_ops_add(a, nullptr, r), CORE_ERROR_NULL);
-    EXPECT_EQ(matrix_ops_add(nullptr, a, r), CORE_ERROR_NULL);
-    EXPECT_EQ(matrix_ops_add(a, a, nullptr), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_add(r, a, nullptr), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_add(r, nullptr, a), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_add(nullptr, a, a), CORE_ERROR_NULL);
 
     EXPECT_EQ(matrix_core_free(a), CORE_ERROR_SUCCESS);
     EXPECT_EQ(matrix_core_free(r), CORE_ERROR_SUCCESS);
@@ -366,7 +366,7 @@ TEST(MatrixOps_Add, GivenDifferentSizes_WhenAdd_ThenReturnsErrDimension) {
     Matrix* r = matrix_core_create(2, 3, &err);
     ASSERT_NE(r, nullptr); ASSERT_EQ(err, CORE_ERROR_SUCCESS);
 
-    EXPECT_EQ(matrix_ops_add(a, b, r), CORE_ERROR_DIMENSION);
+    EXPECT_EQ(matrix_ops_add(r, a, b), CORE_ERROR_DIMENSION);
 
     EXPECT_EQ(matrix_core_free(a), CORE_ERROR_SUCCESS);
     EXPECT_EQ(matrix_core_free(b), CORE_ERROR_SUCCESS);
@@ -1193,7 +1193,7 @@ TEST(MatrixAxpy, GivenLargeMatrix_WhenAxpy_ThenAllElementsMatchReference) {
 }
 
 TEST(MatrixOps_Print, GivenNullMatrix_WhenPrint_ThenReturnsErrNull) {
-    EXPECT_EQ(matrix_ops_print(nullptr), CORE_ERROR_NULL);
+    EXPECT_EQ(matrix_ops_print(nullptr, NULL), CORE_ERROR_NULL);
 }
 
 /* ===== Optional: behavior with NaN alpha =====

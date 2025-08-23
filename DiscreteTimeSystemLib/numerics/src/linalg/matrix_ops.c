@@ -92,7 +92,7 @@ CoreErrorStatus matrix_ops_set_identity(Matrix* mat) {
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
-CoreErrorStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result) {
+CoreErrorStatus matrix_ops_add(Matrix* result, const Matrix* a, const Matrix* b) {
     if (a == NULL || b == NULL || result == NULL) {
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }
@@ -259,13 +259,18 @@ cleanup:
     CORE_ERROR_RETURN(status);
 }
 
-CoreErrorStatus matrix_ops_print(const Matrix* mat)
+CoreErrorStatus matrix_ops_print(const Matrix* mat, const char* label)
 {
     if (mat == NULL) {
         CORE_ERROR_RETURN(CORE_ERROR_NULL);
     }
 
-    CoreErrorStatus status = 0;
+    CoreErrorStatus status = CORE_ERROR_SUCCESS;
+
+    // ƒ‰ƒxƒ‹‚ª‚ ‚ê‚Îæ“ª‚Éo—Í
+    if (label && label[0] != '\0') {
+        printf("%s\n", label);
+    }
 
     printf("Matrix (%d x %d):\n", mat->rows, mat->cols);
     for (int i = 0; i < mat->rows; i++) {
@@ -276,7 +281,6 @@ CoreErrorStatus matrix_ops_print(const Matrix* mat)
                 CORE_ERROR_RETURN(status);
             }
         }
-
         printf("]\n");
     }
     printf("\n");

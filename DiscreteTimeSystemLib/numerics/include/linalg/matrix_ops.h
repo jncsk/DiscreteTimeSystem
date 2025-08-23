@@ -106,13 +106,13 @@ double matrix_ops_get(const Matrix* mat, int i, int j, CoreErrorStatus* err);
 /**
  * @brief Add two matrices: result = a + b
  *
+ * @param result Output matrix (preallocated with same dimensions as a/b)
  * @param a First input matrix (must match dimensions of b)
  * @param b Second input matrix
- * @param result Output matrix (preallocated with same dimensions as a/b)
  * @return CORE_ERROR_SUCCESS if the operation completes successfully,
  *         otherwise an appropriate error code.
  */
-CoreErrorStatus matrix_ops_add(const Matrix* a, const Matrix* b, Matrix* result);
+CoreErrorStatus matrix_ops_add(Matrix* result, const Matrix* a, const Matrix* b);
 
 /**
  * @brief Multiply two matrices: result = a * b
@@ -150,10 +150,12 @@ CoreErrorStatus matrix_ops_copy(Matrix* dest, const Matrix* src);
  * @brief Print the contents of a matrix to stdout in a readable format.
  *
  * @param mat Pointer to the matrix to be printed.
+ * @param label Optional label string to print before the matrix.
+ *              Pass NULL or an empty string to suppress the label.
  * @return CORE_ERROR_SUCCESS if the operation completes successfully,
  *         otherwise an appropriate error code.
  */
-CoreErrorStatus matrix_ops_print(const Matrix* mat);
+CoreErrorStatus matrix_ops_print(const Matrix* mat, const char* label);
 
 /**
  * @brief Scale each element in the matrix using input value, factor.

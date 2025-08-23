@@ -9,13 +9,14 @@
 #include "pade.h"
 #include "pade_scaling.h"
 #include "app_motor.h"
+#include "state_space_discrete.h"
 
 
 #define DEBUG_STATE_SPACE 0
 #define DEBUG_MATRIX_NORM 0
 #define DEBUG_PADE 0
 #define DEBUG_MATRIX_SET_BLOCK 0
-#define DEBUG_APP_MOTOR 0
+#define DEBUG_APP_MOTOR 1
 
 int main()
 {	
@@ -65,7 +66,7 @@ int main()
 			CORE_ERROR_PRINT_CALL_AND_LAST(status);
 		}
 
-		status = matrix_ops_print(matrix->A);
+		status = matrix_ops_print(matrix->A, NULL);
 		if (status != CORE_ERROR_SUCCESS) {
 			CORE_ERROR_PRINT_CALL_AND_LAST(status);
 		}
@@ -84,7 +85,7 @@ int main()
 			CORE_ERROR_PRINT_CALL_AND_LAST(status);
 		}
 
-		status = matrix_ops_print(matrix->B);
+		status = matrix_ops_print(matrix->B, NULL);
 		if (status != CORE_ERROR_SUCCESS) {
 			CORE_ERROR_PRINT_CALL_AND_LAST(status);
 		}
@@ -102,7 +103,7 @@ int main()
 		if (status != CORE_ERROR_SUCCESS) {
 			CORE_ERROR_PRINT_CALL_AND_LAST(status);
 		}
-		status = matrix_ops_print(matrix->C);
+		status = matrix_ops_print(matrix->C, NULL);
 		if (status != CORE_ERROR_SUCCESS) {
 			CORE_ERROR_PRINT_CALL_AND_LAST(status);
 		}
@@ -155,7 +156,6 @@ int main()
 		status = matrix_norm_fro(mat, &res);
 		printf("res; %f\n", res);
 	}
-
 	if (DEBUG_PADE)
 	{
 		printf("=======matrix_norm=========\n");
@@ -182,9 +182,8 @@ int main()
 			CORE_ERROR_PRINT_CALL_AND_LAST(status);
 		}
 
-		matrix_ops_print(res);
+		matrix_ops_print(res, NULL);
 	}
-
 	if (DEBUG_MATRIX_SET_BLOCK)
 	{
 		CoreErrorStatus status;
@@ -226,10 +225,10 @@ int main()
 		status = matrix_ops_set(sys->B, 2, 0, 0);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		status = matrix_ops_print(sys->A);
+		status = matrix_ops_print(sys->A, NULL);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		status = matrix_ops_print(sys->B);
+		status = matrix_ops_print(sys->B, NULL);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
 		Matrix* Ad = matrix_core_create(sys->A->rows, sys->A->cols, &status);
@@ -241,89 +240,66 @@ int main()
 		status = state_space_c2d(sys, 1, Ad, Bd);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		status = matrix_ops_print(Ad);
+		status = matrix_ops_print(Ad, NULL);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 
-		status = matrix_ops_print(Bd);
+		status = matrix_ops_print(Bd, NULL);
 		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
 	}
-	
 	if (DEBUG_APP_MOTOR) {
-		CoreErrorStatus status = CORE_ERROR_SUCCESS;
+		CoreErrorStatus st = CORE_ERROR_SUCCESS;
 
 		// パラメータとモデル生成
 		DCMotorParams* p = motor_set_params(1, 0, 1, 1, 1);
-		StateSpaceModel* sys = motor_create(p, &status);
-		if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		StateSpaceModel* sys = motor_create(p, &st);
+		if (st) { CORE_ERROR_PRINT_CALL_AND_LAST(st); goto CLEANUP; }
 
-		matrix_ops_set(sys->A, 1, 1, -1.0);
-		matrix_ops_print(sys->A);
-		matrix_ops_print(sys->B);
-		matrix_ops_print(sys->C);
+		// A(1,1) = -1 を明示セット（0-based）
+		st = matrix_ops_set(sys->A, 1, 1, -1.0);
+		if (st) { CORE_ERROR_PRINT_CALL_AND_LAST(st); goto CLEANUP; }
 
-		// 状態と一時バッファ
-		Matrix* x_now = matrix_core_create(2, 1, &status); if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
-		Matrix* x_next = matrix_core_create(2, 1, &status); if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
-		Matrix* Ax       = matrix_core_create(2, 1, &status); if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
-		Matrix* Bu       = matrix_core_create(2, 1, &status); if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		// 離散モデル作成
+		SSDiscrete d = { 0 };
+		st = ss_discrete_init_from_csys(&d, sys, 1.0);
+		if (st) { CORE_ERROR_PRINT_CALL_AND_LAST(st); goto CLEANUP; }
 
-		status = matrix_ops_set_zero(x_now); if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
-		status = matrix_ops_set_zero(x_next); if (status) CORE_ERROR_PRINT_CALL_AND_LAST(status);
+		// 確認用に Ad, Bd を出力
+		matrix_ops_print(d.Ad, "Ad");
+		matrix_ops_print(d.Bd, "Bd");
 
-		// 離散化（Ts=1.0 はかなり大きいので注意。例としてそのまま）
-		Matrix* Ad = matrix_core_create(sys->A->rows, sys->A->cols, &status);
-		Matrix* Bd = matrix_core_create(sys->B->rows, sys->B->cols, &status);
+		// 状態と入力
+		Matrix* x = matrix_core_create(d.n, 1, &st); if (st) { CORE_ERROR_PRINT_CALL_AND_LAST(st); goto CLEANUP2; }
+		Matrix* xn = matrix_core_create(d.n, 1, &st); if (st) { CORE_ERROR_PRINT_CALL_AND_LAST(st); goto CLEANUP3; }
+		Matrix* u = matrix_core_create(d.m, 1, &st); if (st) { CORE_ERROR_PRINT_CALL_AND_LAST(st); goto CLEANUP4; }
+		st = matrix_ops_set_zero(x);                   if (st) { CORE_ERROR_PRINT_CALL_AND_LAST(st); goto CLEANUP5; }
 
-		status = state_space_c2d(sys, 1, Ad, Bd);
-		if (status) { CORE_ERROR_PRINT_CALL_AND_LAST(status); goto CLEANUP; }
+		for (int k = 0; k < 8; ++k) {
+			double uk = (k == 0) ? 1.0 : (k == 1) ? 2.0 : 0.0;
+			u->data[0] = uk;
 
-		matrix_ops_print(Ad);
-		matrix_ops_print(Bd);
+			st = ss_discrete_step(&d, x, u, xn);
+			if (st) { CORE_ERROR_PRINT_CALL_AND_LAST(st); goto CLEANUP5; }
 
-		// 時間ステップ
-		double u = 0.0;
+			printf("step: %d, u=%.6f\n", k, uk);
+			matrix_ops_print(xn, "x_next");
 
-		for (int k = 0; k < 50; k++) {
-			// 入力シーケンス
-			if (k == 0) u = 1.0;
-			else if (k == 1) u = 2.0;
-			else u = 0.0;
-
-			// Ax = Ad * x_now
-			status = matrix_ops_multiply(Ax, Ad, x_now);
-			if (status) { CORE_ERROR_PRINT_CALL_AND_LAST(status); goto CLEANUP; }
-
-			// Bu = Bd * u   （毎回 Bd をコピーしてからスケール）
-			status = matrix_ops_copy(Bd, Bu);
-			if (status) { CORE_ERROR_PRINT_CALL_AND_LAST(status); goto CLEANUP; }
-			status = matrix_ops_scale(Bu, u);     // in-place: Bu ← u * Bu
-			if (status) { CORE_ERROR_PRINT_CALL_AND_LAST(status); goto CLEANUP; }
-
-			// x_next = Ax + Bu
-			status = matrix_ops_add(Ax, Bu, x_next); // シグネチャが C=A+B の場合
-			if (status) { CORE_ERROR_PRINT_CALL_AND_LAST(status); goto CLEANUP; }
-
-			printf("time: %d\n", k);
-			matrix_ops_print(x_now);
-
-			// x_now ← x_next （ポインタスワップが速くて安全）
-			Matrix* tmp = x_now;
-			x_now = x_next;
-			x_next = tmp;
+			// 次のステップへ
+			Matrix* tmp = x; x = xn; xn = tmp;
 		}
 
+	CLEANUP5:
+		matrix_core_free(u);
+	CLEANUP4:
+		matrix_core_free(xn);
+	CLEANUP3:
+		matrix_core_free(x);
+	CLEANUP2:
+		ss_discrete_free(&d);
 	CLEANUP:
-		matrix_core_free(Bd);
-		matrix_core_free(Ad);
-		matrix_core_free(Bu);
-		matrix_core_free(Ax);
-		matrix_core_free(x_next);
-		matrix_core_free(x_now);
 		state_space_free(sys);
-
-	CLEANUP_EARLY:
-		; // no-op
+		// motor_set_params() の解放が必要ならここで
 	}
 	printf("hello world!\n");
+
 }
 

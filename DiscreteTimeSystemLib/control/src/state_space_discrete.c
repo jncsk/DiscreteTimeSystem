@@ -32,11 +32,15 @@ CoreErrorStatus ss_discrete_init_from_csys(SSDiscrete* out,
     out->Ts = Ts;
 
     CoreErrorStatus status = CORE_ERROR_SUCCESS;
+
+    // Generate Ad and Bd matrices for ZOH discrete
     out->Ad = matrix_core_create(out->n, out->n, &status); if (status) goto FAIL;
     out->Bd = matrix_core_create(out->n, out->m, &status); if (status) goto FAIL;
 
+    // Calculate Ad and Bd matrices for ZOH 
     status = state_space_c2d(sys, Ts, out->Ad, out->Bd); if (status) goto FAIL;
 
+    // Create C and D matrices if not allocated 
     status = deep_copy_mat_opt(&out->C, sys->C); if (status) goto FAIL;
     status = deep_copy_mat_opt(&out->D, sys->D); if (status) goto FAIL;
 
@@ -82,11 +86,13 @@ FAIL:
 
 CoreErrorStatus ss_discrete_free(SSDiscrete* out) {
     if (!out) CORE_ERROR_RETURN(CORE_ERROR_NULL);
+
     if (out->Ad) matrix_core_free(out->Ad);
     if (out->Bd) matrix_core_free(out->Bd);
     if (out->C)  matrix_core_free(out->C);
     if (out->D)  matrix_core_free(out->D);
     memset(out, 0, sizeof(*out));
+    
     CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
 }
 
@@ -170,6 +176,7 @@ CoreErrorStatus ss_discrete_step_scalar_u(const SSDiscrete* dsys,
     status = matrix_ops_scale(Bu, u_now); if (status) { matrix_core_free(Bu); CORE_ERROR_RETURN(status); }
     status = matrix_ops_add(x_next, x_next, Bu);
     matrix_core_free(Bu);
+
     CORE_ERROR_RETURN(status);
 }
 
@@ -178,23 +185,32 @@ CoreErrorStatus ss_discrete_output(const SSDiscrete* dsys,
     const Matrix* u_now,
     Matrix* y_out)
 {
-    if (!dsys || !x_now || !u_now || !y_out) CORE_ERROR_RETURN(CORE_ERROR_NULL);
-    if (!dsys->C || !dsys->D) CORE_ERROR_RETURN(CORE_ERROR_INVALID_ARG);
+    if (!dsys || !x_now || !u_now || !y_out) return CORE_ERROR_NULL;
 
-    const int p = dsys->p, n = dsys->n, m = dsys->m;
-    if (x_now->rows != n || x_now->cols != 1) CORE_ERROR_RETURN(CORE_ERROR_DIMENSION);
-    if (u_now->rows != m || u_now->cols != 1) CORE_ERROR_RETURN(CORE_ERROR_DIMENSION);
-    if (y_out->rows != p || y_out->cols != 1) CORE_ERROR_RETURN(CORE_ERROR_DIMENSION);
+    // C は必須。D は NULL 可（ゼロ行列扱い）。
+    if (!dsys->C) return CORE_ERROR_INVALID_ARG;
 
-    CoreErrorStatus status = CORE_ERROR_SUCCESS;
+    const int p = dsys->C->rows;
+    const int n = dsys->Ad->rows;  // or dsys->n
+    const int m = dsys->Bd->cols;  // or dsys->m
 
-    // y = C x + D u
-    status = matrix_ops_multiply(y_out, dsys->C, x_now); if (status) CORE_ERROR_RETURN(status);
+    if (x_now->rows != n || x_now->cols != 1) return CORE_ERROR_DIMENSION;
+    if (u_now->rows != m || u_now->cols != 1) return CORE_ERROR_DIMENSION;
+    if (y_out->rows != p || y_out->cols != 1) return CORE_ERROR_DIMENSION;
 
-    Matrix* Du = matrix_core_create(p, 1, &status); if (status) CORE_ERROR_RETURN(status);
-    status = matrix_ops_multiply(Du, dsys->D, u_now); if (status) { matrix_core_free(Du); CORE_ERROR_RETURN(status); }
+    CoreErrorStatus st = CORE_ERROR_SUCCESS;
 
-    status = matrix_ops_add(y_out, y_out, Du);
-    matrix_core_free(Du);
-    CORE_ERROR_RETURN(status);
+    // y_out = C * x_now
+    st = matrix_ops_multiply(y_out, dsys->C, x_now); if (st) return st;
+
+    // + D * u_now （D があれば）
+    if (dsys->D) {
+        Matrix* Du = matrix_core_create(p, 1, &st); if (st) return st;
+        st = matrix_ops_multiply(Du, dsys->D, u_now);
+        if (!st) st = matrix_ops_add(y_out, y_out, Du);
+        matrix_core_free(Du);
+        if (st) return st;
+    }
+    return CORE_ERROR_SUCCESS;
 }
+
