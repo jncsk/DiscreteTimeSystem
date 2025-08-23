@@ -57,5 +57,8 @@
     <ClCompile Include="tests\app\test_main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="tests\control\state_space_discrete.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

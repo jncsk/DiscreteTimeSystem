@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="tests\control\state_space_discrete.cpp" />
     <ClCompile Include="tests\control\test_state_space_c2d.cpp" />
     <ClCompile Include="tests\core\test_core_error.cpp" />
     <ClCompile Include="tests\numerics\linalg\test_matrix_exp.cpp" />
