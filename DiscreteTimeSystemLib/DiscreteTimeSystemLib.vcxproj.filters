@@ -57,6 +57,9 @@
     <ClCompile Include="control\src\state_space_c2d.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="control\src\state_space_discrete.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\include\core_matrix.h">
@@ -96,6 +99,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="control\include\state_space_c2d.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="control\include\state_space_discrete.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
