@@ -114,14 +114,14 @@ CoreErrorStatus matrix_scale_down_pow2(const Matrix* src, int s, Matrix* dst) {
         if (dst == src) {
             CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);  // no-op
         }
-        status = matrix_ops_copy(src, dst);
+        status = matrix_ops_copy(dst, src);
         if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
         CORE_ERROR_RETURN(CORE_ERROR_SUCCESS);
     }
 
     // Prepare destination
     if (dst != src) {
-        status = matrix_ops_copy(src, dst);
+        status = matrix_ops_copy(dst, src);
         if (status != CORE_ERROR_SUCCESS) CORE_ERROR_RETURN(status);
     }
 

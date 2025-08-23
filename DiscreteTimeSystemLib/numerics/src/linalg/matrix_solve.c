@@ -129,12 +129,12 @@ CoreErrorStatus matrix_solve_LU(const Matrix* A, Matrix* X, const Matrix* B) {
         matrix_core_free(LU);
         CORE_ERROR_RETURN(status);
     }
-    status = matrix_ops_copy(A, LU);
+    status = matrix_ops_copy(LU, A);
     if (status != CORE_ERROR_SUCCESS) {
         matrix_core_free(LU); 
         CORE_ERROR_RETURN(status); 
     }
-    status = matrix_ops_copy(B, X);
+    status = matrix_ops_copy(X, B);
     if (status != CORE_ERROR_SUCCESS) {
         matrix_core_free(LU);
         CORE_ERROR_RETURN(status); 
