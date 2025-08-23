@@ -37,6 +37,7 @@ typedef struct {
     Matrix* A;  // n x n
     Matrix* B;  // n x m
     Matrix* C;  // p x n
+    Matrix* D;
 } StateSpaceModel;
 
 //------------------------------------------------
