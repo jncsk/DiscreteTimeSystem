@@ -39,6 +39,5 @@ A C++ library and sample application for exploring discrete-time system models. 
 ## Limitations and Future Plans
 
 - Only basic algorithms are implemented; more control and numerical features are planned.
-- Cross-platform build scripts are not yet available.
 - Additional unit tests and documentation are in progress.
 
