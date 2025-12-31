@@ -129,6 +129,7 @@
     <ClCompile Include="control\src\state_space_discrete.c" />
     <ClCompile Include="core\src\core_error.c" />
     <ClCompile Include="control\src\state_space_c2d.c" />
+    <ClCompile Include="numerics\src\integrators\rk4.c" />
     <ClCompile Include="numerics\src\linalg\matrix_solve.c" />
     <ClCompile Include="numerics\src\linalg\matrix_norm.c" />
     <ClCompile Include="numerics\src\math_utils.c" />
@@ -147,6 +148,7 @@
     <ClInclude Include="control\include\state_space_discrete.h" />
     <ClInclude Include="core\include\core_error.h" />
     <ClInclude Include="control\include\state_space_c2d.h" />
+    <ClInclude Include="numerics\include\integrators\rk4.h" />
     <ClInclude Include="numerics\include\linalg\matrix_norm.h" />
     <ClInclude Include="numerics\include\math_utils.h" />
     <ClInclude Include="core\include\core_matrix.h" />
