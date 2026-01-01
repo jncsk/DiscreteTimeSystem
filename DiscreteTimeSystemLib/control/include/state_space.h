@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "core_matrix.h"
 #include "core_error.h"
 
@@ -60,3 +64,7 @@ StateSpaceModel* state_space_create(int n, int m, int p, CoreErrorStatus* err);
  * @param model Pointer to the StateSpaceModel to free.
  */
 CoreErrorStatus state_space_free(StateSpaceModel* model);
+
+#ifdef __cplusplus
+}
+#endif

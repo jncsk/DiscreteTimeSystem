@@ -1,0 +1,4 @@
+
+This project uses `nlohmann/json` (`#include <nlohmann/json.hpp>`).
+Install it with vcpkg:
+vcpkg install nlohmann-json

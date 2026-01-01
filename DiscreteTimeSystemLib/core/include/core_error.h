@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 #include <stdio.h> // For fprintf in macros
 
@@ -123,3 +127,6 @@ extern THREAD_LOCAL CoreError g_last_error;
  */
 CoreError matrix_core_get_last_error(void);
 
+#ifdef __cplusplus
+}
+#endif

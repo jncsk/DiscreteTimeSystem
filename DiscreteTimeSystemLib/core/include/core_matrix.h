@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 #include <stdio.h> // For fprintf in macros
 #include "core_error.h"
@@ -72,3 +76,7 @@ Matrix* matrix_core_create_square(int size, CoreErrorStatus* err);
  * @return CORE_ERROR_SUCCESS if freed successfully, otherwise an error code.
  */
 CoreErrorStatus matrix_core_free(Matrix* mat);
+
+#ifdef __cplusplus
+}
+#endif
