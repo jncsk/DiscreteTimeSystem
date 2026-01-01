@@ -4,6 +4,10 @@
 #include <stdexcept>
 #include <nlohmann/json.hpp>
 
+#include "core_error.h"
+#include "core_matrix.h"
+#include "matrix_ops.h"
+
 namespace dts::runner {
 
     using json = nlohmann::json;
@@ -14,6 +18,9 @@ namespace dts::runner {
         std::vector<double> data;
     };
 
+    inline void to_json(nlohmann::json& j, const runner_matrix& m) {
+        j = { {"rows", m.rows}, {"cols", m.cols}, {"data", m.data} };
+    }
     inline void from_json(const json& j, runner_matrix& m)
     {
         m.rows = j.at("rows").get<int>();
@@ -47,4 +54,5 @@ namespace dts::runner {
         if (r.B.rows != r.A.rows) throw std::runtime_error("B.rows must equal A.rows");
     }
 
-} // namespace dts::runner
+} 
+

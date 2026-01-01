@@ -133,7 +133,7 @@
     <ClCompile Include="numerics\src\linalg\matrix_solve.c" />
     <ClCompile Include="numerics\src\linalg\matrix_norm.c" />
     <ClCompile Include="numerics\src\math_utils.c" />
-    <ClCompile Include="core\src\matrix_core.c" />
+    <ClCompile Include="core\src\core_matrix.c" />
     <ClCompile Include="numerics\src\linalg\matrix_exp.c" />
     <ClCompile Include="numerics\src\linalg\matrix_ops.c" />
     <ClCompile Include="control\src\state_space.c" />

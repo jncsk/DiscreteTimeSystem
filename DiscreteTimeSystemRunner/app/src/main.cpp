@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 #include <nlohmann/json.hpp>
 #include "runner_exit_codes.h"
 #include "runner_error_map.h"
@@ -11,6 +12,7 @@
 
 #include "core_matrix.h"
 #include "core_error.h"
+#include "matrix_ops.h"
 #include "state_space.h"
 #include "state_space_c2d.h"
 #include "state_space_discrete.h"
@@ -52,7 +54,7 @@ int main(int argc, char** argv) {
 		return static_cast<int>(ExitCode::EXIT_INVALID_INPUT);
 	}
 	auto sz = std::filesystem::file_size(p);
-	if (sz <= 0) return static_cast<int>(ExitCode::EXIT_INVALID_INPUT);
+	if (sz == 0) return (int)ExitCode::EXIT_INVALID_INPUT;
 	if (sz > MAX_BYTES) return static_cast<int>(ExitCode::EXIT_INVALID_INPUT);
 
 	// 3) A,B,dt を取り出す（次元不整合なら exit 2）
@@ -83,21 +85,76 @@ int main(int argc, char** argv) {
 	}
 
 	// 4) 計算（失敗したら exit 3）
-	CoreErrorStatus* err = NULL;
+	CoreErrorStatus err = CORE_ERROR_SUCCESS;
 	StateSpaceModel* sys = (StateSpaceModel*)calloc(1, sizeof(StateSpaceModel));
 	if (!sys) {
-		*err = CORE_ERROR_ALLOCATION_FAILED;
-		CORE_ERROR_SET(*err);
-		return NULL;
+		err = CORE_ERROR_ALLOCATION_FAILED;
+		if (err) return (int)runner_exit_from_core_status(err);
 	}
 
-	sys->A = matrix_core_create(req.A.rows, req.A.cols, err);
-	sys->B = matrix_core_create(req.B.rows, req.B.cols, err);
+	sys->A = matrix_core_create(req.A.rows, req.A.cols, &err);
+	if (err) return (int)runner_exit_from_core_status(err);
+	for (int i = 0; i < req.A.rows; i++) {
+		for (int j = 0; j < req.A.cols; j++) {
+			err = matrix_ops_set(sys->A, i, j, req.A.data[i * req.A.cols + j]);
+			if (err) return (int)runner_exit_from_core_status(err);
+		}
+	}
+
+	sys->B = matrix_core_create(req.B.rows, req.B.cols, &err);
+	if (err) return (int)runner_exit_from_core_status(err);
+	for (int i = 0; i < req.B.rows; i++) {
+		for (int j = 0; j < req.B.cols; j++) {
+			err = matrix_ops_set(sys->B, i, j, req.B.data[i * req.B.cols + j]);
+			if (err) return (int)runner_exit_from_core_status(err);
+		}
+	}
+
 	SSDiscrete d = { 0 };
 
-	ss_discrete_init_from_csys(&d, sys, req.dt);
+	err = ss_discrete_init_from_csys(&d, sys, req.dt);
+	if (err) return (int)runner_exit_from_core_status(err);
 
 	// 5) result.json を書く（書けなければ exit 3）
+	for (int i = 0; i < req.A.rows; i++) {
+		for (int j = 0; j < req.A.cols; j++) {
+			req.A.data[i * req.A.cols + j] = matrix_ops_get(d.Ad, i, j, &err);
+			if (err) return (int)runner_exit_from_core_status(err);
+		}
+	}
+
+	for (int i = 0; i < req.B.rows; i++) {
+		for (int j = 0; j < req.B.cols; j++) {
+			req.B.data[i * req.B.cols + j] = matrix_ops_get(d.Bd, i, j, &err);
+			if (err) return (int)runner_exit_from_core_status(err);
+		}
+	}
+
+	// 出力JSONを組み立て
+	nlohmann::json payload;
+	payload["method"] = req.method;
+	payload["dt"] = req.dt;
+	payload["Ad"] = req.A;
+	payload["Bd"] = req.B;
+
+	nlohmann::json out;
+	out["type"] = "discretize_result";
+	out["payload"] = std::move(payload);
+
+	// ファイルに書く
+	std::ofstream os(out_path, std::ios::binary | std::ios::trunc);
+	if (!os) return (int)ExitCode::EXIT_RUNTIME_ERROR;
+
+	os << out.dump(2);
+	os.flush();
+	if (!os) return (int)ExitCode::EXIT_RUNTIME_ERROR;
+
+	err = state_space_free(sys);
+	if (err) return (int)runner_exit_from_core_status(err);
+
+	err = ss_discrete_free(&d);
+	if (err) return (int)runner_exit_from_core_status(err);
+
 	return (int)ExitCode::EXIT_OK;
 }
 

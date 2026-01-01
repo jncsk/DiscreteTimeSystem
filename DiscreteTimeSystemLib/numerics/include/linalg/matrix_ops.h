@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "core_matrix.h"
 #include "core_error.h"
 
@@ -214,3 +218,7 @@ CoreErrorStatus matrix_ops_set_block(Matrix * dst, int offset_row, int offset_co
  *
  */
 CoreErrorStatus matrix_ops_get_block(const Matrix* src, int offset_row, int offset_col, Matrix* out);
+
+#ifdef __cplusplus
+}
+#endif
