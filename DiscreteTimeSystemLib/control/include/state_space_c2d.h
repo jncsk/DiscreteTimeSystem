@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "core_matrix.h"
 #include "core_error.h"
 #include "state_space.h"
@@ -65,3 +69,7 @@ CoreErrorStatus state_space_c2d(const StateSpaceModel* sys,
     Matrix* Ad,
     Matrix* Bd);
 
+
+#ifdef __cplusplus
+}
+#endif

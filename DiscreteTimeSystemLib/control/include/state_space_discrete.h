@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "core_matrix.h"
 #include "core_error.h"
 #include "state_space.h"
@@ -191,3 +195,7 @@ CoreErrorStatus ss_discrete_output(const SSDiscrete* dsys,
     const Matrix* x_now,
     const Matrix* u_now,
     Matrix* y_out);
+
+#ifdef __cplusplus
+}
+#endif
