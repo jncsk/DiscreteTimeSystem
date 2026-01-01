@@ -30,7 +30,7 @@
     <ClCompile Include="numerics\src\linalg\matrix_exp.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="core\src\matrix_core.c">
+    <ClCompile Include="core\src\core_matrix.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="core\src\core_error.c">
