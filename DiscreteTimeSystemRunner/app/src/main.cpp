@@ -46,8 +46,8 @@ static json make_error_core(int exit_code, int core_status_int) {
     json e = json::object();
     e["category"] = "core_error";
     e["exit_code"] = exit_code;
-    e["core_status"] = core_status_int; // intでもOK（文字列化は後で）
-    e["message"] = json();              // JSON null
+    e["core_status"] = core_status_int;  // intでもOK（文字列化は後で）
+    e["message"] = json();                     // JSON null
     return e;
 }
 
@@ -71,7 +71,7 @@ static int write_result_or_runtime_error(
     return code;
 }
 
-// argv: DiscreteTimeSystemRunner.exe --in input.json --out result.json
+// argv: DiscreteTimeSystemRunner.exe --in ../../../../testdata/input.json --out ../../../../testdata/result.json
 int main(int argc, char** argv) {
     std::string in_path;
     std::string out_path;
