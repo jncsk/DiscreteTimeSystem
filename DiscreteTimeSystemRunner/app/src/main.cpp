@@ -46,8 +46,8 @@ static json make_error_core(int exit_code, int core_status_int) {
     json e = json::object();
     e["category"] = "core_error";
     e["exit_code"] = exit_code;
-    e["core_status"] = core_status_int; // intでもOK（文字列化は後で）
-    e["message"] = json();              // JSON null
+    e["core_status"] = core_status_int;  // intでもOK（文字列化は後で）
+    e["message"] = json();                     // JSON null
     return e;
 }
 
