@@ -71,7 +71,7 @@ static int write_result_or_runtime_error(
     return code;
 }
 
-// argv: DiscreteTimeSystemRunner.exe --in input.json --out result.json
+// argv: DiscreteTimeSystemRunner.exe --in ../../../../testdata/input.json --out ../../../../testdata/result.json
 int main(int argc, char** argv) {
     std::string in_path;
     std::string out_path;
