@@ -1,6 +1,7 @@
 // app_motor.c
 #include "app_motor.h"
 #include "matrix_ops.h"
+#include <math.h>
 
 DCMotorParams* motor_set_params(double J, double D, double M, double R, double K) {
 
