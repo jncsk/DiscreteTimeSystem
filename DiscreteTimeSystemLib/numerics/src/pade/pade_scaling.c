@@ -4,7 +4,8 @@
 #include "core_matrix.h"
 #include "matrix_norm.h"
 #include "matrix_ops.h"
-#include "corecrt_math.h"
+#include <math.h>
+#include <float.h>
 
 /* Higham-style theta_m thresholds (double precision) for m = 3,5,7,9,13.
    These are widely used in expm implementations. */
