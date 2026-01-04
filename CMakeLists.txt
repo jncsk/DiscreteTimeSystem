@@ -25,7 +25,6 @@ add_executable(DiscreteTimeSystemRunner
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/src/linalg/matrix_exp.c
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/src/linalg/matrix_ops.c
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/control/src/state_space.c
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/app/src/main.c
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/src/bit_utils.c
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/src/pade/pade.c
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/src/pade/pade_exp_coeffs.c
