@@ -1,0 +1,9 @@
+out/
+.vs/
+**/Debug/
+**/Release/
+**/x64/
+CMakeFiles/
+CMakeCache.txt
+build/
+
