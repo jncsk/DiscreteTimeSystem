@@ -28,7 +28,7 @@ StateSpaceModel* motor_create(const DCMotorParams* p, CoreErrorStatus* err) {
     matrix_ops_set(sys->A, 0, 1, 1.0);
 
     matrix_ops_set(sys->A, 1, 0, 0.0);
-    matrix_ops_set(sys->A, 1, 1, -(p->D / p->J + pow(p->M) / (p->J * p->R)));
+    matrix_ops_set(sys->A, 1, 1, -(p->D / p->J + pow(p->M, 2) / (p->J * p->R)));
 
     // Bs—ñ
     matrix_ops_set(sys->B, 0, 0, 0.0);
