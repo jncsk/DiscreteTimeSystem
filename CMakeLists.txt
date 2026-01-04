@@ -9,19 +9,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Specify the name of execute file and source files compositing the exe file
 add_executable(DiscreteTimeSystemRunner
-    app\src\main.cpp
-    app\src\runner_io_json.cpp
-    core\src\runner_error_map.cpp  
+    DiscreteTimeSystemRunner/app/src/main.cpp
+    DiscreteTimeSystemRunner/app/src/runner_io_json.cpp
+    DiscreteTimeSystemRunner/core/src/runner_error_map.cpp  
 )
 
 target_include_directories(DiscreteTimeSystemRunner PRIVATE
-    $(SolutionDir)DiscreteTimeSystemLib\app\include
-    $(SolutionDir)DiscreteTimeSystemLib\control\include
-    $(SolutionDir)DiscreteTimeSystemLib\numerics\include
-    $(SolutionDir)DiscreteTimeSystemLib\numerics\include\linalg
-    $(SolutionDir)DiscreteTimeSystemLib\core\include
-    $(SolutionDir)DiscreteTimeSystemLib\numerics\include\pade
-    $(SolutionDir)DiscreteTimeSystemLib\app\include\app_motor
+    $(SolutionDir)DiscreteTimeSystemLib/app/include
+    $(SolutionDir)DiscreteTimeSystemLib/control/include
+    $(SolutionDir)DiscreteTimeSystemLib/numerics/include
+    $(SolutionDir)DiscreteTimeSystemLib/numerics/include/linalg
+    $(SolutionDir)DiscreteTimeSystemLib/core/include
+    $(SolutionDir)DiscreteTimeSystemLib/numerics/include/pade
+    $(SolutionDir)DiscreteTimeSystemLib/app/include/app_motor
+    DiscreteTimeSystemRunner/app/include
+    DiscreteTimeSystemRunner/core/include
 )
 
 # TODO: 必要ならリンク（pthread, m, openblas等）
