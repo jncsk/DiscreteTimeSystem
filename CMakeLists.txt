@@ -15,15 +15,15 @@ add_executable(DiscreteTimeSystemRunner
 )
 
 target_include_directories(DiscreteTimeSystemRunner PRIVATE
-    $(SolutionDir)DiscreteTimeSystemLib/app/include
-    $(SolutionDir)DiscreteTimeSystemLib/control/include
-    $(SolutionDir)DiscreteTimeSystemLib/numerics/include
-    $(SolutionDir)DiscreteTimeSystemLib/numerics/include/linalg
-    $(SolutionDir)DiscreteTimeSystemLib/core/include
-    $(SolutionDir)DiscreteTimeSystemLib/numerics/include/pade
-    $(SolutionDir)DiscreteTimeSystemLib/app/include/app_motor
-    DiscreteTimeSystemRunner/app/include
-    DiscreteTimeSystemRunner/core/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/app/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/control/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/linalg
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/core/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/pade
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/app/include/app_motor
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemRunner/app/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemRunner/core/include
 )
 
 # TODO: 必要ならリンク（pthread, m, openblas等）
