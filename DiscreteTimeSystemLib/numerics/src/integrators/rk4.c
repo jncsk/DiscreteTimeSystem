@@ -98,11 +98,11 @@ CoreErrorStatus rk4_step(RkOdeFunc f,
     st = rk4_step_ws(f, t, x_now, u_now, h, params, x_next, k1, k2, k3, k4, tmp);
 
 DONE:
-    if (tmp) matrix_core_destroy(tmp);
-    if (k4)  matrix_core_destroy(k4);
-    if (k3)  matrix_core_destroy(k3);
-    if (k2)  matrix_core_destroy(k2);
-    if (k1)  matrix_core_destroy(k1);
+    if (tmp) matrix_core_free(tmp);
+    if (k4)  matrix_core_free(k4);
+    if (k3)  matrix_core_free(k3);
+    if (k2)  matrix_core_free(k2);
+    if (k1)  matrix_core_free(k1);
     return st;
 }
 
@@ -213,12 +213,12 @@ CoreErrorStatus rk4_lin_step(const Matrix* A,
     st = rk4_lin_step_ws(A, B, t, x_now, u_now, h, x_next, k1, k2, k3, k4, tmp, Ax, Bu);
 
 DONE:
-    if (Bu)  matrix_core_destroy(Bu);
-    if (Ax)  matrix_core_destroy(Ax);
-    if (tmp) matrix_core_destroy(tmp);
-    if (k4)  matrix_core_destroy(k4);
-    if (k3)  matrix_core_destroy(k3);
-    if (k2)  matrix_core_destroy(k2);
-    if (k1)  matrix_core_destroy(k1);
+    if (Bu)  matrix_core_free(Bu);
+    if (Ax)  matrix_core_free(Ax);
+    if (tmp) matrix_core_free(tmp);
+    if (k4)  matrix_core_free(k4);
+    if (k3)  matrix_core_free(k3);
+    if (k2)  matrix_core_free(k2);
+    if (k1)  matrix_core_free(k1);
     return st;
 }
