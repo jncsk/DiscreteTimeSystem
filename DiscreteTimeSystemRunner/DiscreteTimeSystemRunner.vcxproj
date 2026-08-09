@@ -120,7 +120,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\app\include;$(SolutionDir)DiscreteTimeSystemLib\control\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\core\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\pade;$(SolutionDir)DiscreteTimeSystemLib\app\include\app_motor;$(ProjectDir)core\include;$(ProjectDir)app\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DiscreteTimeSystemLib\app\include;$(SolutionDir)DiscreteTimeSystemLib\control\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\linalg;$(SolutionDir)DiscreteTimeSystemLib\core\include;$(SolutionDir)DiscreteTimeSystemLib\numerics\include\pade;$(SolutionDir)DiscreteTimeSystemLib\app\include\app_motor;$(ProjectDir)core\include;$(ProjectDir)app\include;$(SolutionDir)external\cpp-httplib</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -150,13 +150,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="app\src\main.cpp" />
-    <ClCompile Include="app\src\runner_io_json.cpp" />
-    <ClCompile Include="core\src\runner_error_map.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="app\include\runner_io_json.h" />
-    <ClInclude Include="core\include\runner_error_map.h" />
-    <ClInclude Include="core\include\runner_exit_codes.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DiscreteTimeSystemLib\DiscreteTimeSystemLib.vcxproj">
