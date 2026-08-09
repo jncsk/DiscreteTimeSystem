@@ -10,8 +10,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Specify the name of execute file and source files compositing the exe file
 add_executable(DiscreteTimeSystemRunner
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemRunner/app/src/main.cpp
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemRunner/app/src/runner_io_json.cpp
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemRunner/core/src/runner_error_map.cpp
     
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/app/src/app_motor/app_motor.c
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/control/src/state_space_discrete.c
@@ -32,21 +30,24 @@ add_executable(DiscreteTimeSystemRunner
 )
 
 target_include_directories(DiscreteTimeSystemRunner PRIVATE
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/app/include
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/control/include
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/linalg
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/core/include
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/pade
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/app/include/app_motor
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemRunner/app/include
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemRunner/core/include
-    
+
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/app/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/app/include/app_motor
+
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/core/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/core/include
+
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/control/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/control/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/control/include
+
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/pade
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/pade
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/linalg
-    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/control/include
+    ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/linalg
 )
 
 # TODO: 必要ならリンク（pthread, m, openblas等）
