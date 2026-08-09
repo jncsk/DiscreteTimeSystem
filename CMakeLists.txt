@@ -48,6 +48,8 @@ target_include_directories(DiscreteTimeSystemRunner PRIVATE
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/pade
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/linalg
     ${CMAKE_SOURCE_DIR}/DiscreteTimeSystemLib/numerics/include/linalg
+
+    ${CMAKE_SOURCE_DIR}/external/cpp-httplib
 )
 
 # TODO: 必要ならリンク（pthread, m, openblas等）

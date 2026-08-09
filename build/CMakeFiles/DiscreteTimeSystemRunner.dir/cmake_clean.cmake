@@ -33,10 +33,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/DiscreteTimeSystemRunner.dir/DiscreteTimeSystemLib/numerics/src/pade/pade_scaling.c.o.d"
   "CMakeFiles/DiscreteTimeSystemRunner.dir/DiscreteTimeSystemRunner/app/src/main.cpp.o"
   "CMakeFiles/DiscreteTimeSystemRunner.dir/DiscreteTimeSystemRunner/app/src/main.cpp.o.d"
-  "CMakeFiles/DiscreteTimeSystemRunner.dir/DiscreteTimeSystemRunner/app/src/runner_io_json.cpp.o"
-  "CMakeFiles/DiscreteTimeSystemRunner.dir/DiscreteTimeSystemRunner/app/src/runner_io_json.cpp.o.d"
-  "CMakeFiles/DiscreteTimeSystemRunner.dir/DiscreteTimeSystemRunner/core/src/runner_error_map.cpp.o"
-  "CMakeFiles/DiscreteTimeSystemRunner.dir/DiscreteTimeSystemRunner/core/src/runner_error_map.cpp.o.d"
   "DiscreteTimeSystemRunner"
   "DiscreteTimeSystemRunner.pdb"
 )
