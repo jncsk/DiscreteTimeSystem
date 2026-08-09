@@ -1,0 +1,17 @@
+{
+  "type": "discretize",
+  "payload": {
+    "method": "van_loan",
+    "dt": 0.01,
+    "A": {
+      "rows": 2,
+      "cols": 2,
+      "data": [ 0, 1, -2, -3 ]
+    },
+    "B": {
+      "rows": 2,
+      "cols": 1,
+      "data": [ 0, 1 ]
+    }
+  }
+}
