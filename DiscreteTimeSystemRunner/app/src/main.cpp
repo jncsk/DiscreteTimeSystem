@@ -4,14 +4,14 @@
 
 double calculate(double x, double y)
 {
-    // Šù‘¶‚Ì•¡G‚ÈŒvZƒƒWƒbƒN‚ğ‚±‚±‚©‚çŒÄ‚Ô‘z’è
+    // An actual process for the HTTP requestè
     return x + y;
 }
 
 int main()
 {
 
-    //@Object
+    // Object
     httplib::Server server;
 
     // Define an Endpoint for Get/Calculate
