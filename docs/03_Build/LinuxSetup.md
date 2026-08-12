@@ -48,8 +48,8 @@ sudo vi /etc/systemd/system/discrete-time-system
  Description=Discrete Time System HTTP Server                                                       
  After=network.targe
 [Service]
- ExecStart=/home/junsasaki/src/repos/DiscreteTimeSystem/build/DiscreteTimeSystemRunner
- WorkingDirectory=/home/junsasaki/src/repos/DiscreteTimeSystem/build
+ ExecStart=/home/username/src/repos/DiscreteTimeSystem/build/DiscreteTimeSystemRunner
+ WorkingDirectory=/home/username/src/repos/DiscreteTimeSystem/build
  Restart=on-failure
  User=your name
 [Install]
