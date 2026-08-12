@@ -37,7 +37,7 @@ The API will be replaced with more pratical one
 ```bash
 curl "http://localhost:8080/calculate?x=10&y=20"
 ```
-![alt text](images/curl-result.png)
+![alt text](./images/curl-result.png)
 
 ## 7. Install the systemd Service
 ```bash
@@ -65,8 +65,8 @@ sudo systemctl enable --now discrete-time-system
 ```bash
 systemctl status discrete-time-system
 ```
-![alt text](images/verify-the-service-1.png)
+![alt text](./images/verify-the-service-1.png)
 ```bash
 journalctl -u discrete-time-system
 ```
-![alt text](images/verify-the-service-2.png)
+![alt text](./images/verify-the-service-2.png)
