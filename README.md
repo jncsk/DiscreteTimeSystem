@@ -1,43 +1,84 @@
 # DiscreteTimeSystem
 
-A C++ library and sample application for exploring discrete-time system models. The project is organized with a layered architecture to keep modules focused and loosely coupled.
+## Purpose of This Project
+This project provides mathematical calculation algorithms implemented in C.
+The algorithms are exposed through HTTP APIs hosted on Azure.
+
+## Technical Highlights
+- Implemented mathematical calculation algorithms for discrete-time systems in C. 
+- Documented the underlying mathematical theory, algorithm design, and implementation details in [`02_Math/`](docs/02_Math/).
+- Built and tested a multi-target C/C++ project on Linux using CMake.
+- Added automated unit tests for the calculation library.
+- Containerized the HTTP server in a Linux-based Docker image.
+- Configured Nginx as a reverse proxy.
+- Deployed the application to Azure as a Linux-based Docker container.
+
+## System Architecture
+
+```text
+Client
+  │ HTTP :80
+  ▼
+Nginx
+  │ HTTP :8080
+  ▼
+DiscreteTimeSystemRunner
+  │ Function calls
+  ▼
+DiscreteTimeSystemLib
+```
+Nginx receives client requests and forwards them to the HTTP server.
+DiscreteTimeSystemRunner converts HTTP requests into calls to the calculation library.
+DiscreteTimeSystemLib performs the mathematical calculations.
 
 ## Project Structure
+This project is organized into three main areas:
+1. Application Components
+2. Build and Dependency Management
+3. Deployment Infrastructure
 
-- **[`DiscreteTimeSystemLib/`](DiscreteTimeSystemLib)** – reusable library broken into Core, Numerics, Control, and Application layers. See [Project Architecture documentation](docs/Project%20Architecture/ProjectArchitecture.md) for a detailed explanation of the layering.
-- **[`DiscreteTimeSystemApp/`](DiscreteTimeSystemApp)** – example application that links against the library.
+### 1. Application Components
+Contains the C calculation library, sample application, HTTP server, and unit tests.
+- **[`DiscreteTimeSystemLib/`](DiscreteTimeSystemLib)** – reusable C library containing the mathematical calculation algorithms.
+- **[`DiscreteTimeSystemApp/`](DiscreteTimeSystemApp)** – console application for running and verifying the library directly.
+- **[`DiscreteTimeSystemRunner/`](DiscreteTimeSystemRunner)** – an HTTP server exposing functionality from DiscreteTimeSystemLib
 - **[`UnitTest/`](UnitTest)** – tests for the library and application.
-- **[`docs/`](docs)** – additional documentation, including notes on the [matrix exponential algorithm](docs/MatrixExponential).
 
-```
-/DiscreteTimeSystem
-├── DiscreteTimeSystemLib/
-├── DiscreteTimeSystemApp/
-├── UnitTest/
-└── docs/
-```
+### 2. Build and Dependency Management
+Contains the CMake configuration and third-party dependencies required to build and link the project.
+- **[`CMakeLists.txt`](CMakeLists.txt)** – top-level CMake configuration.
+- **[`external/`](external)** – third-party libraries and dependencies.
 
-## Building
+### 3. Deployment Infrastructure
+Contains the Docker, Nginx, and Azure configurations used to package, expose, and host the HTTP API.
+- **[`Dockerfile`](Dockerfile)** – container image definition for building and running the HTTP server.
+- Nginx configuration – reverse-proxy configuration that forwards incoming requests to the HTTP server.
+- Azure configuration – configuration used to host the containerized application.
 
-1. Install Visual Studio 2022 with the **Desktop development with C++** workload.
-2. Open `DiscreteTimeSystem.sln`.
-3. Select a build configuration (e.g., `Debug|x64`).
-4. **Build → Build Solution** to compile the library and application.
-5. Use **Test → Run All Tests** to build and execute the `UnitTest` project.
 
-## Usage
+## Build and Run
+### 1. Linux with CMake
+<!-- Add the actual configure, build, and run commands. -->
 
-1. In Visual Studio's Solution Explorer, select the `DiscreteTimeSystemApp` project and set it as the startup project if needed.
-2. Press **Ctrl+F5** (Run Without Debugging) to launch the application.
-3. A console window appears showing sample output from the discrete-time system and then closes when execution completes.
+### 2. Windows with Visual Studio
+1. Open the solution in Visual Studio 2022.
+2. Select DiscreteTimeSystemApp as the startup project.
+3. Press Ctrl+F5 to run the application without debugging.
+### 3. Docker
+<!-- Add the actual docker build and docker run commands. -->
+
+## API Usage
+<!-- Add one representative endpoint, request, and response example. -->
+
+## Testing
+<!-- Add the actual commands used to build and run the automated tests. -->
 
 ## Prerequisites
-
-- Windows with Visual Studio 2022
-- C++17-compatible compiler
+1. C and C++17-compatible compilers
+2. CMake
+3. Linux or Windows with Visual Studio 2022
+4. Docker, when running the containerized HTTP server
 
 ## Limitations and Future Plans
-
 - Only basic algorithms are implemented; more control and numerical features are planned.
 - Additional unit tests and documentation are in progress.
-
