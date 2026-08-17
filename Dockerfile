@@ -8,10 +8,8 @@ FROM ubuntu:24.04 AS build
 # Install build tools and build-time dependencies.
 # --no-install-recommends keeps the image smaller by skipping "recommended" packages.
 # We also remove apt cache to reduce the final layer size.
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential cmake \
-    # TODO(1): 追加で必要なら ninja-build とか依存 \
-    nlohmann-json3-dev \
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends build-essential cmake \
  && rm -rf /var/lib/apt/lists/*
 
 # Set working directory inside the container for building sources.
