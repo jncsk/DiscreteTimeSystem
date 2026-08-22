@@ -124,7 +124,7 @@ chmod 600 ~/.ssh/private-key-name.pem
 ### 2.2 Connect to the VM via SSH
 Use the VM's public IP address to establish an SSH connection.
 ```bash
-ssh -i ~/.ssh/private-key-name.pem azureuser@<public-ip-address>
+ssh -i ~/.ssh/<private-key-name>.pem azureuser@<public-ip-address>
 ```
 
 ## 3. Nginx VM Setup
@@ -159,5 +159,40 @@ curl http://localhost
 If the Nginx default page is returned, the Nginx service is running successfully.
 
 ## 4. Configure Network Access
+Configure the Azure Network Security Group (NSG) and the RHEL firewall to allow inbound HTTP traffic on port 80.
+
+### 4.1 NSG setting on Azure Portal
+1. Navigate to **Network settings** of the Nginx VM.
+2. Click **Create port rule** and add an inbound port rule.
+3. Configure the following settings
+
+```text
+Source:          Any
+Source port:     *
+Destination:     Any
+Service:         HTTP
+Destination port: 80
+Protocol:        TCP
+Action:          Allow
+```
+
+### 4.2 Configure the RHEL Firewall
+Allow HTTP traffic through the RHEL firewall.
+```bash
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --reload
+```
+Verify the firewall configuration.
+```bash
+sudo firewall-cmd --list-services
+```
+
+### 4.3 Verify the connectivity from the local environment
+From the local Linux environment, send an HTTP request to the public IP address of the Nginx VM.
+```bash
+curl http://<nginx-vm-public-ip>
+```
+If the Nginx default page is returned, inbound HTTP connectivity to the Nginx VM is configured successfully.
+
 ## 5. Configure Nginx as a Reverse Proxy
 ## 6. Verify End-to-End Connectivity
