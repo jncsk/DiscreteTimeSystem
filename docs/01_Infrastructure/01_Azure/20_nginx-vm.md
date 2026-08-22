@@ -1,129 +1,198 @@
 # Nginx VM Setup
 
-## 0. Prerequisite
-User has their own Azure account.
+## 0. Prerequisites
 
-## 1. Navigate to resource creation page
-Navigate to the following page.
+- A local Linux environment
+- An Azure account
+- An active Azure subscription
+
+## 1. Create a Virtual Machine for Nginx
+
+### 1.1 Navigate to the VM creation page
+
+Open the Azure Virtual Machine creation page:
+
 https://portal.azure.com/#create/Microsoft.VirtualMachine
 
-## 2. Choice the VM settings of the Nginx [Basic]
-#### Subscription
-Your prefered subscription
+### 1.2 Configure the Nginx VM settings [Basics]
 
-#### Resouce group
-Your prefered resource group
+#### Subscription
+Select your preferred Azure subscription.
+
+#### Resource group
+Select an existing resource group or create a new one.
 
 #### Virtual machine name
-Your prefered VM name
+Enter your preferred VM name.
+Example:
+`dts-frontend`
 
 #### Region
-Your prefered region
+Select your preferred Azure region.
 
 #### Availability options
-No ingrastructure redundancy required
+Select:
+`No infrastructure redundancy required`
 
 #### Image
-Red Hat Enterprize Linux 9.4 (LVM) -x64 Gen2
+Select:
+`Red Hat Enterprise Linux 9.4 (LVM) - x64 Gen2`
 
 #### VM architecture
-x64
+Select:
+`x64`
 
 #### Size
-B1ms
+Select:
+`Standard_B1ms`
 
 #### Authentication type
-SSH public key
+Select:
+`SSH public key`
 
 #### Username
-azureuser
+Set:
+`azureuser`
 
 #### SSH public key source
-RSA SSH Format
+Select the appropriate option for generating or using an SSH key pair.
 
-#### SSH Key Type
-default value
+#### SSH key type
+Use the default value.
 
 #### Key pair name
-default value
+Use the default value or specify your preferred key pair name.
 
-#### Inbound port rules
-Allow selected prots
+#### Public inbound ports
+Select:
+`Allow selected ports`
 
 #### Select inbound ports
-SSH (22)
+Select:
+`SSH (22)`
 
-## 3. Choice the VM settings of the Nginx [Disks]
-Use the default setting.
-## 4. Choice the VM settings of the Nginx [Networking]
-Use the default setting.
+### 1.3 Configure the Nginx VM settings [Disks]
+Use the default settings.
 
-## 5. Choice the VM settings of the Nginx [Management]
-Use the default setting.
+### 1.4 Configure the Nginx VM settings [Networking]
+Configure the VM to use the Azure Virtual Network used by the DiscreteTimeSystem environment.
 
-## 6. Choice the VM settings of the Nginx [Monitoring]
-Use the default setting.
+Record the following values for later configuration:
+- Virtual network
+- Subnet
+- Private IP address
+- Public IP address
+- Network Security Group
 
-## 7. Choice the VM settings of the Nginx [Advanced]
-Use the default setting.
+At this stage, allow SSH (TCP/22) for remote administration.
 
-## 8. Choice the VM settings of the Nginx [Tags]
-Use the default setting.
+### 1.5 Configure the Nginx VM settings [Management]
+Use the default settings.
 
+### 1.6 Configure the Nginx VM settings [Monitoring]
+Use the default settings.
 
+### 1.7 Configure the Nginx VM settings [Advanced]
+Use the default settings.
 
-## 3. Configure the Build
+### 1.8 Configure the Nginx VM settings [Tags]
+Use the default settings.
+
+### 1.9 Create the VM
+Review the configuration and create the virtual machine.
+
+> **Note:**  
+> When the VM is created using a newly generated SSH key pair, Azure allows you to download the private key file.  
+> Make sure to download and store the private key in a secure location, as it is required to connect to the VM via SSH.
+>
+> Do not commit the private key to this repository or share it with others.
+
+After deployment is complete, record the VM's public and private IP addresses.
+
+## 2. Connect to the VM from a Local Linux Environment
+
+### 2.1 Copy the private key to the Linux environment
+If you are using WSL and the private key is stored in the Windows Downloads directory, copy it to the `.ssh` directory in your Linux home directory.
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cp "/mnt/c/Users/YourAccount/Downloads/private-key-name.pem" ~/.ssh/
+```
+Restrict access to the private key:
+```bash
+chmod 600 ~/.ssh/private-key-name.pem
 ```
 
-## 4. Build the Project
+### 2.2 Connect to the VM via SSH
+Use the VM's public IP address to establish an SSH connection.
 ```bash
-cmake --build build
+ssh -i ~/.ssh/<private-key-name>.pem azureuser@<public-ip-address>
 ```
 
-## 5. Run the HTTP Server
+## 3. Nginx VM Setup
+
+### 3.1 Install Nginx
+Install Nginx using the DNF package manager.
 ```bash
-/build/DiscreteTimeSystemRunner
+sudo dnf install nginx
+```
+Check the service status.
+```bash
+systemctl status nginx
 ```
 
-## 6. Verify the HTTP Server
-Note: 
-The API here is just an example.
-The API will be replaced with more pratical one
+### 3.2 Start Nginx
+Start the Nginx service.
 ```bash
-curl "http://localhost:8080/calculate?x=10&y=20"
-```
-![alt text](./images/curl-result.png)
-
-## 7. Install the systemd Service
-```bash
-sudo vi /etc/systemd/system/discrete-time-system
-```
-```bash
-[Unit]
- Description=Discrete Time System HTTP Server                                                       
- After=network.targe
-[Service]
- ExecStart=/home/junsasaki/src/repos/DiscreteTimeSystem/build/DiscreteTimeSystemRunner
- WorkingDirectory=/home/junsasaki/src/repos/DiscreteTimeSystem/build
- Restart=on-failure
- User=your name
-[Install]
- WantedBy=multi-user.target       
-```
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now discrete-time-system
+sudo systemctl start nginx
 ```
 
-## 8. Verify the Service
+### 3.3 Enable Nginx to start automatically at boot
+Configure Nginx to start automatically when the VM boots.
+```bash
+sudo systemctl enable nginx  
+```
 
+### 3.4 Verify Local Connectivity
+Verify that Nginx is responding locally on HTTP port 80.
 ```bash
-systemctl status discrete-time-system
+curl http://localhost 
 ```
-![alt text](./images/verify-the-service-1.png)
+If the Nginx default page is returned, the Nginx service is running successfully.
+
+## 4. Configure Network Access
+Configure the Azure Network Security Group (NSG) and the RHEL firewall to allow inbound HTTP traffic on port 80.
+
+### 4.1 NSG setting on Azure Portal
+1. Navigate to **Network settings** of the Nginx VM.
+2. Click **Create port rule** and add an inbound port rule.
+3. Configure the following settings
+
+```text
+Source:          Any
+Source port:     *
+Destination:     Any
+Service:         HTTP
+Destination port: 80
+Protocol:        TCP
+Action:          Allow
+```
+
+### 4.2 Configure the RHEL Firewall
+Allow HTTP traffic through the RHEL firewall.
 ```bash
-journalctl -u discrete-time-system
+sudo firewall-cmd --permanent --add-service=http
+sudo firewall-cmd --reload
 ```
-![alt text](./images/verify-the-service-2.png)
+Verify the firewall configuration.
+```bash
+sudo firewall-cmd --list-services
+```
+
+### 4.3 Verify the connectivity from the local environment
+From the local Linux environment, send an HTTP request to the public IP address of the Nginx VM.
+```bash
+curl http://<nginx-vm-public-ip>
+```
+If the Nginx default page is returned, inbound HTTP connectivity to the Nginx VM is configured successfully.
+
+## 5. Configure Nginx as a Reverse Proxy
+## 6. Verify End-to-End Connectivity
