@@ -187,7 +187,7 @@ Verify the firewall configuration.
 sudo firewall-cmd --list-services
 ```
 
-### 4.3 Allow Nginx to Establish outbound network connections 
+### 4.3 Configure SELinux for Nginx 
 On RHEL, SELinux may prevent Nginx from establishing outbound network connections to the backend application.
 
 Check the current setting:
