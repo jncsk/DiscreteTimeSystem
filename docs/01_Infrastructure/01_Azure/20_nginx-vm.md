@@ -187,7 +187,27 @@ Verify the firewall configuration.
 sudo firewall-cmd --list-services
 ```
 
-### 4.3 Verify the connectivity from the local environment
+### 4.3 Allow Nginx to Establish outbound network connections 
+On RHEL, SELinux may prevent Nginx from establishing outbound network connections to the backend application.
+
+Check the current setting:
+```bash
+getsebool httpd_can_network_connect
+```
+If the value is off, enable it:
+```bash
+sudo setsebool -P httpd_can_network_connect 1
+```
+Verify the setting:
+```bash
+getsebool httpd_can_network_connect
+```
+Expected result:
+```bash
+httpd_can_network_connect --> on
+```
+
+### 4.4 Verify the connectivity from the local environment
 From the local Linux environment, send an HTTP request to the public IP address of the Nginx VM.
 ```bash
 curl http://<nginx-vm-public-ip>
