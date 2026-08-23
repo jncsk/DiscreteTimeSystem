@@ -161,7 +161,7 @@ If the Nginx default page is returned, the Nginx service is running successfully
 ## 4. Configure Network Access
 Configure the Azure Network Security Group (NSG) and the RHEL firewall to allow inbound HTTP traffic on port 80.
 
-### 4.1 NSG setting on Azure Portal
+### 4.1 Configure the NSG on Azure Portal
 1. Navigate to **Network settings** of the Nginx VM.
 2. Click **Create port rule** and add an inbound port rule.
 3. Configure the following settings
@@ -195,4 +195,46 @@ curl http://<nginx-vm-public-ip>
 If the Nginx default page is returned, inbound HTTP connectivity to the Nginx VM is configured successfully.
 
 ## 5. Configure Nginx as a Reverse Proxy
-## 6. Verify End-to-End Connectivity
+
+Create a reverse proxy configuration file under `/etc/nginx/conf.d/`.
+
+### 5.1 Create a Reverse Proxy Configuration File
+
+Create the configuration file:
+
+```bash
+sudo vi /etc/nginx/conf.d/discrete-time-system.conf
+```
+
+Add the following configuration:
+```bash
+server {
+    listen 80;
+    server_name discrete-time-system;
+
+    location / {
+        proxy_pass http://<application-vm-private-ip>:8080;
+    }
+}
+```
+
+### 5.2 Validate and Apply the Nginx Configuration
+Check the Nginx configuration for syntax errors:
+```bash
+sudo nginx -t
+```
+If the configuration is valid, reload Nginx:
+```bash
+sudo systemctl reload nginx
+```
+
+### 5.3 Verify Connectivity from the Local Environment
+From the local Linux environment, send an HTTP request to the public IP address of the Nginx VM with the Host header matching the configured server_name.
+
+```bash
+curl -H "Host: discrete-time-system" \
+  "http://<nginx-vm-public-ip>/calculate?x=10&y=20"
+  ```
+If the calculation result from the application is returned, the Nginx reverse proxy is configured successfully.
+> **Note:**  
+> If the application VM is stopped or the backend application is not reachable, Nginx will typically return 502 Bad Gateway.
