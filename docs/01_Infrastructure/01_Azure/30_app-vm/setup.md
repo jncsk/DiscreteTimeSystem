@@ -538,3 +538,123 @@ DiscreteTimeSystem Container
         v
 Calculation Result
 ```
+
+---
+
+## 8. Remove the Public IP Address
+
+After the Application VM has been configured and end-to-end connectivity has been verified, remove its public IP address.
+
+The Application VM should operate as a private backend server and receive application traffic only through the Nginx VM over the Azure Virtual Network.
+
+Target architecture:
+
+### 8.1 Verify Private Network Connectivity
+
+Before removing the public IP address, verify that the Nginx VM can reach the Application VM through its private IP address.
+
+From the Nginx VM:
+
+```bash
+curl "http://<application-vm-private-ip>:8080/calculate?x=10&y=20"
+```
+
+If a calculation result is returned, application traffic over the private network is working correctly.
+
+### 8.2 Verify SSH Access through the Nginx VM
+See ../40_networking/ssh-access.md
+
+### 8.3 Dissociate the Public IP Address
+
+On Azure Portal:
+
+1. Navigate to the **Application VM**.
+2. Open **Networking**.
+3. Open the **Network Interface** attached to the VM.
+4. Navigate to **IP configurations**.
+5. Select the primary IP configuration, such as `ipconfig1`.
+6. Dissociate or remove the configured **Public IP address**.
+7. Save the configuration.
+
+Do not delete the Network Interface itself.
+
+The network configuration changes from:
+
+```text
+Application VM
+    |
+    v
+NIC
+    |-- Private IP
+    `-- Public IP
+```
+
+to:
+
+```text
+Application VM
+    |
+    v
+NIC
+    `-- Private IP
+```
+
+### 8.4 Delete the Unused Public IP Resource
+
+Dissociating the public IP address does not automatically delete the Azure Public IP Address resource.
+
+If the public IP address is no longer required:
+
+1. Navigate to the Azure resource group.
+2. Open the unused **Public IP Address** resource.
+3. Confirm that it is no longer associated with the Application VM.
+4. Delete the resource.
+
+> **Note:**  
+> **Dissociate** removes the relationship between the Public IP resource and the NIC.  
+> **Delete** removes the Public IP resource itself from Azure.
+
+### 8.5 Verify SSH Connectivity
+
+From the local Linux environment, verify that the Application VM is still accessible through the Nginx VM.
+
+```bash
+ssh dts-main-application
+```
+
+A successful connection confirms that administrative access remains available without exposing the Application VM directly to the Internet.
+
+### 8.6 Verify End-to-End Application Connectivity
+
+From the local Linux environment, send a request through the Nginx reverse proxy.
+
+```bash
+curl -H "Host: discrete-time-system" \
+  "http://<nginx-vm-public-ip>/calculate?x=10&y=20"
+```
+
+If the calculation result is returned, the Application VM is successfully operating as a private backend server.
+
+Final communication path:
+
+```text
+Local Linux Environment
+        |
+        | Internet
+        | HTTP :80
+        v
+Nginx VM
+Public IP
+        |
+        | Azure VNet
+        | HTTP :8080
+        v
+Application VM
+Private IP only
+        |
+        v
+Docker Container
+        |
+        v
+DiscreteTimeSystem
+```
